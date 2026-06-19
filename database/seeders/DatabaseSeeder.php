@@ -53,6 +53,18 @@ class DatabaseSeeder extends Seeder
                 'date' => '15 Mei 2026',
                 'image_url' => 'https://umiba.ac.id/wp-content/uploads/2026/05/audensiUMIBA-300x158.webp',
                 'source' => 'kompaskampus.id'
+            ],
+            [
+                'title' => 'Rapat Kerja Tahunan Pimpinan Universitas',
+                'date' => '25 Mei 2026',
+                'image_url' => 'https://umiba.ac.id/wp-content/uploads/2026/05/rektor-UMIBA-2026.jpeg',
+                'source' => 'internal'
+            ],
+            [
+                'title' => 'Peresmian Fasilitas Laboratorium Baru',
+                'date' => '10 Mei 2026',
+                'image_url' => 'https://umiba.ac.id/wp-content/uploads/2024/05/1-4.png',
+                'source' => 'internal'
             ]
         ]);
 

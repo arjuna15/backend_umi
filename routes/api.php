@@ -9,7 +9,13 @@ Route::get('/user', function (Request $request) {
 
 Route::get('/home-data', function () {
     return response()->json([
-        'news' => \App\Models\News::orderBy('created_at', 'desc')->get(),
+        'news' => \App\Models\News::orderBy('id', 'asc')->limit(3)->get(),
         'testimonials' => \App\Models\Testimonial::all()
+    ]);
+});
+
+Route::get('/news', function () {
+    return response()->json([
+        'news' => \App\Models\News::orderBy('id', 'asc')->get()
     ]);
 });
