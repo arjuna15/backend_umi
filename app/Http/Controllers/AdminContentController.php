@@ -51,7 +51,7 @@ class AdminContentController extends Controller
                 return response()->json([
                     'url' => url('uploads/' . $filename)
                 ]);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // Fallback to regular upload if Intervention fails
                 $filename = time() . '_' . $file->getClientOriginalName();
                 $file->move($uploadPath, $filename);
