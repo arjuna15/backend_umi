@@ -15,7 +15,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        \App\Models\User::factory()->create([
+            'name' => 'Admin UMIBA',
+            'email' => 'admin@umiba.ac.id',
+            'password' => bcrypt('password123'),
+        ]);
+
+        \App\Models\Content::insert([
+            ['key' => 'home_hero_title', 'type' => 'text', 'value' => 'Raih Masa Depan Gemilang Bersama UMIBA'],
+            ['key' => 'home_hero_subtitle', 'type' => 'text', 'value' => 'Pendaftaran Mahasiswa Baru Tahun Akademik 2026/2027 Telah Dibuka. Bergabunglah menjadi bagian dari generasi cerdas dan inovatif.'],
+            ['key' => 'home_hero_bg', 'type' => 'image', 'value' => 'https://umiba.ac.id/wp-content/uploads/2024/05/bannerUMIBA26_2.png'],
+            ['key' => 'profil_hero_title', 'type' => 'text', 'value' => 'Profil Universitas'],
+            ['key' => 'profil_hero_bg', 'type' => 'image', 'value' => 'https://umiba.ac.id/wp-content/uploads/2024/05/bannerUMIBA26_1.png'],
+        ]);
 
         \App\Models\News::insert([
             [
