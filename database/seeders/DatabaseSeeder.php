@@ -25,9 +25,7 @@ class DatabaseSeeder extends Seeder
             ['key' => 'home_hero_title', 'type' => 'text', 'value' => 'Raih Masa Depan Gemilang Bersama UMIBA'],
             ['key' => 'home_hero_subtitle', 'type' => 'text', 'value' => 'Pendaftaran Mahasiswa Baru Tahun Akademik 2026/2027 Telah Dibuka. Bergabunglah menjadi bagian dari generasi cerdas dan inovatif.'],
             ['key' => 'home_hero_bg', 'type' => 'image', 'value' => 'https://umiba.ac.id/wp-content/uploads/2024/05/bannerUMIBA26_2.png'],
-            ['key' => 'profil_hero_title', 'type' => 'text', 'value' => 'Profil Universitas'],
-            ['key' => 'profil_hero_bg', 'type' => 'image', 'value' => 'https://umiba.ac.id/wp-content/uploads/2024/05/bannerUMIBA26_1.png'],
-            ['key' => 'akademik_hero_title', 'type' => 'text', 'value' => 'Fakultas & Akademik'],
+                                    ['key' => 'akademik_hero_title', 'type' => 'text', 'value' => 'Fakultas & Akademik'],
             ['key' => 'akademik_hero_bg', 'type' => 'image', 'value' => 'https://umiba.ac.id/wp-content/uploads/2024/05/bannerUMIBA26_2.png'],
             ['key' => 'akademik_html', 'type' => 'html', 'value' => '<!-- ░░░ HERO SUBPAGE ░░░ -->
 
