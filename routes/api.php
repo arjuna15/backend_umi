@@ -48,4 +48,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Siakad Routes
 Route::post('/siakad/login', [\App\Http\Controllers\SiakadController::class, 'login']);
-Route::middleware('auth:sanctum')->get('/siakad/dashboard', [\App\Http\Controllers\SiakadController::class, 'dashboard']);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/siakad/dashboard', [\App\Http\Controllers\SiakadController::class, 'dashboard']);
+    Route::post('/siakad/course/{courseId}/materi', [\App\Http\Controllers\SiakadController::class, 'uploadMateri']);
+    Route::post('/siakad/assignment/{assignmentId}/submit', [\App\Http\Controllers\SiakadController::class, 'uploadSubmission']);
+    
+    // Dosen operations
+    Route::post('/siakad/course/{courseId}/assignment', [\App\Http\Controllers\SiakadController::class, 'createAssignment']);
+    Route::post('/siakad/course/{courseId}/attendance', [\App\Http\Controllers\SiakadController::class, 'createAttendance']);
+    Route::post('/siakad/attendance/{attendanceId}/record', [\App\Http\Controllers\SiakadController::class, 'updateAttendanceRecord']);
+    Route::post('/siakad/grade/{gradeId}', [\App\Http\Controllers\SiakadController::class, 'updateGrade']);
+});

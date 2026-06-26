@@ -12,6 +12,25 @@ class SiakadSeeder extends Seeder
 {
     public function run(): void
     {
+        // 0. Create Admin and Kaprodi
+        $admin = User::create([
+            'name' => 'Admin Utama',
+            'email' => 'admin@umiba.ac.id',
+            'password' => Hash::make('admin123'),
+            'role' => 'admin',
+            'nim_nip' => 'admin_001',
+            'prodi' => 'Semua',
+        ]);
+
+        $kaprodi = User::create([
+            'name' => 'Kaprodi Teknik Komputer',
+            'email' => 'kaprodi.komputer@umiba.ac.id',
+            'password' => Hash::make('kaprodi123'),
+            'role' => 'kaprodi',
+            'nim_nip' => 'kaprodi_001',
+            'prodi' => 'Teknik Komputer',
+        ]);
+
         // 1. Create Dosen
         $dosen1 = User::create([
             'name' => 'Dr. Budi Santoso',
@@ -121,5 +140,33 @@ class SiakadSeeder extends Seeder
         // Kevin (mahasiswa3)
         Grade::create(['mahasiswa_id' => $mahasiswa3->id, 'course_id' => $course1->id, 'score' => 65.0, 'grade' => 'C+']);
         Grade::create(['mahasiswa_id' => $mahasiswa3->id, 'course_id' => $course5->id, 'score' => null, 'grade' => null]);
+
+        // 5. Create Billings
+        \App\Models\Billing::create(['user_id' => $mahasiswa1->id, 'description' => 'UKT Semester Ganjil 2026/2027', 'amount' => 4500000, 'status' => 'Belum Lunas', 'due_date' => '2026-08-30']);
+        \App\Models\Billing::create(['user_id' => $mahasiswa1->id, 'description' => 'Sumbangan Pembangunan', 'amount' => 1500000, 'status' => 'Lunas', 'due_date' => '2026-07-01']);
+        
+        \App\Models\Billing::create(['user_id' => $mahasiswa2->id, 'description' => 'UKT Semester Ganjil 2026/2027', 'amount' => 4500000, 'status' => 'Lunas', 'due_date' => '2026-08-30']);
+        \App\Models\Billing::create(['user_id' => $mahasiswa3->id, 'description' => 'UKT Semester Ganjil 2026/2027', 'amount' => 4500000, 'status' => 'Belum Lunas', 'due_date' => '2026-08-30']);
+
+        // 6. Create E-Learning Materials & Assignments
+        \App\Models\Material::create(['course_id' => $course1->id, 'title' => 'Pertemuan 1: Pengenalan Algoritma (PDF)', 'content_link' => 'https://example.com/materi1.pdf']);
+        \App\Models\Material::create(['course_id' => $course1->id, 'title' => 'Pertemuan 2: Variabel & Tipe Data (Slide)', 'content_link' => 'https://example.com/materi2.pdf']);
+        
+        $assignment1 = \App\Models\Assignment::create(['course_id' => $course1->id, 'title' => 'Tugas 1: Membuat Flowchart', 'description' => 'Buat flowchart untuk menentukan bilangan genap dan ganjil.', 'deadline' => '2026-09-10']);
+
+        // 7. Create Attendances
+        $attendance1 = \App\Models\Attendance::create(['course_id' => $course1->id, 'meeting_number' => 1, 'date' => '2026-09-01']);
+        \App\Models\AttendanceRecord::create(['attendance_id' => $attendance1->id, 'mahasiswa_id' => $mahasiswa1->id, 'status' => 'present']);
+        \App\Models\AttendanceRecord::create(['attendance_id' => $attendance1->id, 'mahasiswa_id' => $mahasiswa2->id, 'status' => 'present']);
+        \App\Models\AttendanceRecord::create(['attendance_id' => $attendance1->id, 'mahasiswa_id' => $mahasiswa3->id, 'status' => 'absent']);
+
+        // 8. Create Submissions
+        \App\Models\Submission::create(['assignment_id' => $assignment1->id, 'mahasiswa_id' => $mahasiswa1->id, 'file_path' => 'submissions/andi_tugas1.pdf', 'grade' => 90]);
+        \App\Models\Submission::create(['assignment_id' => $assignment1->id, 'mahasiswa_id' => $mahasiswa2->id, 'file_path' => 'submissions/siti_tugas1.pdf', 'grade' => null]);
+
+        // 9. Create Forums
+        $forum1 = \App\Models\Forum::create(['course_id' => $course1->id, 'user_id' => $dosen1->id, 'title' => 'Diskusi Materi 1', 'content' => 'Silahkan bertanya jika ada yang kurang jelas dari materi 1.']);
+        \App\Models\ForumReply::create(['forum_id' => $forum1->id, 'user_id' => $mahasiswa1->id, 'content' => 'Pak, untuk tugas 1 apakah boleh pakai Visio?']);
+        \App\Models\ForumReply::create(['forum_id' => $forum1->id, 'user_id' => $dosen1->id, 'content' => 'Boleh, yang penting disave ke PDF ya.']);
     }
 }
