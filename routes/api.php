@@ -46,3 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/admin/upload-image', [\App\Http\Controllers\AdminContentController::class, 'uploadImage']);
 });
 
+// Siakad Routes
+Route::post('/siakad/login', [\App\Http\Controllers\SiakadController::class, 'login']);
+Route::middleware('auth:sanctum')->get('/siakad/dashboard', [\App\Http\Controllers\SiakadController::class, 'dashboard']);
