@@ -203,4 +203,101 @@ class SiakadController extends Controller
         
         return response()->json(['message' => 'Grade updated', 'data' => $grade]);
     }
+
+    // --- Forum Diskusi ---
+
+    public function createForumThread(Request $request, $courseId)
+    {
+        $request->validate([
+            'title' => 'required',
+            'content' => 'required',
+        ]);
+
+        $forum = \App\Models\Forum::create([
+            'course_id' => $courseId,
+            'user_id' => $request->user()->id,
+            'title' => $request->title,
+            'content' => $request->content,
+        ]);
+
+        return response()->json(['message' => 'Forum thread created', 'forum' => $forum]);
+    }
+
+    public function replyForum(Request $request, $forumId)
+    {
+        $request->validate([
+            'content' => 'required',
+        ]);
+
+        $reply = \App\Models\ForumReply::create([
+            'forum_id' => $forumId,
+            'user_id' => $request->user()->id,
+            'content' => $request->content,
+        ]);
+
+        return response()->json(['message' => 'Reply posted', 'reply' => $reply]);
+    }
+
+    // --- Admin CRUD ---
+
+    public function getUsers()
+    {
+        return response()->json(User::all());
+    }
+
+    public function createUser(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'nim_nip' => 'required|unique:users',
+            'role' => 'required|in:admin,superadmin,kaprodi,dosen,mahasiswa',
+            'password' => 'required|min:6'
+        ]);
+
+        $user = User::create([
+            'name' => $request->name,
+            'nim_nip' => $request->nim_nip,
+            'role' => $request->role,
+            'prodi' => $request->prodi,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json(['message' => 'User created', 'user' => $user]);
+    }
+
+    public function deleteUser($id)
+    {
+        User::findOrFail($id)->delete();
+        return response()->json(['message' => 'User deleted']);
+    }
+
+    public function getCourses()
+    {
+        return response()->json(Course::with('dosen')->get());
+    }
+
+    public function createCourse(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'code' => 'required|unique:courses',
+            'sks' => 'required|numeric',
+            'dosen_id' => 'required|exists:users,id'
+        ]);
+
+        $course = Course::create([
+            'name' => $request->name,
+            'code' => $request->code,
+            'sks' => $request->sks,
+            'dosen_id' => $request->dosen_id,
+        ]);
+
+        return response()->json(['message' => 'Course created', 'course' => $course]);
+    }
+
+    public function deleteCourse($id)
+    {
+        Course::findOrFail($id)->delete();
+        return response()->json(['message' => 'Course deleted']);
+    }
 }

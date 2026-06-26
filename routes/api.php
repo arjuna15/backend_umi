@@ -58,4 +58,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/siakad/course/{courseId}/attendance', [\App\Http\Controllers\SiakadController::class, 'createAttendance']);
     Route::post('/siakad/attendance/{attendanceId}/record', [\App\Http\Controllers\SiakadController::class, 'updateAttendanceRecord']);
     Route::post('/siakad/grade/{gradeId}', [\App\Http\Controllers\SiakadController::class, 'updateGrade']);
+    
+    // Forum Diskusi
+    Route::post('/siakad/forum/{courseId}', [\App\Http\Controllers\SiakadController::class, 'createForumThread']);
+    Route::post('/siakad/forum/{forumId}/reply', [\App\Http\Controllers\SiakadController::class, 'replyForum']);
+    
+    // Admin Siakad operations
+    Route::get('/siakad/admin/users', [\App\Http\Controllers\SiakadController::class, 'getUsers']);
+    Route::post('/siakad/admin/users', [\App\Http\Controllers\SiakadController::class, 'createUser']);
+    Route::delete('/siakad/admin/users/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteUser']);
+    
+    Route::get('/siakad/admin/courses', [\App\Http\Controllers\SiakadController::class, 'getCourses']);
+    Route::post('/siakad/admin/courses', [\App\Http\Controllers\SiakadController::class, 'createCourse']);
+    Route::delete('/siakad/admin/courses/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteCourse']);
 });
