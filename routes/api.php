@@ -59,6 +59,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/siakad/attendance/{attendanceId}/record', [\App\Http\Controllers\SiakadController::class, 'updateAttendanceRecord']);
     Route::post('/siakad/grade/{gradeId}', [\App\Http\Controllers\SiakadController::class, 'updateGrade']);
     
+    Route::post('/siakad/billing/{id}/pay', [\App\Http\Controllers\SiakadController::class, 'payBilling']);
+    Route::post('/siakad/profile/password', [\App\Http\Controllers\SiakadController::class, 'updatePassword']);
+    
     // Forum Diskusi
     Route::post('/siakad/forum/{courseId}', [\App\Http\Controllers\SiakadController::class, 'createForumThread']);
     Route::post('/siakad/forum/{forumId}/reply', [\App\Http\Controllers\SiakadController::class, 'replyForum']);

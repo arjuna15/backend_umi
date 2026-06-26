@@ -75,7 +75,7 @@ class SiakadController extends Controller
             ]);
         }
 
-        if (in_array($user->role, ['admin', 'kaprodi'])) {
+        if (in_array($user->role, ['admin', 'kaprodi', 'superadmin'])) {
             $courses = Course::with(['dosen'])->get();
             $users = User::all();
             return response()->json([
@@ -299,5 +299,26 @@ class SiakadController extends Controller
     {
         Course::findOrFail($id)->delete();
         return response()->json(['message' => 'Course deleted']);
+    }
+
+    public function payBilling(Request $request, $id)
+    {
+        $billing = \App\Models\Billing::where('id', $id)->where('user_id', $request->user()->id)->firstOrFail();
+        $billing->update(['status' => 'Lunas']);
+        return response()->json(['message' => 'Payment successful', 'billing' => $billing]);
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|min:6'
+        ]);
+        
+        $user = $request->user();
+        $user->update([
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password)
+        ]);
+
+        return response()->json(['message' => 'Password updated successfully']);
     }
 }
