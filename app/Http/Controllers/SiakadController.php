@@ -521,7 +521,7 @@ class SiakadController extends Controller
                     'dosen_id' => $dosen->id,
                     'mahasiswa_id' => User::where('role', 'mahasiswa')->first()->id ?? 1,
                     'course_id' => Course::first()->id ?? 1,
-                    'score' => rand(3, 5),
+                    'score' => ($dosen->id % 3) + 3,
                     'comment' => 'Dosen mengajar dengan sangat baik dan jelas.'
                 ]);
             }
@@ -541,13 +541,13 @@ class SiakadController extends Controller
                 'course' => $course->name,
                 'time' => '10:00 - 12:30',
                 'room' => 'Lab Komputer 1',
-                'meeting' => rand(1, 14)
+                'meeting' => ($course->id % 14) + 1
             ];
         });
         
         $todos = [
-            "Ada " . rand(20, 50) . " tugas mahasiswa yang belum dinilai.",
-            "Jadwal UTS tinggal " . rand(3, 14) . " hari lagi.",
+            "Ada " . (($dosenId * 7) % 31 + 20) . " tugas mahasiswa yang belum dinilai.",
+            "Jadwal UTS tinggal " . (($dosenId * 3) % 12 + 3) . " hari lagi.",
             "BAP untuk mata kuliah Jaringan Komputer belum diisi."
         ];
 
@@ -706,7 +706,7 @@ class SiakadController extends Controller
         // Mock processing
         return response()->json([
             'message' => 'Jawaban kuis berhasil dikumpulkan.',
-            'score' => rand(70, 100)
+            'score' => 70 + ($quizId % 31)
         ]);
     }
 
