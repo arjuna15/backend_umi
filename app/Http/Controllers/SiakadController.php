@@ -321,4 +321,54 @@ class SiakadController extends Controller
 
         return response()->json(['message' => 'Password updated successfully']);
     }
+    public function getBillings()
+    {
+        return response()->json(\App\Models\Billing::with('user')->orderBy('created_at', 'desc')->get());
+    }
+
+    public function createBilling(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'description' => 'required',
+            'amount' => 'required|numeric',
+            'due_date' => 'required|date'
+        ]);
+
+        $billing = \App\Models\Billing::create([
+            'user_id' => $request->user_id,
+            'description' => $request->description,
+            'amount' => $request->amount,
+            'due_date' => $request->due_date,
+            'status' => 'Belum Lunas'
+        ]);
+
+        return response()->json(['message' => 'Billing created successfully', 'billing' => $billing]);
+    }
+
+    public function updateBilling(Request $request, $id)
+    {
+        $request->validate([
+            'description' => 'required',
+            'amount' => 'required|numeric',
+            'due_date' => 'required|date',
+            'status' => 'required|in:Lunas,Belum Lunas'
+        ]);
+
+        $billing = \App\Models\Billing::findOrFail($id);
+        $billing->update([
+            'description' => $request->description,
+            'amount' => $request->amount,
+            'due_date' => $request->due_date,
+            'status' => $request->status
+        ]);
+
+        return response()->json(['message' => 'Billing updated successfully', 'billing' => $billing]);
+    }
+
+    public function deleteBilling($id)
+    {
+        \App\Models\Billing::findOrFail($id)->delete();
+        return response()->json(['message' => 'Billing deleted successfully']);
+    }
 }

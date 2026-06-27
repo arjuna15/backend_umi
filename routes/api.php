@@ -74,4 +74,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/siakad/admin/courses', [\App\Http\Controllers\SiakadController::class, 'getCourses']);
     Route::post('/siakad/admin/courses', [\App\Http\Controllers\SiakadController::class, 'createCourse']);
     Route::delete('/siakad/admin/courses/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteCourse']);
+
+    // Admin Billing operations
+    Route::get('/siakad/admin/billings', [\App\Http\Controllers\SiakadController::class, 'getBillings']);
+    Route::post('/siakad/admin/billings', [\App\Http\Controllers\SiakadController::class, 'createBilling']);
+    Route::put('/siakad/admin/billings/{id}', [\App\Http\Controllers\SiakadController::class, 'updateBilling']);
+    Route::delete('/siakad/admin/billings/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteBilling']);
 });
