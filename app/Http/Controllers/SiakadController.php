@@ -265,6 +265,31 @@ class SiakadController extends Controller
         return response()->json(['message' => 'User created', 'user' => $user]);
     }
 
+    public function updateUser(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'nim_nip' => 'required|unique:users,nim_nip,'.$id,
+            'role' => 'required|in:admin,superadmin,kaprodi,dosen,mahasiswa'
+        ]);
+
+        $user = User::findOrFail($id);
+        $updateData = [
+            'name' => $request->name,
+            'nim_nip' => $request->nim_nip,
+            'role' => $request->role,
+            'prodi' => $request->prodi,
+        ];
+        
+        if ($request->password) {
+            $updateData['password'] = Hash::make($request->password);
+        }
+
+        $user->update($updateData);
+
+        return response()->json(['message' => 'User updated', 'user' => $user]);
+    }
+
     public function deleteUser($id)
     {
         User::findOrFail($id)->delete();
@@ -293,6 +318,26 @@ class SiakadController extends Controller
         ]);
 
         return response()->json(['message' => 'Course created', 'course' => $course]);
+    }
+
+    public function updateCourse(Request $request, $id)
+    {
+        $request->validate([
+            'name' => 'required',
+            'code' => 'required|unique:courses,code,'.$id,
+            'sks' => 'required|numeric',
+            'dosen_id' => 'required|exists:users,id'
+        ]);
+
+        $course = Course::findOrFail($id);
+        $course->update([
+            'name' => $request->name,
+            'code' => $request->code,
+            'sks' => $request->sks,
+            'dosen_id' => $request->dosen_id,
+        ]);
+
+        return response()->json(['message' => 'Course updated', 'course' => $course]);
     }
 
     public function deleteCourse($id)
@@ -370,5 +415,54 @@ class SiakadController extends Controller
     {
         \App\Models\Billing::findOrFail($id)->delete();
         return response()->json(['message' => 'Billing deleted successfully']);
+    }
+
+    public function getAvailableKrs(Request $request)
+    {
+        $courses = Course::with('dosen')->get();
+        return response()->json($courses);
+    }
+
+    public function getKrsSubmission(Request $request)
+    {
+        $submission = \App\Models\KrsSubmission::where('mahasiswa_id', $request->user()->id)->latest()->first();
+        return response()->json($submission);
+    }
+
+    public function submitKrs(Request $request)
+    {
+        $request->validate([
+            'course_ids' => 'required|array',
+            'semester' => 'required|string'
+        ]);
+
+        $submission = \App\Models\KrsSubmission::updateOrCreate(
+            ['mahasiswa_id' => $request->user()->id, 'semester' => $request->semester],
+            ['course_ids' => $request->course_ids, 'status' => 'pending']
+        );
+
+        return response()->json(['message' => 'KRS submitted successfully', 'submission' => $submission]);
+    }
+
+    public function getPendingKrs(Request $request)
+    {
+        $submissions = \App\Models\KrsSubmission::with('mahasiswa')->orderBy('created_at', 'desc')->get();
+        return response()->json($submissions);
+    }
+
+    public function approveKrs(Request $request, $id)
+    {
+        $submission = \App\Models\KrsSubmission::findOrFail($id);
+        $submission->update(['status' => 'approved']);
+
+        // Create Grades based on approved KRS
+        foreach ($submission->course_ids as $courseId) {
+            Grade::updateOrCreate(
+                ['mahasiswa_id' => $submission->mahasiswa_id, 'course_id' => $courseId],
+                ['score' => null, 'grade' => null]
+            );
+        }
+
+        return response()->json(['message' => 'KRS approved successfully']);
     }
 }

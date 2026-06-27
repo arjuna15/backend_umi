@@ -66,13 +66,22 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/siakad/forum/{courseId}', [\App\Http\Controllers\SiakadController::class, 'createForumThread']);
     Route::post('/siakad/forum/{forumId}/reply', [\App\Http\Controllers\SiakadController::class, 'replyForum']);
     
+    // KRS Online
+    Route::get('/siakad/krs/available', [\App\Http\Controllers\SiakadController::class, 'getAvailableKrs']);
+    Route::get('/siakad/krs/submission', [\App\Http\Controllers\SiakadController::class, 'getKrsSubmission']);
+    Route::post('/siakad/krs/submit', [\App\Http\Controllers\SiakadController::class, 'submitKrs']);
+    Route::get('/siakad/krs/pending', [\App\Http\Controllers\SiakadController::class, 'getPendingKrs']);
+    Route::post('/siakad/krs/approve/{id}', [\App\Http\Controllers\SiakadController::class, 'approveKrs']);
+
     // Admin Siakad operations
     Route::get('/siakad/admin/users', [\App\Http\Controllers\SiakadController::class, 'getUsers']);
     Route::post('/siakad/admin/users', [\App\Http\Controllers\SiakadController::class, 'createUser']);
+    Route::put('/siakad/admin/users/{id}', [\App\Http\Controllers\SiakadController::class, 'updateUser']);
     Route::delete('/siakad/admin/users/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteUser']);
     
     Route::get('/siakad/admin/courses', [\App\Http\Controllers\SiakadController::class, 'getCourses']);
     Route::post('/siakad/admin/courses', [\App\Http\Controllers\SiakadController::class, 'createCourse']);
+    Route::put('/siakad/admin/courses/{id}', [\App\Http\Controllers\SiakadController::class, 'updateCourse']);
     Route::delete('/siakad/admin/courses/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteCourse']);
 
     // Admin Billing operations
