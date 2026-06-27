@@ -675,8 +675,8 @@ class SiakadController extends Controller
                 'course_name' => $c->name,
                 'course_code' => $c->code,
                 'total_meetings' => 14,
-                'attended' => rand(10, 14),
-                'active_session' => rand(0, 1) == 1 ? ['id' => rand(100,999), 'meeting' => 5, 'status' => 'open'] : null
+                'attended' => 10 + ($c->id % 5),
+                'active_session' => ($c->id % 2 == 0) ? ['id' => 100 + $c->id, 'meeting' => 5, 'status' => 'open'] : null
             ];
         }
         return response()->json($presensiList);
@@ -715,10 +715,10 @@ class SiakadController extends Controller
         $courses = \App\Models\Course::all();
         $grades = [];
         foreach($courses as $c) {
-            $nilaiTugas = rand(70, 95);
-            $nilaiKuis = rand(65, 100);
-            $nilaiUts = rand(70, 90);
-            $nilaiUas = rand(75, 95);
+            $nilaiTugas = 70 + (($c->id * 3) % 26);
+            $nilaiKuis = 65 + (($c->id * 5) % 36);
+            $nilaiUts = 70 + (($c->id * 7) % 21);
+            $nilaiUas = 75 + (($c->id * 11) % 21);
             
             $akhir = ($nilaiTugas * 0.2) + ($nilaiKuis * 0.2) + ($nilaiUts * 0.3) + ($nilaiUas * 0.3);
             
