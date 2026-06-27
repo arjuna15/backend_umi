@@ -7,17 +7,50 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/home-data', function () {
+$defaultNews = [
+    [
+        'id' => 1,
+        'title' => 'Penerimaan Mahasiswa Baru Semester Gasal 2025/2026 Resmi Dibuka',
+        'date' => '8 Juni 2026',
+        'image_url' => 'https://umiba.ac.id/wp-content/uploads/2024/05/bannerUMIBA26_1.png',
+        'source' => 'kompaskampus.id'
+    ],
+    [
+        'id' => 2,
+        'title' => 'Seminar Nasional Teknologi Informasi & Aktuaria 2025',
+        'date' => '5 Juni 2026',
+        'image_url' => 'https://umiba.ac.id/wp-content/uploads/2024/05/bannerUMIBA26_2.png',
+        'source' => 'wartaekonomi.co.id'
+    ],
+    [
+        'id' => 3,
+        'title' => 'Mahasiswa UMIBA Raih Juara 1 Kompetisi Nasional 2025',
+        'date' => '1 Juni 2026',
+        'image_url' => 'https://umiba.ac.id/wp-content/uploads/2024/05/bannerUMIBA26_3.png',
+        'source' => 'teropongsenayan.com'
+    ],
+    [
+        'id' => 4,
+        'title' => 'Universitas Mitra Bangsa Selenggarakan Gebyar Kemerdekaan HUT-RI Ke-80',
+        'date' => '17 Agustus 2025',
+        'image_url' => 'https://umiba.ac.id/wp-content/uploads/2025/08/umiba-upacara.jpg',
+        'source' => 'newsdetik.co'
+    ]
+];
+
+Route::get('/home-data', function () use ($defaultNews) {
+    $news = \App\Models\News::orderBy('id', 'asc')->limit(3)->get();
     return response()->json([
-        'news' => \App\Models\News::orderBy('id', 'asc')->limit(3)->get(),
+        'news' => $news->isEmpty() ? array_slice($defaultNews, 0, 3) : $news,
         'testimonials' => \App\Models\Testimonial::all(),
         'contents' => \App\Models\Content::pluck('value', 'key')
     ]);
 });
 
-Route::get('/news', function () {
+Route::get('/news', function () use ($defaultNews) {
+    $news = \App\Models\News::orderBy('id', 'asc')->get();
     return response()->json([
-        'news' => \App\Models\News::orderBy('id', 'asc')->get()
+        'news' => $news->isEmpty() ? $defaultNews : $news
     ]);
 });
 
