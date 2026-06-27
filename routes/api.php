@@ -73,6 +73,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/siakad/krs/pending', [\App\Http\Controllers\SiakadController::class, 'getPendingKrs']);
     Route::post('/siakad/krs/approve/{id}', [\App\Http\Controllers\SiakadController::class, 'approveKrs']);
 
+    // Kaprodi Mega Update
+    Route::prefix('siakad/kaprodi')->group(function () {
+        Route::get('/stats', [\App\Http\Controllers\SiakadController::class, 'getKaprodiStats']);
+        Route::get('/monitoring', [\App\Http\Controllers\SiakadController::class, 'getKaprodiMonitoring']);
+        Route::get('/courses', [\App\Http\Controllers\SiakadController::class, 'getKaprodiCourses']);
+        Route::post('/courses/{id}/plot', [\App\Http\Controllers\SiakadController::class, 'plotDosen']);
+        Route::get('/students/grades', [\App\Http\Controllers\SiakadController::class, 'getKaprodiStudentGrades']);
+        Route::get('/edom', [\App\Http\Controllers\SiakadController::class, 'getKaprodiEdom']);
+    });
+
     // Admin Siakad operations
     Route::get('/siakad/admin/users', [\App\Http\Controllers\SiakadController::class, 'getUsers']);
     Route::post('/siakad/admin/users', [\App\Http\Controllers\SiakadController::class, 'createUser']);

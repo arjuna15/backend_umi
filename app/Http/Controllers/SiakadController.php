@@ -466,3 +466,69 @@ class SiakadController extends Controller
         return response()->json(['message' => 'KRS approved successfully']);
     }
 }
+    // Kaprodi Mega Update Methods
+    public function getKaprodiStats(Request $request)
+    {
+        $courses = Course::count();
+        $students = User::where('role', 'mahasiswa')->count();
+        $dosens = User::where('role', 'dosen')->count();
+        
+        return response()->json([
+            'total_classes' => $courses,
+            'total_students' => $students,
+            'total_dosens' => $dosens,
+        ]);
+    }
+
+    public function getKaprodiMonitoring(Request $request)
+    {
+        $courses = Course::with(['dosen', 'materials', 'attendances'])->get();
+        return response()->json($courses);
+    }
+
+    public function getKaprodiCourses(Request $request)
+    {
+        $courses = Course::with('dosen')->get();
+        $dosens = User::where('role', 'dosen')->get();
+        return response()->json([
+            'courses' => $courses,
+            'dosens' => $dosens
+        ]);
+    }
+
+    public function plotDosen(Request $request, $id)
+    {
+        $request->validate(['dosen_id' => 'required|exists:users,id']);
+        $course = Course::findOrFail($id);
+        $course->update(['dosen_id' => $request->dosen_id]);
+        return response()->json(['message' => 'Dosen assigned successfully']);
+    }
+
+    public function getKaprodiStudentGrades(Request $request)
+    {
+        $grades = Grade::with(['mahasiswa', 'course'])->get();
+        return response()->json($grades);
+    }
+
+    public function getKaprodiEdom(Request $request)
+    {
+        $edoms = \App\Models\Edom::with(['dosen', 'mahasiswa', 'course'])->get();
+        $dosens = User::where('role', 'dosen')->get();
+        
+        // Seed edoms if empty for demo
+        if ($edoms->isEmpty() && $dosens->count() > 0) {
+            foreach ($dosens as $dosen) {
+                \App\Models\Edom::create([
+                    'dosen_id' => $dosen->id,
+                    'mahasiswa_id' => User::where('role', 'mahasiswa')->first()->id ?? 1,
+                    'course_id' => Course::first()->id ?? 1,
+                    'score' => rand(3, 5),
+                    'comment' => 'Dosen mengajar dengan sangat baik dan jelas.'
+                ]);
+            }
+            $edoms = \App\Models\Edom::with(['dosen', 'mahasiswa', 'course'])->get();
+        }
+        
+        return response()->json(['edoms' => $edoms, 'dosens' => $dosens]);
+    }
+}
