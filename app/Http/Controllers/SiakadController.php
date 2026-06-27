@@ -616,6 +616,20 @@ class SiakadController extends Controller
         return response()->json($quizzes);
     }
 
+    public function getCourseSessions(Request $request, $courseId)
+    {
+        $sessions = [];
+        for ($i = 1; $i <= 14; $i++) {
+            $sessions[] = [
+                'session' => $i,
+                'title' => 'Materi Pertemuan ' . $i,
+                'material_count' => rand(1, 3)
+            ];
+        }
+        return response()->json($sessions);
+    }
+
+
     // ==========================================
     // MAHASISWA ULTIMATE MEGA UPDATE
     // ==========================================
