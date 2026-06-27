@@ -465,7 +465,6 @@ class SiakadController extends Controller
 
         return response()->json(['message' => 'KRS approved successfully']);
     }
-}
     // Kaprodi Mega Update Methods
     public function getKaprodiStats(Request $request)
     {
