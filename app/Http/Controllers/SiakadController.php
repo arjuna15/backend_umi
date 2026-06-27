@@ -623,7 +623,7 @@ class SiakadController extends Controller
             $sessions[] = [
                 'session' => $i,
                 'title' => 'Materi Pertemuan ' . $i,
-                'material_count' => rand(1, 3)
+                'material_count' => (($courseId * 7 + $i * 3) % 4) + 1
             ];
         }
         return response()->json($sessions);
