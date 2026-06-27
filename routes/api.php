@@ -108,5 +108,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/courses/{courseId}/quizzes', [\App\Http\Controllers\SiakadController::class, 'getQuizzesByCourse']);
         Route::get('/courses/{courseId}/sessions', [\App\Http\Controllers\SiakadController::class, 'getCourseSessions']);
     });
+    // Mahasiswa Ultimate Mega Update
+    Route::prefix('siakad/mahasiswa')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaDashboard']);
+        Route::get('/courses/{courseId}/materials', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaMaterials']);
+        Route::get('/presensi', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaPresensi']);
+        Route::post('/presensi/{attendanceId}/submit', [\App\Http\Controllers\SiakadController::class, 'submitMahasiswaPresensi']);
+        Route::get('/quizzes/{quizId}', [\App\Http\Controllers\SiakadController::class, 'getQuizForMahasiswa']);
+        Route::post('/quizzes/{quizId}/submit', [\App\Http\Controllers\SiakadController::class, 'submitQuizAnswers']);
+        Route::get('/gradebook', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaGradebook']);
+    });
 });
 

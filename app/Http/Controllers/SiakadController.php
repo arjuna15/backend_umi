@@ -616,7 +616,26 @@ class SiakadController extends Controller
         return response()->json($quizzes);
     }
 
-    public function getCourseSessions(Request $request, $courseId)
+    // ==========================================
+    // MAHASISWA ULTIMATE MEGA UPDATE
+    // ==========================================
+
+    public function getMahasiswaDashboard(Request $request)
+    {
+        // Add fake upcoming deadlines and schedule
+        return response()->json([
+            'schedule_today' => [
+                ['time' => '08:00 - 10:30', 'course' => 'Pemrograman Web Lanjut', 'room' => 'Lab Komputer A'],
+                ['time' => '13:00 - 15:30', 'course' => 'Basis Data 2', 'room' => 'Ruang 402']
+            ],
+            'upcoming_deadlines' => [
+                ['title' => 'Tugas 3: React Hooks', 'course' => 'Pemrograman Web Lanjut', 'due_in_days' => 1],
+                ['title' => 'Kuis Tengah Semester', 'course' => 'Rekayasa Perangkat Lunak', 'due_in_days' => 2]
+            ]
+        ]);
+    }
+
+    public function getMahasiswaMaterials(Request $request, $courseId)
     {
         // Mock 14 sessions
         $sessions = [];
@@ -624,9 +643,87 @@ class SiakadController extends Controller
             $sessions[] = [
                 'session' => $i,
                 'title' => 'Pertemuan ' . $i,
-                'material_count' => rand(0, 3)
+                'materials' => [
+                    ['id' => 1, 'title' => 'Materi_Bagian_'.$i.'.pdf', 'type' => 'pdf'],
+                    ['id' => 2, 'title' => 'Video Pembelajaran Sesi '.$i, 'type' => 'video']
+                ]
             ];
         }
         return response()->json($sessions);
+    }
+
+    public function getMahasiswaPresensi(Request $request)
+    {
+        $courses = \App\Models\Course::all();
+        $presensiList = [];
+        foreach($courses as $c) {
+            $presensiList[] = [
+                'course_name' => $c->name,
+                'course_code' => $c->code,
+                'total_meetings' => 14,
+                'attended' => rand(10, 14),
+                'active_session' => rand(0, 1) == 1 ? ['id' => rand(100,999), 'meeting' => 5, 'status' => 'open'] : null
+            ];
+        }
+        return response()->json($presensiList);
+    }
+
+    public function submitMahasiswaPresensi(Request $request, $attendanceId)
+    {
+        return response()->json(['message' => 'Kehadiran berhasil dicatat.']);
+    }
+
+    public function getQuizForMahasiswa(Request $request, $quizId)
+    {
+        $quiz = \App\Models\Quiz::with('questions')->find($quizId);
+        if (!$quiz) return response()->json(['message' => 'Quiz not found'], 404);
+        
+        // Hide correct answers
+        $quizData = $quiz->toArray();
+        foreach($quizData['questions'] as &$q) {
+            unset($q['correct_answer']);
+        }
+        
+        return response()->json($quizData);
+    }
+
+    public function submitQuizAnswers(Request $request, $quizId)
+    {
+        // Mock processing
+        return response()->json([
+            'message' => 'Jawaban kuis berhasil dikumpulkan.',
+            'score' => rand(70, 100)
+        ]);
+    }
+
+    public function getMahasiswaGradebook(Request $request)
+    {
+        $courses = \App\Models\Course::all();
+        $grades = [];
+        foreach($courses as $c) {
+            $nilaiTugas = rand(70, 95);
+            $nilaiKuis = rand(65, 100);
+            $nilaiUts = rand(70, 90);
+            $nilaiUas = rand(75, 95);
+            
+            $akhir = ($nilaiTugas * 0.2) + ($nilaiKuis * 0.2) + ($nilaiUts * 0.3) + ($nilaiUas * 0.3);
+            
+            $huruf = 'A';
+            if ($akhir < 80) $huruf = 'B';
+            if ($akhir < 70) $huruf = 'C';
+            if ($akhir < 60) $huruf = 'D';
+            
+            $grades[] = [
+                'course_name' => $c->name,
+                'sks' => $c->sks,
+                'tugas' => $nilaiTugas,
+                'kuis' => $nilaiKuis,
+                'uts' => $nilaiUts,
+                'uas' => $nilaiUas,
+                'akhir' => round($akhir, 1),
+                'huruf' => $huruf
+            ];
+        }
+        return response()->json($grades);
     }
 }
