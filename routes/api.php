@@ -99,4 +99,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/siakad/admin/billings', [\App\Http\Controllers\SiakadController::class, 'createBilling']);
     Route::put('/siakad/admin/billings/{id}', [\App\Http\Controllers\SiakadController::class, 'updateBilling']);
     Route::delete('/siakad/admin/billings/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteBilling']);
+
+    // Dosen Ultimate Mega Update
+    Route::prefix('siakad/dosen')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\SiakadController::class, 'getDosenDashboard']);
+        Route::post('/bap', [\App\Http\Controllers\SiakadController::class, 'storeBap']);
+        Route::post('/quiz', [\App\Http\Controllers\SiakadController::class, 'storeQuiz']);
+        Route::get('/courses/{courseId}/quizzes', [\App\Http\Controllers\SiakadController::class, 'getQuizzesByCourse']);
+        Route::get('/courses/{courseId}/sessions', [\App\Http\Controllers\SiakadController::class, 'getCourseSessions']);
+    });
 });
+

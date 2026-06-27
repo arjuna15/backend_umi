@@ -530,4 +530,103 @@ class SiakadController extends Controller
         
         return response()->json(['edoms' => $edoms, 'dosens' => $dosens]);
     }
+
+    // Dosen Ultimate Mega Update Methods
+    public function getDosenDashboard(Request $request)
+    {
+        $dosenId = auth()->id();
+        $courses = Course::where('dosen_id', $dosenId)->get();
+        $todaySchedule = $courses->map(function($course) {
+            return [
+                'course' => $course->name,
+                'time' => '10:00 - 12:30',
+                'room' => 'Lab Komputer 1',
+                'meeting' => rand(1, 14)
+            ];
+        });
+        
+        $todos = [
+            "Ada " . rand(20, 50) . " tugas mahasiswa yang belum dinilai.",
+            "Jadwal UTS tinggal " . rand(3, 14) . " hari lagi.",
+            "BAP untuk mata kuliah Jaringan Komputer belum diisi."
+        ];
+
+        return response()->json([
+            'total_courses' => $courses->count(),
+            'schedule' => $todaySchedule,
+            'todos' => $todos
+        ]);
+    }
+
+    public function storeBap(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'meeting_number' => 'required|integer',
+            'topic' => 'required|string',
+            'date' => 'required|date'
+        ]);
+
+        $bap = \App\Models\Bap::create([
+            'course_id' => $request->course_id,
+            'dosen_id' => auth()->id(),
+            'meeting_number' => $request->meeting_number,
+            'topic' => $request->topic,
+            'date' => $request->date,
+            'notes' => $request->notes
+        ]);
+
+        return response()->json(['message' => 'BAP berhasil disimpan', 'bap' => $bap]);
+    }
+
+    public function storeQuiz(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'title' => 'required|string',
+            'duration_minutes' => 'required|integer',
+            'questions' => 'required|array'
+        ]);
+
+        $quiz = \App\Models\Quiz::create([
+            'course_id' => $request->course_id,
+            'title' => $request->title,
+            'duration_minutes' => $request->duration_minutes,
+            'randomize_questions' => $request->randomize_questions ?? false
+        ]);
+
+        foreach ($request->questions as $q) {
+            \App\Models\QuizQuestion::create([
+                'quiz_id' => $quiz->id,
+                'question' => $q['question'],
+                'option_a' => $q['option_a'],
+                'option_b' => $q['option_b'],
+                'option_c' => $q['option_c'],
+                'option_d' => $q['option_d'],
+                'correct_answer' => $q['correct_answer']
+            ]);
+        }
+
+        return response()->json(['message' => 'Quiz berhasil dibuat']);
+    }
+
+    public function getQuizzesByCourse(Request $request, $courseId)
+    {
+        $quizzes = \App\Models\Quiz::with('questions')->where('course_id', $courseId)->get();
+        return response()->json($quizzes);
+    }
+
+    public function getCourseSessions(Request $request, $courseId)
+    {
+        // Mock 14 sessions
+        $sessions = [];
+        for ($i = 1; $i <= 14; $i++) {
+            $sessions[] = [
+                'session' => $i,
+                'title' => 'Pertemuan ' . $i,
+                'material_count' => rand(0, 3)
+            ];
+        }
+        return response()->json($sessions);
+    }
 }
