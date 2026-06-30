@@ -113,6 +113,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/monitoring', [\App\Http\Controllers\SiakadController::class, 'getKaprodiMonitoring']);
         Route::get('/courses', [\App\Http\Controllers\SiakadController::class, 'getKaprodiCourses']);
         Route::post('/courses/{id}/plot', [\App\Http\Controllers\SiakadController::class, 'plotDosen']);
+        Route::post('/courses/{id}/schedule', [\App\Http\Controllers\SiakadController::class, 'plotSchedule']);
         Route::get('/students/grades', [\App\Http\Controllers\SiakadController::class, 'getKaprodiStudentGrades']);
         Route::get('/edom', [\App\Http\Controllers\SiakadController::class, 'getKaprodiEdom']);
     });

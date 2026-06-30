@@ -495,7 +495,11 @@ class SiakadController extends Controller
 
     public function getKaprodiCourses(Request $request)
     {
-        $courses = Course::with('dosen')->get();
+        $courses = Course::with('dosen')->get()->map(function($course) {
+            $course->jamMulai = $course->jam_mulai;
+            $course->jamSelesai = $course->jam_selesai;
+            return $course;
+        });
         $dosens = User::where('role', 'dosen')->get();
         return response()->json([
             'courses' => $courses,
@@ -509,6 +513,24 @@ class SiakadController extends Controller
         $course = Course::findOrFail($id);
         $course->update(['dosen_id' => $request->dosen_id]);
         return response()->json(['message' => 'Dosen assigned successfully']);
+    }
+
+    public function plotSchedule(Request $request, $id)
+    {
+        $request->validate([
+            'hari' => 'required|string',
+            'jamMulai' => 'required|string',
+            'jamSelesai' => 'required|string',
+            'ruang' => 'required|string',
+        ]);
+        $course = Course::findOrFail($id);
+        $course->update([
+            'hari' => $request->hari,
+            'jam_mulai' => $request->jamMulai,
+            'jam_selesai' => $request->jamSelesai,
+            'ruang' => $request->ruang,
+        ]);
+        return response()->json(['message' => 'Schedule updated successfully', 'course' => $course]);
     }
 
     public function getKaprodiStudentGrades(Request $request)
@@ -547,8 +569,8 @@ class SiakadController extends Controller
         $todaySchedule = $courses->map(function($course) {
             return [
                 'course' => $course->name,
-                'time' => '10:00 - 12:30',
-                'room' => 'Lab Komputer 1',
+                'time' => ($course->jam_mulai && $course->jam_selesai) ? $course->jam_mulai . ' - ' . $course->jam_selesai : 'Belum diatur',
+                'room' => $course->ruang ?? 'Belum ada ruang',
                 'meeting' => ($course->id % 14) + 1
             ];
         });
