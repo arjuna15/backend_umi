@@ -465,6 +465,14 @@ class SiakadController extends Controller
 
         return response()->json(['message' => 'KRS approved successfully']);
     }
+
+    public function rejectKrs(Request $request, $id)
+    {
+        $submission = \App\Models\KrsSubmission::findOrFail($id);
+        $submission->update(['status' => 'rejected']);
+
+        return response()->json(['message' => 'KRS rejected successfully']);
+    }
     // Kaprodi Mega Update Methods
     public function getKaprodiStats(Request $request)
     {

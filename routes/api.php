@@ -105,6 +105,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/siakad/krs/submit', [\App\Http\Controllers\SiakadController::class, 'submitKrs']);
     Route::get('/siakad/krs/pending', [\App\Http\Controllers\SiakadController::class, 'getPendingKrs']);
     Route::post('/siakad/krs/approve/{id}', [\App\Http\Controllers\SiakadController::class, 'approveKrs']);
+    Route::post('/siakad/krs/reject/{id}', [\App\Http\Controllers\SiakadController::class, 'rejectKrs']);
 
     // Kaprodi Mega Update
     Route::prefix('siakad/kaprodi')->group(function () {
