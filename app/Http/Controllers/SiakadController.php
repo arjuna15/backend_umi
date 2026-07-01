@@ -366,6 +366,49 @@ class SiakadController extends Controller
 
         return response()->json(['message' => 'Password updated successfully']);
     }
+
+    public function updateProfile(Request $request)
+    {
+        $user = auth()->user();
+        $request->validate([
+            'email' => 'nullable|email|unique:users,email,'.$user->id,
+            'phone' => 'nullable|string',
+            'address' => 'nullable|string',
+            'bio' => 'nullable|string',
+        ]);
+
+        $user->update([
+            'email' => $request->email ?? $user->email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'bio' => $request->bio,
+        ]);
+
+        return response()->json(['message' => 'Profil berhasil diperbarui', 'user' => $user]);
+    }
+
+    public function uploadAvatar(Request $request)
+    {
+        $request->validate([
+            'avatar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048'
+        ]);
+
+        $user = auth()->user();
+        
+        if ($request->hasFile('avatar')) {
+            $file = $request->file('avatar');
+            $filename = time() . '_' . $user->id . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('uploads/avatars'), $filename);
+            
+            $user->update([
+                'avatar_url' => url('/uploads/avatars/' . $filename)
+            ]);
+            
+            return response()->json(['message' => 'Avatar berhasil diunggah', 'avatar_url' => $user->avatar_url]);
+        }
+
+        return response()->json(['message' => 'Gagal mengunggah avatar'], 400);
+    }
     public function getBillings()
     {
         return response()->json(\App\Models\Billing::with('user')->orderBy('created_at', 'desc')->get());
