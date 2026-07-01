@@ -144,7 +144,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/quiz', [\App\Http\Controllers\SiakadController::class, 'storeQuiz']);
         Route::get('/courses/{courseId}/quizzes', [\App\Http\Controllers\SiakadController::class, 'getQuizzesByCourse']);
         Route::get('/courses/{courseId}/sessions', [\App\Http\Controllers\SiakadController::class, 'getCourseSessions']);
+        // E-Learning
+        Route::post('/course/{courseId}/materials', [\App\Http\Controllers\SiakadController::class, 'uploadMateri']);
+        Route::post('/course/{courseId}/assignments', [\App\Http\Controllers\SiakadController::class, 'createAssignment']);
     });
+    
+    Route::get('/siakad/materials/download/{id}', [\App\Http\Controllers\SiakadController::class, 'downloadMaterial']);
+    
     // Mahasiswa Ultimate Mega Update
     Route::prefix('siakad/mahasiswa')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaDashboard']);
