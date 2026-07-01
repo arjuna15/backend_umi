@@ -168,12 +168,14 @@ class SiakadController extends Controller
         $request->validate([
             'meeting_number' => 'required|numeric',
             'date' => 'required|date',
+            'mode' => 'nullable|string',
         ]);
         
         $attendance = \App\Models\Attendance::create([
             'course_id' => $courseId,
             'meeting_number' => $request->meeting_number,
             'date' => $request->date,
+            'mode' => $request->mode ?? 'Online',
         ]);
         
         // Auto-create blank records for all students enrolled
