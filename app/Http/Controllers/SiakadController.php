@@ -859,4 +859,144 @@ class SiakadController extends Controller
         }
         return response()->json($grades);
     }
+
+    public function getDosenRoster(Request $request)
+    {
+        $dosenId = $request->user()->id;
+        $courses = Course::with('grades.mahasiswa')->where('dosen_id', $dosenId)->get();
+        
+        $students = [];
+        foreach ($courses as $course) {
+            foreach ($course->grades as $grade) {
+                if ($grade->mahasiswa) {
+                    $students[] = [
+                        'course' => $course->name,
+                        'mahasiswa' => $grade->mahasiswa
+                    ];
+                }
+            }
+        }
+        return response()->json(['courses' => $courses, 'students' => $students]);
+    }
+
+    public function updateDosenJadwal(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'day' => 'required|string',
+            'start_time' => 'required|string',
+            'end_time' => 'required|string',
+            'room' => 'required|string',
+        ]);
+        
+        $course = Course::where('id', $request->course_id)
+            ->where('dosen_id', $request->user()->id)
+            ->firstOrFail();
+            
+        $course->update([
+            'hari' => $request->day,
+            'jam_mulai' => $request->start_time,
+            'jam_selesai' => $request->end_time,
+            'ruang' => $request->room,
+        ]);
+        
+        return response()->json(['message' => 'Jadwal updated', 'course' => $course]);
+    }
+
+    public function getDosenKrs(Request $request)
+    {
+        $dosenId = $request->user()->id;
+        $krs = \App\Models\KrsSubmission::whereHas('mahasiswa', function($q) use ($dosenId) {
+            $q->where('dosen_wali_id', $dosenId);
+        })->with('mahasiswa')->get();
+        return response()->json($krs);
+    }
+
+    public function approveDosenKrs(Request $request)
+    {
+        $request->validate([
+            'krs_id' => 'required|exists:krs_submissions,id',
+            'status' => 'required|in:approved,rejected',
+            'notes' => 'nullable|string'
+        ]);
+        
+        $krs = \App\Models\KrsSubmission::findOrFail($request->krs_id);
+        $krs->update([
+            'status' => $request->status,
+            'notes' => $request->notes
+        ]);
+        
+        if ($request->status === 'approved') {
+            foreach ($krs->course_ids as $courseId) {
+                Grade::updateOrCreate(
+                    ['mahasiswa_id' => $krs->mahasiswa_id, 'course_id' => $courseId],
+                    ['score' => null, 'grade' => null]
+                );
+            }
+        }
+        
+        return response()->json(['message' => 'KRS ' . $request->status, 'krs' => $krs]);
+    }
+
+    public function getDosenRekapPresensi(Request $request)
+    {
+        $dosenId = $request->user()->id;
+        $courses = Course::where('dosen_id', $dosenId)->get();
+        
+        $rekap = [];
+        foreach($courses as $c) {
+            $attendances = \App\Models\Attendance::where('course_id', $c->id)->pluck('id');
+            $totalMeetings = $attendances->count();
+            
+            $grades = Grade::with('mahasiswa')->where('course_id', $c->id)->get();
+            $students = [];
+            
+            foreach($grades as $g) {
+                $presentCount = \App\Models\AttendanceRecord::whereIn('attendance_id', $attendances)
+                    ->where('mahasiswa_id', $g->mahasiswa_id)
+                    ->where('status', 'present')
+                    ->count();
+                
+                $percentage = $totalMeetings > 0 ? round(($presentCount / $totalMeetings) * 100, 2) : 0;
+                
+                $students[] = [
+                    'mahasiswa' => $g->mahasiswa,
+                    'present_count' => $presentCount,
+                    'total_meetings' => $totalMeetings,
+                    'percentage' => $percentage
+                ];
+            }
+            
+            $rekap[] = [
+                'course' => $c,
+                'rekap' => $students
+            ];
+        }
+        
+        return response()->json($rekap);
+    }
+
+    public function importDosenGradebook(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'grades' => 'required|array',
+            'grades.*.mahasiswa_id' => 'required|exists:users,id',
+            'grades.*.score' => 'nullable|numeric',
+            'grades.*.grade' => 'nullable|string'
+        ]);
+        
+        $course = Course::where('id', $request->course_id)
+            ->where('dosen_id', $request->user()->id)
+            ->firstOrFail();
+            
+        foreach($request->grades as $g) {
+            Grade::updateOrCreate(
+                ['course_id' => $course->id, 'mahasiswa_id' => $g['mahasiswa_id']],
+                ['score' => $g['score'] ?? null, 'grade' => $g['grade'] ?? null]
+            );
+        }
+        
+        return response()->json(['message' => 'Grades imported successfully']);
+    }
 }

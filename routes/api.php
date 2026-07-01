@@ -147,6 +147,13 @@ Route::middleware('auth:sanctum')->group(function () {
         // E-Learning
         Route::post('/course/{courseId}/materials', [\App\Http\Controllers\SiakadController::class, 'uploadMateri']);
         Route::post('/course/{courseId}/assignments', [\App\Http\Controllers\SiakadController::class, 'createAssignment']);
+        
+        Route::get('/roster', [\App\Http\Controllers\SiakadController::class, 'getDosenRoster']);
+        Route::post('/jadwal/update', [\App\Http\Controllers\SiakadController::class, 'updateDosenJadwal']);
+        Route::get('/krs', [\App\Http\Controllers\SiakadController::class, 'getDosenKrs']);
+        Route::post('/krs/approve', [\App\Http\Controllers\SiakadController::class, 'approveDosenKrs']);
+        Route::get('/rekap-presensi', [\App\Http\Controllers\SiakadController::class, 'getDosenRekapPresensi']);
+        Route::post('/gradebook/import', [\App\Http\Controllers\SiakadController::class, 'importDosenGradebook']);
     });
     
     Route::get('/siakad/materials/download/{id}', [\App\Http\Controllers\SiakadController::class, 'downloadMaterial']);
