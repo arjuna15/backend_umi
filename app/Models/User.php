@@ -34,6 +34,11 @@ class User extends Authenticatable
         'role',
         'nim_nip',
         'prodi',
+        'phone',
+        'address',
+        'bio',
+        'avatar_url',
+        'dosen_wali_id',
     ];
 
     /**

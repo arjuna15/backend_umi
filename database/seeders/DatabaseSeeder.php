@@ -1890,5 +1890,7 @@ class DatabaseSeeder extends Seeder
             ['image_url' => 'https://umiba.ac.id/wp-content/uploads/2024/05/2-2.png'],
             ['image_url' => 'https://umiba.ac.id/wp-content/uploads/2024/05/3-2.png'],
         ]);
+
+        $this->call(SiakadSeeder::class);
     }
 }
