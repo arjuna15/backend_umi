@@ -236,6 +236,8 @@ class SiakadController extends Controller
 
     public function updateGrade(Request $request, $gradeId)
     {
+        \Log::info('updateGrade Request data for ' . $gradeId . ': ' . json_encode($request->all()));
+        
         $request->validate([
             'attendance_score' => 'numeric|nullable|min:0|max:100',
             'assignment_score' => 'numeric|nullable|min:0|max:100',
@@ -1157,6 +1159,8 @@ class SiakadController extends Controller
 
     public function importDosenGradebook(Request $request)
     {
+        \Log::info('importDosenGradebook Request data: ' . json_encode($request->all()));
+        
         $request->validate([
             'course_id' => 'required|exists:courses,id',
             'grades' => 'required|array',
