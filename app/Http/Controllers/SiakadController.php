@@ -889,18 +889,24 @@ class SiakadController extends Controller
         $dosenId = $request->user()->id;
         $courses = Course::with('grades.mahasiswa')->where('dosen_id', $dosenId)->get();
         
-        $students = [];
-        foreach ($courses as $course) {
+        $mappedCourses = $courses->map(function ($course) {
+            $students = [];
             foreach ($course->grades as $grade) {
                 if ($grade->mahasiswa) {
                     $students[] = [
-                        'course' => $course->name,
-                        'mahasiswa' => $grade->mahasiswa
+                        'id' => $grade->mahasiswa->id,
+                        'nim' => $grade->mahasiswa->nim_nip,
+                        'name' => $grade->mahasiswa->name,
+                        'prodi' => $grade->mahasiswa->prodi,
+                        'phone' => $grade->mahasiswa->phone,
                     ];
                 }
             }
-        }
-        return response()->json(['courses' => $courses, 'students' => $students]);
+            $course->students = $students;
+            return $course;
+        });
+
+        return response()->json(['courses' => $mappedCourses]);
     }
 
     public function updateDosenJadwal(Request $request)
