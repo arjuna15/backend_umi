@@ -155,6 +155,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/krs/approve', [\App\Http\Controllers\SiakadController::class, 'approveDosenKrs']);
         Route::get('/rekap-presensi', [\App\Http\Controllers\SiakadController::class, 'getDosenRekapPresensi']);
         Route::post('/gradebook/import', [\App\Http\Controllers\SiakadController::class, 'importDosenGradebook']);
+        Route::put('/courses/{courseId}/grading-weights', [\App\Http\Controllers\SiakadController::class, 'updateCourseWeights']);
     });
     
     Route::get('/siakad/materials/download/{id}', [\App\Http\Controllers\SiakadController::class, 'downloadMaterial']);

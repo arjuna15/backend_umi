@@ -366,6 +366,10 @@ class SiakadController extends Controller
             'type' => 'nullable|string',
             'prodi' => 'nullable|string',
             'semester' => 'nullable|string',
+            'attendance_weight' => 'nullable|numeric|min:0|max:100',
+            'assignment_weight' => 'nullable|numeric|min:0|max:100',
+            'uts_weight' => 'nullable|numeric|min:0|max:100',
+            'uas_weight' => 'nullable|numeric|min:0|max:100',
         ]);
 
         $course = Course::create([
@@ -377,6 +381,10 @@ class SiakadController extends Controller
             'type' => $request->type ?? 'Wajib',
             'prodi' => $request->prodi ?? 'Teknik Komputer',
             'semester' => $request->semester ?? 'Ganjil 2026/2027',
+            'attendance_weight' => $request->attendance_weight ?? 10,
+            'assignment_weight' => $request->assignment_weight ?? 20,
+            'uts_weight' => $request->uts_weight ?? 30,
+            'uas_weight' => $request->uas_weight ?? 40,
         ]);
 
         return response()->json(['message' => 'Course created', 'course' => $course]);
@@ -393,6 +401,10 @@ class SiakadController extends Controller
             'type' => 'nullable|string',
             'prodi' => 'nullable|string',
             'semester' => 'nullable|string',
+            'attendance_weight' => 'nullable|numeric|min:0|max:100',
+            'assignment_weight' => 'nullable|numeric|min:0|max:100',
+            'uts_weight' => 'nullable|numeric|min:0|max:100',
+            'uas_weight' => 'nullable|numeric|min:0|max:100',
         ]);
 
         $course = Course::findOrFail($id);
@@ -405,9 +417,36 @@ class SiakadController extends Controller
             'type' => $request->type ?? $course->type,
             'prodi' => $request->prodi ?? $course->prodi,
             'semester' => $request->semester ?? $course->semester,
+            'attendance_weight' => $request->attendance_weight ?? $course->attendance_weight,
+            'assignment_weight' => $request->assignment_weight ?? $course->assignment_weight,
+            'uts_weight' => $request->uts_weight ?? $course->uts_weight,
+            'uas_weight' => $request->uas_weight ?? $course->uas_weight,
         ]);
 
         return response()->json(['message' => 'Course updated', 'course' => $course]);
+    }
+
+    public function updateCourseWeights(Request $request, $courseId)
+    {
+        $request->validate([
+            'attendance_weight' => 'required|numeric|min:0|max:100',
+            'assignment_weight' => 'required|numeric|min:0|max:100',
+            'uts_weight' => 'required|numeric|min:0|max:100',
+            'uas_weight' => 'required|numeric|min:0|max:100',
+        ]);
+
+        $course = Course::where('id', $courseId)
+            ->where('dosen_id', $request->user()->id)
+            ->firstOrFail();
+
+        $course->update([
+            'attendance_weight' => $request->attendance_weight,
+            'assignment_weight' => $request->assignment_weight,
+            'uts_weight' => $request->uts_weight,
+            'uas_weight' => $request->uas_weight,
+        ]);
+
+        return response()->json(['message' => 'Grading weights updated', 'course' => $course]);
     }
 
     public function deleteCourse($id)
@@ -1113,7 +1152,8 @@ class SiakadController extends Controller
         $request->validate([
             'course_id' => 'required|exists:courses,id',
             'grades' => 'required|array',
-            'grades.*.mahasiswa_id' => 'required|exists:users,id',
+            'grades.*.id' => 'nullable|exists:grades,id',
+            'grades.*.mahasiswa_id' => 'nullable|exists:users,id',
             'grades.*.score' => 'nullable|numeric',
             'grades.*.grade' => 'nullable|string'
         ]);
@@ -1122,7 +1162,25 @@ class SiakadController extends Controller
             ->where('dosen_id', $request->user()->id)
             ->firstOrFail();
             
-        foreach($request->grades as $g) {
+        foreach ($request->grades as $g) {
+            if (!empty($g['id'])) {
+                $grade = Grade::where('id', $g['id'])
+                    ->where('course_id', $course->id)
+                    ->first();
+
+                if ($grade) {
+                    $grade->update([
+                        'score' => $g['score'] ?? null,
+                        'grade' => $g['grade'] ?? null,
+                    ]);
+                }
+                continue;
+            }
+
+            if (empty($g['mahasiswa_id'])) {
+                continue;
+            }
+
             Grade::updateOrCreate(
                 ['course_id' => $course->id, 'mahasiswa_id' => $g['mahasiswa_id']],
                 ['score' => $g['score'] ?? null, 'grade' => $g['grade'] ?? null]
