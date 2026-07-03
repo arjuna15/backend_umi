@@ -168,5 +168,34 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/quizzes/{quizId}/submit', [\App\Http\Controllers\SiakadController::class, 'submitQuizAnswers']);
         Route::get('/gradebook', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaGradebook']);
     });
+
+    // Academic Calendar
+    Route::get('/siakad/calendar', [\App\Http\Controllers\SiakadController::class, 'getCalendar']);
+    Route::post('/siakad/calendar', [\App\Http\Controllers\SiakadController::class, 'createCalendar']);
+    Route::put('/siakad/calendar/{id}', [\App\Http\Controllers\SiakadController::class, 'updateCalendar']);
+    Route::delete('/siakad/calendar/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteCalendar']);
+
+    // Letter Requests
+    Route::get('/siakad/mahasiswa/letters', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaLetters']);
+    Route::post('/siakad/mahasiswa/letters', [\App\Http\Controllers\SiakadController::class, 'submitMahasiswaLetter']);
+    Route::get('/siakad/admin/letters', [\App\Http\Controllers\SiakadController::class, 'getAdminLetters']);
+    Route::put('/siakad/admin/letters/{id}', [\App\Http\Controllers\SiakadController::class, 'updateLetterStatus']);
+
+    // Classrooms
+    Route::get('/siakad/admin/classrooms', [\App\Http\Controllers\SiakadController::class, 'getClassrooms']);
+    Route::post('/siakad/admin/classrooms', [\App\Http\Controllers\SiakadController::class, 'createClassroom']);
+    Route::put('/siakad/admin/classrooms/{id}', [\App\Http\Controllers\SiakadController::class, 'updateClassroom']);
+    Route::delete('/siakad/admin/classrooms/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteClassroom']);
+
+    // Study Programs
+    Route::get('/siakad/admin/prodis', [\App\Http\Controllers\SiakadController::class, 'getStudyPrograms']);
+    Route::post('/siakad/admin/prodis', [\App\Http\Controllers\SiakadController::class, 'createStudyProgram']);
+    Route::put('/siakad/admin/prodis/{id}', [\App\Http\Controllers\SiakadController::class, 'updateStudyProgram']);
+    Route::delete('/siakad/admin/prodis/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteStudyProgram']);
+
+    // Logs & Backups
+    Route::get('/siakad/admin/logs', [\App\Http\Controllers\SiakadController::class, 'getActivityLogs']);
+    Route::get('/siakad/admin/backups', [\App\Http\Controllers\SiakadController::class, 'getBackups']);
+    Route::post('/siakad/admin/backups', [\App\Http\Controllers\SiakadController::class, 'triggerBackup']);
 });
 

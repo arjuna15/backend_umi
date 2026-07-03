@@ -147,12 +147,12 @@ class SiakadSeeder extends Seeder
         // 4. Create Courses (Mata Kuliah)
         $courses = [];
         $courseData = [
-            ['code' => 'COMP101', 'name' => 'Algoritma dan Pemrograman', 'sks' => 3, 'dosen_id' => $dosens[0]->id, 'hari' => 'Senin', 'jam_mulai' => '08:00', 'jam_selesai' => '10:30', 'ruang' => 'Lab Komputer A'],
-            ['code' => 'COMP102', 'name' => 'Struktur Data', 'sks' => 3, 'dosen_id' => $dosens[1]->id, 'hari' => 'Selasa', 'jam_mulai' => '10:40', 'jam_selesai' => '13:10', 'ruang' => 'Lab Komputer B'],
-            ['code' => 'COMP201', 'name' => 'Jaringan Komputer', 'sks' => 4, 'dosen_id' => $dosens[2]->id, 'hari' => 'Rabu', 'jam_mulai' => '13:20', 'jam_selesai' => '16:40', 'ruang' => 'Ruang 401'],
-            ['code' => 'COMP305', 'name' => 'Kecerdasan Buatan', 'sks' => 3, 'dosen_id' => $dosens[3]->id, 'hari' => 'Kamis', 'jam_mulai' => '08:00', 'jam_selesai' => '10:30', 'ruang' => 'Ruang 402'],
-            ['code' => 'COMP402', 'name' => 'Basis Data Lanjut', 'sks' => 3, 'dosen_id' => $dosens[4]->id, 'hari' => 'Jumat', 'jam_mulai' => '10:40', 'jam_selesai' => '13:10', 'ruang' => 'Lab Komputer A'],
-            ['code' => 'UM001', 'name' => 'Pendidikan Pancasila', 'sks' => 2, 'dosen_id' => $dosens[1]->id, 'hari' => 'Sabtu', 'jam_mulai' => '08:00', 'jam_selesai' => '09:40', 'ruang' => 'Ruang Seminar 1']
+            ['code' => 'COMP101', 'name' => 'Algoritma dan Pemrograman', 'sks' => 3, 'dosen_id' => $dosens[0]->id, 'hari' => 'Senin', 'jam_mulai' => '08:00', 'jam_selesai' => '10:30', 'ruang' => 'Lab Komputer A', 'semester_num' => 1, 'type' => 'Wajib'],
+            ['code' => 'COMP102', 'name' => 'Struktur Data', 'sks' => 3, 'dosen_id' => $dosens[1]->id, 'hari' => 'Selasa', 'jam_mulai' => '10:40', 'jam_selesai' => '13:10', 'ruang' => 'Lab Komputer B', 'semester_num' => 2, 'type' => 'Wajib'],
+            ['code' => 'COMP201', 'name' => 'Jaringan Komputer', 'sks' => 4, 'dosen_id' => $dosens[2]->id, 'hari' => 'Rabu', 'jam_mulai' => '13:20', 'jam_selesai' => '16:40', 'ruang' => 'Ruang 401', 'semester_num' => 3, 'type' => 'Wajib'],
+            ['code' => 'COMP305', 'name' => 'Kecerdasan Buatan', 'sks' => 3, 'dosen_id' => $dosens[3]->id, 'hari' => 'Kamis', 'jam_mulai' => '08:00', 'jam_selesai' => '10:30', 'ruang' => 'Ruang 402', 'semester_num' => 5, 'type' => 'Pilihan'],
+            ['code' => 'COMP402', 'name' => 'Basis Data Lanjut', 'sks' => 3, 'dosen_id' => $dosens[4]->id, 'hari' => 'Jumat', 'jam_mulai' => '10:40', 'jam_selesai' => '13:10', 'ruang' => 'Lab Komputer A', 'semester_num' => 4, 'type' => 'Wajib'],
+            ['code' => 'UM001', 'name' => 'Pendidikan Pancasila', 'sks' => 2, 'dosen_id' => $dosens[1]->id, 'hari' => 'Sabtu', 'jam_mulai' => '08:00', 'jam_selesai' => '09:40', 'ruang' => 'Ruang Seminar 1', 'semester_num' => 1, 'type' => 'Wajib']
         ];
 
         foreach ($courseData as $c) {
@@ -166,7 +166,9 @@ class SiakadSeeder extends Seeder
                 'hari' => $c['hari'],
                 'jam_mulai' => $c['jam_mulai'],
                 'jam_selesai' => $c['jam_selesai'],
-                'ruang' => $c['ruang']
+                'ruang' => $c['ruang'],
+                'semester_num' => $c['semester_num'],
+                'type' => $c['type'],
             ]);
         }
 
@@ -375,6 +377,63 @@ class SiakadSeeder extends Seeder
                 'type' => 'essay',
                 'correct_answer_text' => 'Jawaban esai yang dinilai manual.'
             ]);
+        }
+
+        // 13. Academic Calendar
+        $calendarEvents = [
+            ['name' => 'Pendaftaran & Pembayaran UKT Baru', 'start_date' => '2026-07-10', 'end_date' => '2026-08-05', 'type' => 'Akademik'],
+            ['name' => 'Pengisian KRS Online', 'start_date' => '2026-08-01', 'end_date' => '2026-08-15', 'type' => 'Akademik'],
+            ['name' => 'Kuliah Perdana & Masa Orientasi', 'start_date' => '2026-08-20', 'end_date' => '2026-08-25', 'type' => 'Akademik'],
+            ['name' => 'Ujian Tengah Semester (UTS)', 'start_date' => '2026-10-12', 'end_date' => '2026-10-24', 'type' => 'Ujian'],
+            ['name' => 'Batas Akhir Rapat Pleno Dosen', 'start_date' => '2026-12-10', 'end_date' => '2026-12-15', 'type' => 'Dosen'],
+        ];
+        foreach ($calendarEvents as $ev) {
+            \App\Models\AcademicCalendar::create($ev);
+        }
+
+        // 14. Classrooms
+        $classrooms = [
+            ['code' => 'LAB-COMP-A', 'name' => 'Laboratorium Komputer A', 'capacity' => 30, 'type' => 'Laboratorium'],
+            ['code' => 'LAB-COMP-B', 'name' => 'Laboratorium Komputer B', 'capacity' => 30, 'type' => 'Laboratorium'],
+            ['code' => 'R-401', 'name' => 'Ruang Kuliah 401', 'capacity' => 40, 'type' => 'Kelas Teori'],
+            ['code' => 'R-402', 'name' => 'Ruang Kuliah 402', 'capacity' => 45, 'type' => 'Kelas Teori'],
+            ['code' => 'R-405', 'name' => 'Ruang 405 (Aula)', 'capacity' => 120, 'type' => 'Aula'],
+            ['code' => 'R-SEM-1', 'name' => 'Ruang Seminar 1', 'capacity' => 25, 'type' => 'Seminar'],
+        ];
+        foreach ($classrooms as $room) {
+            \App\Models\Classroom::create($room);
+        }
+
+        // 15. Study Programs
+        $prodis = [
+            ['code' => 'TK', 'name' => 'Teknik Komputer', 'kaprodi' => 'Kaprodi Teknik Komputer', 'jenjang' => 'S1'],
+            ['code' => 'SI', 'name' => 'Sistem Informasi', 'kaprodi' => 'Rina Amelia, M.Kom.', 'jenjang' => 'S1'],
+            ['code' => 'MN', 'name' => 'Manajemen', 'kaprodi' => 'Indri Astuti, M.M.', 'jenjang' => 'S1'],
+            ['code' => 'IH', 'name' => 'Ilmu Hukum', 'kaprodi' => 'Kamilov Sagala, S.H.', 'jenjang' => 'S1'],
+            ['code' => 'AK', 'name' => 'Aktuaria', 'kaprodi' => 'Drs. Suparno, M.Sc.', 'jenjang' => 'S1'],
+        ];
+        foreach ($prodis as $p) {
+            \App\Models\StudyProgram::create($p);
+        }
+
+        // 16. Activity Logs
+        $logs = [
+            ['user_name' => 'Admin Utama', 'action' => 'Mengubah Periode Akademik', 'details' => 'Mengubah semester aktif menjadi Ganjil 2026/2027', 'ip_address' => '127.0.0.1', 'created_at' => date('Y-m-d H:i:s', strtotime('-1 day'))],
+            ['user_name' => 'Kaprodi Teknik Komputer', 'action' => 'Plotting Jadwal Dosen', 'details' => 'Memetakan dosen untuk kelas COMP101', 'ip_address' => '127.0.0.1', 'created_at' => date('Y-m-d H:i:s', strtotime('-5 hours'))],
+            ['user_name' => 'Andi Pratama', 'action' => 'KRS Online', 'details' => 'Mengajukan rencana studi KRS semester ganjil', 'ip_address' => '127.0.0.1', 'created_at' => date('Y-m-d H:i:s', strtotime('-2 hours'))],
+        ];
+        foreach ($logs as $log) {
+            \App\Models\ActivityLog::create($log);
+        }
+
+        // 17. Letter Requests
+        $letters = [
+            ['mahasiswa_id' => $students[0]->id, 'type' => 'Surat Keterangan Aktif Kuliah', 'date' => date('Y-m-d', strtotime('-5 days')), 'status' => 'Selesai', 'note' => 'Silahkan ambil fisik surat di loket pelayanan mahasiswa.'],
+            ['mahasiswa_id' => $students[1]->id, 'type' => 'Surat Pengantar Magang / PKL', 'date' => date('Y-m-d', strtotime('-2 days')), 'status' => 'Diproses', 'note' => 'Menunggu tanda tangan pimpinan fakultas.'],
+            ['mahasiswa_id' => $students[2]->id, 'type' => 'Surat Keterangan Bebas Pustaka', 'date' => date('Y-m-d'), 'status' => 'Pending', 'note' => 'Menunggu verifikasi admin perpustakaan.'],
+        ];
+        foreach ($letters as $l) {
+            \App\Models\LetterRequest::create($l);
         }
     }
 }
