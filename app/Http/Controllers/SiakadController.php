@@ -237,12 +237,20 @@ class SiakadController extends Controller
     public function updateGrade(Request $request, $gradeId)
     {
         $request->validate([
-            'score' => 'numeric|nullable',
+            'attendance_score' => 'numeric|nullable|min:0|max:100',
+            'assignment_score' => 'numeric|nullable|min:0|max:100',
+            'uts_score' => 'numeric|nullable|min:0|max:100',
+            'uas_score' => 'numeric|nullable|min:0|max:100',
+            'score' => 'numeric|nullable|min:0|max:100',
             'grade' => 'string|nullable',
         ]);
         
         $grade = \App\Models\Grade::findOrFail($gradeId);
         $grade->update([
+            'attendance_score' => $request->attendance_score,
+            'assignment_score' => $request->assignment_score,
+            'uts_score' => $request->uts_score,
+            'uas_score' => $request->uas_score,
             'score' => $request->score,
             'grade' => $request->grade,
         ]);
@@ -978,14 +986,14 @@ class SiakadController extends Controller
             // Generate mock components that roughly equal the final score in DB if available
             $finalScore = $g->score ?? 0;
             
-            // To make it look realistic, we just mock the components around the final score
-            $nilaiTugas = min(100, max(0, $finalScore + (($c->id * 3) % 10 - 5)));
-            $nilaiKuis = min(100, max(0, $finalScore + (($c->id * 5) % 10 - 5)));
-            $nilaiUts = min(100, max(0, $finalScore + (($c->id * 7) % 10 - 5)));
-            $nilaiUas = min(100, max(0, ($finalScore - ($nilaiTugas*0.2 + $nilaiKuis*0.2 + $nilaiUts*0.3)) / 0.3));
+            // To make it look realistic, we just mock the components around the final score if DB columns are empty
+            $nilaiTugas = $g->assignment_score !== null ? $g->assignment_score : min(100, max(0, $finalScore + (($c->id * 3) % 10 - 5)));
+            $nilaiKuis = $g->attendance_score !== null ? $g->attendance_score : min(100, max(0, $finalScore + (($c->id * 5) % 10 - 5)));
+            $nilaiUts = $g->uts_score !== null ? $g->uts_score : min(100, max(0, $finalScore + (($c->id * 7) % 10 - 5)));
+            $nilaiUas = $g->uas_score !== null ? $g->uas_score : min(100, max(0, ($finalScore - ($nilaiTugas*0.2 + $nilaiKuis*0.2 + $nilaiUts*0.3)) / 0.3));
             
-            // If there's no score, everything is 0
-            if ($finalScore == 0) {
+            // If there's no score and no database components, everything is 0
+            if ($finalScore == 0 && $g->assignment_score === null && $g->attendance_score === null && $g->uts_score === null && $g->uas_score === null) {
                 $nilaiTugas = $nilaiKuis = $nilaiUts = $nilaiUas = 0;
             }
             
@@ -1154,7 +1162,11 @@ class SiakadController extends Controller
             'grades' => 'required|array',
             'grades.*.id' => 'nullable|exists:grades,id',
             'grades.*.mahasiswa_id' => 'nullable|exists:users,id',
-            'grades.*.score' => 'nullable|numeric',
+            'grades.*.attendance_score' => 'nullable|numeric|min:0|max:100',
+            'grades.*.assignment_score' => 'nullable|numeric|min:0|max:100',
+            'grades.*.uts_score' => 'nullable|numeric|min:0|max:100',
+            'grades.*.uas_score' => 'nullable|numeric|min:0|max:100',
+            'grades.*.score' => 'nullable|numeric|min:0|max:100',
             'grades.*.grade' => 'nullable|string'
         ]);
         
@@ -1170,6 +1182,10 @@ class SiakadController extends Controller
 
                 if ($grade) {
                     $grade->update([
+                        'attendance_score' => $g['attendance_score'] ?? null,
+                        'assignment_score' => $g['assignment_score'] ?? null,
+                        'uts_score' => $g['uts_score'] ?? null,
+                        'uas_score' => $g['uas_score'] ?? null,
                         'score' => $g['score'] ?? null,
                         'grade' => $g['grade'] ?? null,
                     ]);
@@ -1183,7 +1199,14 @@ class SiakadController extends Controller
 
             Grade::updateOrCreate(
                 ['course_id' => $course->id, 'mahasiswa_id' => $g['mahasiswa_id']],
-                ['score' => $g['score'] ?? null, 'grade' => $g['grade'] ?? null]
+                [
+                    'attendance_score' => $g['attendance_score'] ?? null,
+                    'assignment_score' => $g['assignment_score'] ?? null,
+                    'uts_score' => $g['uts_score'] ?? null,
+                    'uas_score' => $g['uas_score'] ?? null,
+                    'score' => $g['score'] ?? null,
+                    'grade' => $g['grade'] ?? null
+                ]
             );
         }
         
