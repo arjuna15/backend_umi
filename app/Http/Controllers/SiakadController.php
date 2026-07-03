@@ -939,18 +939,34 @@ class SiakadController extends Controller
         $krs = \App\Models\KrsSubmission::whereHas('mahasiswa', function($q) use ($dosenId) {
             $q->where('dosen_wali_id', $dosenId);
         })->with('mahasiswa')->get();
-        return response()->json($krs);
+
+        $mappedKrs = $krs->map(function ($sub) {
+            $courseIds = $sub->course_ids ?? [];
+            $courses = \App\Models\Course::whereIn('id', $courseIds)->get();
+
+            if ($sub->mahasiswa) {
+                $sub->mahasiswa->nim = $sub->mahasiswa->nim_nip;
+            }
+
+            $sub->courses = $courses;
+            return $sub;
+        });
+
+        return response()->json(['submissions' => $mappedKrs]);
     }
 
     public function approveDosenKrs(Request $request)
     {
+        $krsId = $request->submission_id ?? $request->krs_id;
+
+        $request->merge(['resolved_krs_id' => $krsId]);
         $request->validate([
-            'krs_id' => 'required|exists:krs_submissions,id',
+            'resolved_krs_id' => 'required|exists:krs_submissions,id',
             'status' => 'required|in:approved,rejected',
             'notes' => 'nullable|string'
         ]);
         
-        $krs = \App\Models\KrsSubmission::findOrFail($request->krs_id);
+        $krs = \App\Models\KrsSubmission::findOrFail($krsId);
         $krs->update([
             'status' => $request->status,
             'notes' => $request->notes
