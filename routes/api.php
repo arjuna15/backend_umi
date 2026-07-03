@@ -136,6 +136,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/siakad/admin/billings', [\App\Http\Controllers\SiakadController::class, 'createBilling']);
     Route::put('/siakad/admin/billings/{id}', [\App\Http\Controllers\SiakadController::class, 'updateBilling']);
     Route::delete('/siakad/admin/billings/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteBilling']);
+    Route::post('/siakad/admin/billings/bulk-generate', [\App\Http\Controllers\SiakadController::class, 'bulkGenerateBillings']);
 
     // Dosen Ultimate Mega Update
     Route::prefix('siakad/dosen')->group(function () {

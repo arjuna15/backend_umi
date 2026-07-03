@@ -530,6 +530,53 @@ class SiakadController extends Controller
         return response()->json(['message' => 'Billing deleted successfully']);
     }
 
+    public function bulkGenerateBillings(Request $request)
+    {
+        $request->validate([
+            'description' => 'required|string',
+            'amount' => 'required|numeric|min:1',
+            'due_date' => 'required|date'
+        ]);
+
+        $mahasiswaUsers = User::where('role', 'mahasiswa')->get();
+
+        if ($mahasiswaUsers->isEmpty()) {
+            return response()->json(['message' => 'Tidak ada mahasiswa aktif ditemukan.'], 404);
+        }
+
+        $created = 0;
+        $skipped = 0;
+
+        foreach ($mahasiswaUsers as $mhs) {
+            // Skip if same billing already exists for this user
+            $exists = \App\Models\Billing::where('user_id', $mhs->id)
+                ->where('description', $request->description)
+                ->where('due_date', $request->due_date)
+                ->exists();
+
+            if ($exists) {
+                $skipped++;
+                continue;
+            }
+
+            \App\Models\Billing::create([
+                'user_id' => $mhs->id,
+                'description' => $request->description,
+                'amount' => $request->amount,
+                'due_date' => $request->due_date,
+                'status' => 'Belum Lunas'
+            ]);
+            $created++;
+        }
+
+        return response()->json([
+            'message' => "Berhasil membuat {$created} tagihan untuk mahasiswa aktif." . ($skipped > 0 ? " {$skipped} tagihan duplikat dilewati." : ''),
+            'created' => $created,
+            'skipped' => $skipped,
+            'total_mahasiswa' => $mahasiswaUsers->count()
+        ]);
+    }
+
     public function getAvailableKrs(Request $request)
     {
         $courses = Course::with('dosen')->get();
