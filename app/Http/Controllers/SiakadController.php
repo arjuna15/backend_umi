@@ -93,17 +93,42 @@ class SiakadController extends Controller
         $request->validate([
             'title' => 'required',
             'file' => 'required|file',
+            'session_num' => 'nullable|integer',
         ]);
 
-        $path = $request->file('file')->store('materials', 'local');
+        $path = $request->file('file')->store('materials', 'public');
 
         $material = Material::create([
             'course_id' => $courseId,
             'title' => $request->title,
-            'content_link' => $path,
+            'session_num' => $request->session_num ?? 1,
+            'type' => 'file',
+            'content_link' => '/storage/' . $path,
         ]);
 
         return response()->json(['message' => 'Material uploaded successfully', 'material' => $material]);
+    }
+
+    public function saveMeetLink(Request $request, $courseId)
+    {
+        $request->validate([
+            'session_num' => 'required|integer',
+            'meet_url' => 'required|url',
+        ]);
+
+        $material = Material::updateOrCreate(
+            [
+                'course_id' => $courseId,
+                'session_num' => $request->session_num,
+                'type' => 'meet',
+            ],
+            [
+                'title' => 'Link Meet Pertemuan ' . $request->session_num,
+                'content_link' => $request->meet_url,
+            ]
+        );
+
+        return response()->json(['message' => 'Meet link saved successfully', 'material' => $material]);
     }
 
     public function downloadMaterial(Request $request, $id)
@@ -656,6 +681,7 @@ class SiakadController extends Controller
         $courses = Course::where('dosen_id', $dosenId)->get();
         $todaySchedule = $courses->map(function($course) {
             return [
+                'course_id' => $course->id,
                 'course' => $course->name,
                 'time' => ($course->jam_mulai && $course->jam_selesai) ? $course->jam_mulai . ' - ' . $course->jam_selesai : 'Belum diatur',
                 'room' => $course->ruang ?? 'Belum ada ruang',
@@ -736,12 +762,19 @@ class SiakadController extends Controller
 
     public function getCourseSessions(Request $request, $courseId)
     {
+        $materials = \App\Models\Material::where('course_id', $courseId)->get();
+        
         $sessions = [];
         for ($i = 1; $i <= 14; $i++) {
+            $sessionMaterials = $materials->where('session_num', $i)->where('type', 'file');
+            $meetLinkObj = $materials->where('session_num', $i)->where('type', 'meet')->first();
+
             $sessions[] = [
                 'session' => $i,
                 'title' => 'Materi Pertemuan ' . $i,
-                'material_count' => (($courseId * 7 + $i * 3) % 4) + 1
+                'materials' => $sessionMaterials->values(),
+                'material_count' => $sessionMaterials->count(),
+                'meet_link' => $meetLinkObj ? $meetLinkObj->content_link : null
             ];
         }
         return response()->json($sessions);
