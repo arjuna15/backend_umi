@@ -39,6 +39,8 @@ class User extends Authenticatable
         'bio',
         'avatar_url',
         'dosen_wali_id',
+        'jfa',
+        'status',
     ];
 
     /**

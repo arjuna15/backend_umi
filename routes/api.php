@@ -197,5 +197,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/siakad/admin/logs', [\App\Http\Controllers\SiakadController::class, 'getActivityLogs']);
     Route::get('/siakad/admin/backups', [\App\Http\Controllers\SiakadController::class, 'getBackups']);
     Route::post('/siakad/admin/backups', [\App\Http\Controllers\SiakadController::class, 'triggerBackup']);
+    Route::delete('/siakad/admin/backups/{filename}', [\App\Http\Controllers\SiakadController::class, 'deleteBackup']);
 });
 

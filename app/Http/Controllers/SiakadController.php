@@ -272,7 +272,9 @@ class SiakadController extends Controller
             'name' => 'required',
             'nim_nip' => 'required|unique:users',
             'role' => 'required|in:admin,superadmin,kaprodi,dosen,mahasiswa',
-            'password' => 'required|min:6'
+            'password' => 'required|min:6',
+            'jfa' => 'nullable|string',
+            'status' => 'nullable|string',
         ]);
 
         $user = User::create([
@@ -280,6 +282,8 @@ class SiakadController extends Controller
             'nim_nip' => $request->nim_nip,
             'role' => $request->role,
             'prodi' => $request->prodi,
+            'jfa' => $request->jfa ?? 'Asisten Ahli',
+            'status' => $request->status ?? 'Aktif',
             'password' => Hash::make($request->password),
         ]);
 
@@ -291,7 +295,9 @@ class SiakadController extends Controller
         $request->validate([
             'name' => 'required',
             'nim_nip' => 'required|unique:users,nim_nip,'.$id,
-            'role' => 'required|in:admin,superadmin,kaprodi,dosen,mahasiswa'
+            'role' => 'required|in:admin,superadmin,kaprodi,dosen,mahasiswa',
+            'jfa' => 'nullable|string',
+            'status' => 'nullable|string',
         ]);
 
         $user = User::findOrFail($id);
@@ -300,6 +306,8 @@ class SiakadController extends Controller
             'nim_nip' => $request->nim_nip,
             'role' => $request->role,
             'prodi' => $request->prodi,
+            'jfa' => $request->jfa ?? $user->jfa,
+            'status' => $request->status ?? $user->status,
         ];
         
         if ($request->password) {
@@ -1332,5 +1340,16 @@ class SiakadController extends Controller
                 'created_at' => date('Y-m-d H:i:s')
             ]
         ]);
+    }
+
+    public function deleteBackup(Request $request, $filename)
+    {
+        $backupPath = storage_path('app/backups/' . basename($filename));
+        if (file_exists($backupPath)) {
+            unlink($backupPath);
+            $this->logActivity($request->user()->name, 'Hapus Backup', 'Menghapus file backup database: ' . $filename);
+            return response()->json(['message' => 'Backup deleted']);
+        }
+        return response()->json(['message' => 'File not found'], 404);
     }
 }
