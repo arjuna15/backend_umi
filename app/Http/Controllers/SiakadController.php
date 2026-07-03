@@ -1022,7 +1022,7 @@ class SiakadController extends Controller
         $dosenId = $request->user()->id;
         $courses = Course::where('dosen_id', $dosenId)->get();
         
-        $rekap = [];
+        $mappedCourses = [];
         foreach($courses as $c) {
             $attendances = \App\Models\Attendance::where('course_id', $c->id)->pluck('id');
             $totalMeetings = $attendances->count();
@@ -1031,6 +1031,8 @@ class SiakadController extends Controller
             $students = [];
             
             foreach($grades as $g) {
+                if (!$g->mahasiswa) continue;
+                
                 $presentCount = \App\Models\AttendanceRecord::whereIn('attendance_id', $attendances)
                     ->where('mahasiswa_id', $g->mahasiswa_id)
                     ->where('status', 'present')
@@ -1039,20 +1041,24 @@ class SiakadController extends Controller
                 $percentage = $totalMeetings > 0 ? round(($presentCount / $totalMeetings) * 100, 2) : 0;
                 
                 $students[] = [
-                    'mahasiswa' => $g->mahasiswa,
+                    'id' => $g->mahasiswa->id,
+                    'nim' => $g->mahasiswa->nim_nip,
+                    'name' => $g->mahasiswa->name,
                     'present_count' => $presentCount,
-                    'total_meetings' => $totalMeetings,
-                    'percentage' => $percentage
+                    'attendance_percentage' => $percentage
                 ];
             }
             
-            $rekap[] = [
-                'course' => $c,
-                'rekap' => $students
+            $mappedCourses[] = [
+                'id' => $c->id,
+                'code' => $c->code,
+                'name' => $c->name,
+                'total_meetings' => $totalMeetings,
+                'students' => $students
             ];
         }
         
-        return response()->json($rekap);
+        return response()->json(['courses' => $mappedCourses]);
     }
 
     public function importDosenGradebook(Request $request)
