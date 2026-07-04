@@ -1241,6 +1241,10 @@ class SiakadController extends Controller
                 'kuis' => round($nilaiKuis, 1),
                 'uts' => round($nilaiUts, 1),
                 'uas' => round($nilaiUas, 1),
+                'attendance_weight' => (float) ($c->attendance_weight ?? 0),
+                'assignment_weight' => (float) ($c->assignment_weight ?? 0),
+                'uts_weight' => (float) ($c->uts_weight ?? 0),
+                'uas_weight' => (float) ($c->uas_weight ?? 0),
                 'akhir' => round((float) $finalScore, 1),
                 'huruf' => $g->grade ?? $this->scoreToLetter((float) $finalScore),
             ];
