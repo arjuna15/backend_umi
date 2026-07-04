@@ -47,6 +47,8 @@ class SiakadController extends Controller
     {
         $user = $request->user();
         $user->loadMissing('dosenWali');
+        $portal = strtolower((string) $request->header('X-SIAKAD-PORTAL', ''));
+        $isDosenPortal = $user->role === 'dosen' || ($user->role === 'kaprodi' && $portal === 'dosen');
 
         if ($user->role === 'mahasiswa') {
             $grades = Grade::with([
@@ -73,7 +75,7 @@ class SiakadController extends Controller
             ]);
         }
 
-        if ($user->role === 'dosen') {
+        if ($isDosenPortal) {
             $courses = Course::with([
                 'grades.mahasiswa',
                 'materials',
