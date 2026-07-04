@@ -163,6 +163,8 @@ Route::middleware('auth:sanctum')->group(function () {
     // Mahasiswa Ultimate Mega Update
     Route::prefix('siakad/mahasiswa')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaDashboard']);
+        Route::get('/consultations', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaConsultations']);
+        Route::post('/consultations', [\App\Http\Controllers\SiakadController::class, 'storeMahasiswaConsultation']);
         Route::get('/courses/{courseId}/materials', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaMaterials']);
         Route::get('/presensi', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaPresensi']);
         Route::post('/presensi/{attendanceId}/submit', [\App\Http\Controllers\SiakadController::class, 'submitMahasiswaPresensi']);

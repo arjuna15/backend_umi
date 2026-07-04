@@ -90,4 +90,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(ForumReply::class);
     }
+
+    public function dosenWali()
+    {
+        return $this->belongsTo(User::class, 'dosen_wali_id');
+    }
+
 }

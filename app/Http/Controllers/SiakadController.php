@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Grade;
 use App\Models\Course;
+use App\Models\ConsultationMessage;
 use App\Models\Material;
 use App\Models\Submission;
 use Illuminate\Support\Facades\Storage;
@@ -45,19 +46,30 @@ class SiakadController extends Controller
     public function dashboard(Request $request)
     {
         $user = $request->user();
+        $user->loadMissing('dosenWali');
 
         if ($user->role === 'mahasiswa') {
             $grades = Grade::with([
                 'course.materials',
                 'course.assignments.submissions',
                 'course.attendances.records',
-                'course.forums.replies'
+                'course.forums.replies',
+                'course.quizzes.questions'
             ])->where('mahasiswa_id', $user->id)->get();
             $billings = \App\Models\Billing::where('user_id', $user->id)->get();
+            $consultations = $this->formatConsultationMessages($user);
             return response()->json([
                 'user' => $user,
                 'krs' => $grades,
-                'billings' => $billings
+                'billings' => $billings,
+                'consultations' => $consultations,
+                'messages' => $consultations,
+                'advisor' => $user->dosenWali ? [
+                    'id' => $user->dosenWali->id,
+                    'name' => $user->dosenWali->name,
+                    'nidn' => $user->dosenWali->nim_nip,
+                    'prodi' => $user->dosenWali->prodi,
+                ] : null,
             ]);
         }
 
@@ -67,11 +79,13 @@ class SiakadController extends Controller
                 'materials',
                 'assignments.submissions',
                 'attendances.records',
-                'forums.replies'
+                'forums.replies',
+                'quizzes.questions'
             ])->where('dosen_id', $user->id)->get();
             return response()->json([
                 'user' => $user,
-                'jadwal' => $courses
+                'jadwal' => $courses,
+                'courses' => $courses,
             ]);
         }
 
@@ -86,6 +100,35 @@ class SiakadController extends Controller
         }
 
         return response()->json(['message' => 'Unauthorized role'], 403);
+    }
+
+    private function formatConsultationMessages(User $user)
+    {
+        if (!$user->dosenWali) {
+            return collect();
+        }
+
+        return ConsultationMessage::query()
+            ->where('mahasiswa_id', $user->id)
+            ->where(function ($query) use ($user) {
+                $query->where('dosen_id', $user->dosenWali->id)
+                    ->orWhereNull('dosen_id');
+            })
+            ->orderBy('created_at')
+            ->get()
+            ->map(function (ConsultationMessage $message) use ($user) {
+                $sender = $message->sender_role === 'mahasiswa' ? 'mahasiswa' : 'dosen';
+                return [
+                    'id' => $message->id,
+                    'sender' => $sender,
+                    'content' => $message->content,
+                    'text' => $message->content,
+                    'created_at' => $message->created_at?->toDateTimeString(),
+                    'time' => $message->created_at?->format('j M Y, H:i'),
+                    'is_from_student' => $sender === 'mahasiswa',
+                    'advisor_name' => $user->dosenWali?->name,
+                ];
+            });
     }
 
     public function uploadMateri(Request $request, $courseId)
@@ -298,7 +341,21 @@ class SiakadController extends Controller
 
     public function getUsers()
     {
-        return response()->json(User::all());
+        $users = User::orderBy('role')->orderBy('name')->get()->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'name' => $user->name,
+                'nim_nip' => $user->nim_nip,
+                'role' => $user->role,
+                'prodi' => $user->prodi,
+                'jfa' => $user->jfa,
+                'status' => $user->status,
+                'phone' => $user->phone,
+                'email' => $user->email,
+            ];
+        });
+
+        return response()->json($users);
     }
 
     public function createUser(Request $request)
@@ -362,7 +419,30 @@ class SiakadController extends Controller
 
     public function getCourses()
     {
-        return response()->json(Course::with('dosen')->get());
+        $courses = Course::with('dosen')->orderBy('code')->get()->map(function ($course) {
+            return [
+                'id' => $course->id,
+                'code' => $course->code,
+                'name' => $course->name,
+                'sks' => $course->sks,
+                'semester' => $course->semester,
+                'semester_num' => $course->semester_num,
+                'type' => $course->type,
+                'prodi' => $course->prodi,
+                'dosen_id' => $course->dosen_id,
+                'dosen' => $course->dosen ? [
+                    'id' => $course->dosen->id,
+                    'name' => $course->dosen->name,
+                    'nim_nip' => $course->dosen->nim_nip,
+                ] : null,
+                'hari' => $course->hari,
+                'jam_mulai' => $course->jam_mulai,
+                'jam_selesai' => $course->jam_selesai,
+                'ruang' => $course->ruang,
+            ];
+        });
+
+        return response()->json($courses);
     }
 
     public function createCourse(Request $request)
@@ -774,27 +854,40 @@ class SiakadController extends Controller
     public function getDosenDashboard(Request $request)
     {
         $dosenId = auth()->id();
-        $courses = Course::where('dosen_id', $dosenId)->get();
+        $courses = Course::with(['grades', 'attendances', 'assignments'])->where('dosen_id', $dosenId)->get();
+
         $todaySchedule = $courses->map(function($course) {
+            $latestAttendance = $course->attendances->sortByDesc('meeting_number')->first();
             return [
                 'course_id' => $course->id,
                 'course' => $course->name,
-                'time' => ($course->jam_mulai && $course->jam_selesai) ? $course->jam_mulai . ' - ' . $course->jam_selesai : 'Belum diatur',
-                'room' => $course->ruang ?? 'Belum ada ruang',
-                'meeting' => ($course->id % 14) + 1
+                'time' => ($course->jam_mulai && $course->jam_selesai) ? $course->jam_mulai . ' - ' . $course->jam_selesai : '-',
+                'room' => $course->ruang ?? '-',
+                'meeting' => $latestAttendance?->meeting_number ?? 1,
+                'day' => $course->hari ?? null,
             ];
+        })->values();
+
+        $pendingGrades = $courses->sum(function ($course) {
+            return $course->grades->whereNull('score')->count();
         });
-        
-        $todos = [
-            "Ada " . (($dosenId * 7) % 31 + 20) . " tugas mahasiswa yang belum dinilai.",
-            "Jadwal UTS tinggal " . (($dosenId * 3) % 12 + 3) . " hari lagi.",
-            "BAP untuk mata kuliah Jaringan Komputer belum diisi."
-        ];
+
+        $pendingBap = $courses->filter(function ($course) {
+            return !\App\Models\Bap::where('course_id', $course->id)->exists();
+        })->count();
+
+        $todos = collect([
+            $pendingGrades > 0 ? "Ada {$pendingGrades} nilai yang belum diisi." : null,
+            $courses->sum(fn ($course) => $course->assignments->count()) > 0 ? 'Ada tugas aktif yang perlu dipantau.' : null,
+            $pendingBap > 0 ? 'Beberapa mata kuliah belum memiliki BAP awal.' : null,
+        ])->filter()->values();
 
         return response()->json([
             'total_courses' => $courses->count(),
             'schedule' => $todaySchedule,
-            'todos' => $todos
+            'todos' => $todos,
+            'courses' => $courses,
+            'semester' => 'Ganjil 2026/2027',
         ]);
     }
 
@@ -883,31 +976,140 @@ class SiakadController extends Controller
 
     public function getMahasiswaDashboard(Request $request)
     {
-        // Add fake upcoming deadlines and schedule
+        $user = $request->user();
+        $user->loadMissing('dosenWali');
+        $today = now();
+        $approvedKrs = \App\Models\KrsSubmission::where('mahasiswa_id', $user->id)
+            ->where('status', 'approved')
+            ->latest()
+            ->first();
+
+        $courseIds = collect($approvedKrs?->course_ids ?? [])
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->values();
+
+        if ($courseIds->isNotEmpty()) {
+            $courses = Course::with(['dosen', 'attendances', 'assignments', 'quizzes.questions'])->whereIn('id', $courseIds)->get();
+        } else {
+            $courses = Course::with(['dosen', 'attendances', 'assignments', 'quizzes.questions'])
+                ->where('prodi', $user->prodi)
+                ->get();
+        }
+
+        $scheduleToday = $courses->map(function ($course) use ($today) {
+            $attendance = $course->attendances->sortByDesc('meeting_number')->first();
+            return [
+                'day' => $course->hari ?? $today->locale('id')->translatedFormat('l'),
+                'time' => trim(($course->jam_mulai ?? '') . ($course->jam_selesai ? ' - ' . $course->jam_selesai : '')) ?: '-',
+                'course' => $course->name,
+                'room' => $course->ruang ?? '-',
+                'dosen' => $course->dosen?->name ?? '-',
+                'meeting' => $attendance?->meeting_number ?? 1,
+            ];
+        })->filter(fn ($item) => $item['course'] !== '-')->values();
+
+        $upcomingDeadlines = [];
+        foreach ($courses as $course) {
+            foreach ($course->assignments->take(1) as $assignment) {
+                $dueInDays = now()->diffInDays(\Carbon\Carbon::parse($assignment->deadline), false);
+                $upcomingDeadlines[] = [
+                    'title' => $assignment->title,
+                    'course' => $course->name,
+                    'due_in_days' => max(0, abs((int) $dueInDays)),
+                ];
+            }
+        }
+
+        $billing = \App\Models\Billing::where('user_id', $user->id)->latest()->first();
+        if ($billing) {
+            $upcomingDeadlines[] = [
+                'title' => 'Tagihan ' . $billing->description,
+                'course' => $user->prodi,
+                'due_in_days' => max(0, now()->diffInDays($billing->due_date, false)),
+            ];
+        }
+
+        $consultations = $this->formatConsultationMessages($user);
+
         return response()->json([
-            'schedule_today' => [
-                ['time' => '08:00 - 10:30', 'course' => 'Pemrograman Web Lanjut', 'room' => 'Lab Komputer A'],
-                ['time' => '13:00 - 15:30', 'course' => 'Basis Data 2', 'room' => 'Ruang 402']
-            ],
-            'upcoming_deadlines' => [
-                ['title' => 'Tugas 3: React Hooks', 'course' => 'Pemrograman Web Lanjut', 'due_in_days' => 1],
-                ['title' => 'Kuis Tengah Semester', 'course' => 'Rekayasa Perangkat Lunak', 'due_in_days' => 2]
-            ]
+            'advisor' => $user->dosenWali ? [
+                'id' => $user->dosenWali->id,
+                'name' => $user->dosenWali->name,
+                'nidn' => $user->dosenWali->nim_nip,
+                'prodi' => $user->dosenWali->prodi,
+            ] : null,
+            'krs_status' => $approvedKrs?->status ?? 'belum_diajukan',
+            'krs_deadline' => $today->copy()->addDays(7)->toDateString(),
+            'schedule_today' => $scheduleToday,
+            'upcoming_deadlines' => collect($upcomingDeadlines)->sortBy('due_in_days')->values(),
+            'consultations' => $consultations->values(),
+            'weekly_schedule' => $scheduleToday,
+            'messages' => $consultations->values(),
         ]);
+    }
+
+    public function getMahasiswaConsultations(Request $request)
+    {
+        $user = $request->user();
+        $user->loadMissing('dosenWali');
+
+        return response()->json([
+            'advisor' => $user->dosenWali ? [
+                'id' => $user->dosenWali->id,
+                'name' => $user->dosenWali->name,
+                'nidn' => $user->dosenWali->nim_nip,
+                'prodi' => $user->dosenWali->prodi,
+            ] : null,
+            'messages' => $this->formatConsultationMessages($user)->values(),
+        ]);
+    }
+
+    public function storeMahasiswaConsultation(Request $request)
+    {
+        $user = $request->user();
+        $user->loadMissing('dosenWali');
+
+        if ($user->role !== 'mahasiswa' || !$user->dosenWali) {
+            return response()->json(['message' => 'Dosen wali tidak ditemukan.'], 422);
+        }
+
+        $request->validate([
+            'message' => 'required|string|max:2000',
+        ]);
+
+        $message = ConsultationMessage::create([
+            'mahasiswa_id' => $user->id,
+            'dosen_id' => $user->dosenWali->id,
+            'sender_role' => 'mahasiswa',
+            'content' => trim($request->message),
+            'is_read' => false,
+        ]);
+
+        return response()->json([
+            'message' => 'Pesan konsultasi berhasil dikirim.',
+            'data' => [
+                'id' => $message->id,
+                'sender' => 'mahasiswa',
+                'content' => $message->content,
+                'text' => $message->content,
+                'created_at' => $message->created_at?->toDateTimeString(),
+                'time' => $message->created_at?->format('j M Y, H:i'),
+                'is_from_student' => true,
+            ],
+        ], 201);
     }
 
     public function getMahasiswaMaterials(Request $request, $courseId)
     {
-        // Mock 14 sessions
+        $materials = \App\Models\Material::where('course_id', $courseId)->orderBy('session_num')->get();
         $sessions = [];
         for ($i = 1; $i <= 14; $i++) {
+            $sessionMaterials = $materials->where('session_num', $i)->values();
             $sessions[] = [
                 'session' => $i,
                 'title' => 'Pertemuan ' . $i,
-                'materials' => [
-                    ['id' => 1, 'title' => 'Materi_Bagian_'.$i.'.pdf', 'type' => 'pdf'],
-                    ['id' => 2, 'title' => 'Video Pembelajaran Sesi '.$i, 'type' => 'video']
-                ]
+                'materials' => $sessionMaterials,
             ];
         }
         return response()->json($sessions);
@@ -915,9 +1117,25 @@ class SiakadController extends Controller
 
     public function getMahasiswaPresensi(Request $request)
     {
-        $courses = \App\Models\Course::all();
+        $user = $request->user();
+        $approvedKrs = \App\Models\KrsSubmission::where('mahasiswa_id', $user->id)
+            ->where('status', 'approved')
+            ->latest()
+            ->first();
+
+        $courseIds = collect($approvedKrs?->course_ids ?? [])
+            ->filter()
+            ->map(fn ($id) => (int) $id)
+            ->values();
+
+        if ($courseIds->isNotEmpty()) {
+            $courses = \App\Models\Course::with('attendances')->whereIn('id', $courseIds)->get();
+        } else {
+            $courses = \App\Models\Course::with('attendances')->where('prodi', $user->prodi)->get();
+        }
+
         $presensiList = [];
-        foreach($courses as $c) {
+        foreach ($courses as $c) {
             $latestAttendance = \App\Models\Attendance::where('course_id', $c->id)->latest()->first();
             $active_session = null;
             
@@ -968,10 +1186,31 @@ class SiakadController extends Controller
 
     public function submitQuizAnswers(Request $request, $quizId)
     {
-        // Mock processing
+        $request->validate([
+            'answers' => 'required|array',
+        ]);
+
+        $quiz = \App\Models\Quiz::with('questions')->findOrFail($quizId);
+        $answers = $request->answers;
+        $correct = 0;
+        $total = $quiz->questions->count();
+
+        foreach ($quiz->questions as $question) {
+            $given = $answers[$question->id] ?? null;
+            $expected = strtoupper(trim((string) $question->correct_answer));
+
+            if ($expected !== '' && strtoupper(trim((string) $given)) === $expected) {
+                $correct++;
+            }
+        }
+
+        $score = $total > 0 ? round(($correct / $total) * 100, 2) : 0;
+
         return response()->json([
             'message' => 'Jawaban kuis berhasil dikumpulkan.',
-            'score' => 70 + ($quizId % 31)
+            'score' => $score,
+            'correct' => $correct,
+            'total' => $total,
         ]);
     }
 
@@ -981,24 +1220,20 @@ class SiakadController extends Controller
         $gradesDb = \App\Models\Grade::with('course')->where('mahasiswa_id', $user->id)->get();
         
         $grades = [];
-        foreach($gradesDb as $g) {
+        foreach ($gradesDb as $g) {
             $c = $g->course;
             if (!$c) continue;
-            
-            // Generate mock components that roughly equal the final score in DB if available
-            $finalScore = $g->score ?? 0;
-            
-            // To make it look realistic, we just mock the components around the final score if DB columns are empty
-            $nilaiTugas = $g->assignment_score !== null ? $g->assignment_score : min(100, max(0, $finalScore + (($c->id * 3) % 10 - 5)));
-            $nilaiKuis = $g->attendance_score !== null ? $g->attendance_score : min(100, max(0, $finalScore + (($c->id * 5) % 10 - 5)));
-            $nilaiUts = $g->uts_score !== null ? $g->uts_score : min(100, max(0, $finalScore + (($c->id * 7) % 10 - 5)));
-            $nilaiUas = $g->uas_score !== null ? $g->uas_score : min(100, max(0, ($finalScore - ($nilaiTugas*0.2 + $nilaiKuis*0.2 + $nilaiUts*0.3)) / 0.3));
-            
-            // If there's no score and no database components, everything is 0
-            if ($finalScore == 0 && $g->assignment_score === null && $g->attendance_score === null && $g->uts_score === null && $g->uas_score === null) {
-                $nilaiTugas = $nilaiKuis = $nilaiUts = $nilaiUas = 0;
+
+            $nilaiTugas = $g->assignment_score ?? 0;
+            $nilaiKuis = $g->attendance_score ?? 0;
+            $nilaiUts = $g->uts_score ?? 0;
+            $nilaiUas = $g->uas_score ?? 0;
+            $finalScore = $g->score;
+
+            if ($finalScore === null) {
+                $finalScore = round(($nilaiTugas * 0.2) + ($nilaiKuis * 0.2) + ($nilaiUts * 0.3) + ($nilaiUas * 0.3), 1);
             }
-            
+
             $grades[] = [
                 'course_name' => $c->name,
                 'sks' => $c->sks,
@@ -1006,8 +1241,8 @@ class SiakadController extends Controller
                 'kuis' => round($nilaiKuis, 1),
                 'uts' => round($nilaiUts, 1),
                 'uas' => round($nilaiUas, 1),
-                'akhir' => $finalScore,
-                'huruf' => $g->grade ?? '-'
+                'akhir' => round((float) $finalScore, 1),
+                'huruf' => $g->grade ?? $this->scoreToLetter((float) $finalScore),
             ];
         }
         return response()->json($grades);
@@ -1544,5 +1779,21 @@ class SiakadController extends Controller
             return response()->json(['message' => 'Backup deleted']);
         }
         return response()->json(['message' => 'File not found'], 404);
+    }
+
+
+    private function scoreToLetter(float $score): string
+    {
+        return match (true) {
+            $score >= 85 => 'A',
+            $score >= 80 => 'A-',
+            $score >= 75 => 'B+',
+            $score >= 70 => 'B',
+            $score >= 65 => 'B-',
+            $score >= 60 => 'C+',
+            $score >= 55 => 'C',
+            $score >= 40 => 'D',
+            default => 'E',
+        };
     }
 }

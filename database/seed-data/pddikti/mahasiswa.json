@@ -1,128 +1,98 @@
 [
   {
-    "nama": "ABDILLAH",
-    "nim": "332231500040",
-    "nama_prodi": "Manajemen",
+    "nama": "ABDUL MUTHOLIB",
+    "nim": "315251020015",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "AISYAH",
-    "nim": "312241520041",
-    "nama_prodi": "Manajemen",
+    "nama": "ADITYA ALISANDI",
+    "nim": "314251021001",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "AJI",
-    "nim": "313241010018",
-    "nama_prodi": "Hukum",
+    "nama": "ADITYA ALISANDI",
+    "nim": "315241010002",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "keluar"
+  },
+  {
+    "nama": "AFIF UBAYDILAH",
+    "nim": "314241010001",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "ANDRIAN",
-    "nim": "312251541124",
-    "nama_prodi": "Manajemen",
+    "nama": "AGUS SETIAWAN",
+    "nim": "314241010013",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "ANDRIANI",
-    "nim": "331221340217",
-    "nama_prodi": "Manajemen",
+    "nama": "AHMAD FIKRI",
+    "nim": "315251020009",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "ANDRIYANI",
-    "nim": "331211320692",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "ARDIANSYAH",
-    "nim": "311242381023",
-    "nama_prodi": "Manajemen",
+    "nama": "ALDO CHRISKYAWAN",
+    "nim": "314251020021",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "ARIFIN",
-    "nim": "331212331070",
-    "nama_prodi": "Manajemen",
+    "nama": "AMEER BEDITO PUTRA",
+    "nim": "314241010008",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "keluar"
+  },
+  {
+    "nama": "AMOS REYNALDI",
+    "nim": "315251020007",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "ARIYA",
-    "nim": "331211320425",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "ASHSHIFA",
-    "nim": "331221340090",
-    "nama_prodi": "Manajemen",
+    "nama": "ANDI NUR AMALIA",
+    "nim": "316251020005",
+    "nama_prodi": "Ilmu Aktuaria",
     "status": "aktif"
   },
   {
-    "nama": "BASUKI",
-    "nim": "331211320668",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "BUKHORI",
-    "nim": "313241010089",
-    "nama_prodi": "Hukum",
+    "nama": "ARJUNA ARRASYID",
+    "nim": "315251020003",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "CITRA DIANA",
-    "nim": "331231360073",
-    "nama_prodi": "Manajemen",
+    "nama": "ARNOLDUS WORA",
+    "nim": "315241010007",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "CITRA IIS HARDIYANTI",
-    "nim": "331221340384",
-    "nama_prodi": "Manajemen",
+    "nama": "BIN WISLAN SAOGO",
+    "nim": "315251020019",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "CITRA MAESYARINDA",
-    "nim": "331231361147",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "CITRA SARASWATI",
-    "nim": "311242381091",
-    "nama_prodi": "Manajemen",
+    "nama": "DIMAS ARDIANSYAH",
+    "nim": "314251020018",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "DAMAS",
-    "nim": "332222490118",
-    "nama_prodi": "Manajemen",
+    "nama": "EDDY SUDRAJAT",
+    "nim": "314251020005",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "DEASTUTI",
-    "nim": "311241371119",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "DENNY",
-    "nim": "311242381060",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "ELIANI",
-    "nim": "312232511035",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "ENDANG",
-    "nim": "312251540059",
-    "nama_prodi": "Manajemen",
+    "nama": "ERNIWATI LASE",
+    "nim": "314251020023",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
@@ -132,477 +102,405 @@
     "status": "aktif"
   },
   {
-    "nama": "FATIMAHTUZAHRO",
-    "nim": "331221340296",
-    "nama_prodi": "Manajemen",
+    "nama": "FAIRUZ IBRAHIMMOVIC",
+    "nim": "314251020025",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "FAUZAN",
-    "nim": "312232511038",
-    "nama_prodi": "Manajemen",
+    "nama": "FAJAR ABITH RAMADANI",
+    "nim": "314241010012",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "FEBRIYANTI",
-    "nim": "311251391177",
-    "nama_prodi": "Manajemen",
+    "nama": "GERADUS ANU",
+    "nim": "314251020020",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "FITRIA",
-    "nim": "331211320062",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "GUNAWAN",
-    "nim": "331221340003",
-    "nama_prodi": "Manajemen",
+    "nama": "GITA NURAINI",
+    "nim": "314251020008",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "HANAFI",
-    "nim": "332221480060",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "HENDAR",
-    "nim": "331211320671",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "HENDRIKA",
-    "nim": "312251541083",
-    "nama_prodi": "Manajemen",
+    "nama": "HAIKATUL RAJMAN",
+    "nim": "315241010012",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "HERLIYAN",
-    "nim": "313251020073",
-    "nama_prodi": "Hukum",
+    "nama": "HELDHI STIYOSO",
+    "nim": "315251020011",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "HILALUDDIN",
-    "nim": "312251541067",
-    "nama_prodi": "Manajemen",
+    "nama": "HIZKY SEPTIAN FIRMANSYAH",
+    "nim": "314251020016",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "INDRA RAMA FITRA",
-    "nim": "331211320529",
-    "nama_prodi": "Manajemen",
+    "nama": "IDHAM MAULANA",
+    "nim": "315241010011",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "ILMA AURA ANDINI",
+    "nim": "315251020018",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "IMAN WARTI HALAWA",
+    "nim": "315241010009",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "INNIKE REYNAWATI SYOFIANA",
+    "nim": "315251020020",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "IRFAN ASRIEL",
+    "nim": "315241010014",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "JENI JAMILUDIN",
+    "nim": "314241010007",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "JONATHAN KEVIN DWIANANDA",
+    "nim": "315251020016",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "LILIS HERAWATI",
+    "nim": "315241010004",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "MARCO HENDRIAN BANARY",
+    "nim": "316251020002",
+    "nama_prodi": "Ilmu Aktuaria",
+    "status": "aktif"
+  },
+  {
+    "nama": "MARIA AMELIA CLAUDIA SEKU",
+    "nim": "316241010001",
+    "nama_prodi": "Ilmu Aktuaria",
+    "status": "aktif"
+  },
+  {
+    "nama": "MARIA GORETI TAI",
+    "nim": "314251020009",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "MARIA KLEMENSIA TAI",
+    "nim": "314251020010",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "MASTER SP SITUMORANG",
+    "nim": "315251020013",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "MAULANA",
+    "nim": "315251020014",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "MECO SITARDJA",
+    "nim": "316241010003",
+    "nama_prodi": "Ilmu Aktuaria",
+    "status": "aktif"
+  },
+  {
+    "nama": "MOCHAMMAD IRSAL",
+    "nim": "314251020022",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUCHAMMAD RAFIQ FITRIANSYAH",
+    "nim": "315251020006",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUHAMMAD AIDIL BAYHAQI",
+    "nim": "315241010001",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "keluar"
   },
   {
-    "nama": "IRMAN",
-    "nim": "312251540054",
-    "nama_prodi": "Manajemen",
+    "nama": "MUHAMMAD AL GHIFARI",
+    "nim": "314251020001",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "IRMANSYAH",
-    "nim": "313251020075",
-    "nama_prodi": "Hukum",
+    "nama": "MUHAMMAD DANISH YAMARU",
+    "nim": "314251020004",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "ISTIQOMAH",
-    "nim": "331211320625",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
+    "nama": "MUHAMMAD FAJRI FATTAHUL JABBAR",
+    "nim": "315251020017",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
   },
   {
-    "nama": "JUMADDIN",
-    "nim": "332212470037",
-    "nama_prodi": "Manajemen",
+    "nama": "MUHAMMAD FIKRI",
+    "nim": "314241010006",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUHAMMAD HAIKAL FASHA",
+    "nim": "315251020010",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUHAMMAD ISMAIL YUSUF",
+    "nim": "314251020002",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUHAMMAD RAFI APRILIANSYAH",
+    "nim": "314251020013",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUHAMMAD RAFLI ARDANA",
+    "nim": "314241010003",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUHAMMAD RAJA DWIPA RHOMADHON",
+    "nim": "315251020002",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUHAMMAD RANDI WILLIANSYAH",
+    "nim": "315251020012",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUHAMMAD ZAKY ABDI",
+    "nim": "314251020011",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUKHAMAD IKHSAN AL-FARUQ",
+    "nim": "315241010005",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "NATALITA STAYVINA SUOTH",
+    "nim": "316251020001",
+    "nama_prodi": "Ilmu Aktuaria",
+    "status": "aktif"
+  },
+  {
+    "nama": "NELSIANA BULU",
+    "nim": "314241010009",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "NOFRIANUS KEDA",
+    "nim": "314251020024",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "NOPRAN FAJAR",
+    "nim": "314241010014",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "PRAMESTI ANANDA REGITA",
+    "nim": "314251020015",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "PUTRIANI HIA",
+    "nim": "314241010004",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "RADIANTO",
+    "nim": "315241010008",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "RATU ALLEYDIA RAMADHANI",
+    "nim": "315251020008",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "REZA KAMAL",
+    "nim": "314251020027",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "REZA PUTRA PRADANA",
+    "nim": "315241010016",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "RIDHO DWI SAMPURNO",
+    "nim": "315251020005",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "RIVALDO JEREMY NAHAMPUN",
+    "nim": "314241010005",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "RIZKI ADITYA FAJAR",
+    "nim": "314251020026",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "RIZKY GILANG PRATAMA",
+    "nim": "314251020007",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "RIZKY HIDAYAHTULLAH",
+    "nim": "314241010002",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "ROBBI KHARISMA AR RASYID",
+    "nim": "315241010017",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "SATRIO ANA MEHA",
+    "nim": "314251020019",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "SEVI SUSILANINGSIH",
+    "nim": "314251020014",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "SHEAMA JAFAR MUBARAK BIN HAREEZ",
+    "nim": "315251020001",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "SILVIA FERINA",
+    "nim": "314251020003",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "SITI LARASATI",
+    "nim": "315241010003",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "SONIADI",
+    "nim": "314241010011",
+    "nama_prodi": "Ilmu Komputer",
+    "status": "aktif"
+  },
+  {
+    "nama": "SUPARMAN",
+    "nim": "315241010010",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
+    "status": "aktif"
+  },
+  {
+    "nama": "TIKA LIANA KACARIBU",
+    "nim": "316241010002",
+    "nama_prodi": "Ilmu Aktuaria",
+    "status": "aktif"
+  },
+  {
+    "nama": "TRI RAHAYU PRATIWI",
+    "nim": "315251020009",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "keluar"
   },
   {
-    "nama": "JUNAEDI",
-    "nim": "312241520061",
-    "nama_prodi": "Manajemen",
+    "nama": "WAHYUDI",
+    "nim": "315241010006",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "JUSRIANTO",
-    "nim": "313241010075",
-    "nama_prodi": "Hukum",
+    "nama": "YANDHI KUSLIYANA",
+    "nim": "316251020004",
+    "nama_prodi": "Ilmu Aktuaria",
     "status": "aktif"
   },
   {
-    "nama": "KARINDA CITRA NINGRUM",
-    "nim": "331211320261",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "KEMALSYAH",
-    "nim": "312241521042",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "MADIH",
-    "nim": "312241520045",
-    "nama_prodi": "Manajemen",
+    "nama": "YUSUF IRVANTA SARAGIH",
+    "nim": "315241010013",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   },
   {
-    "nama": "MAHFUZI",
-    "nim": "312251541117",
-    "nama_prodi": "Manajemen",
+    "nama": "ZENI ADI PUTRA",
+    "nim": "314241010010",
+    "nama_prodi": "Ilmu Komputer",
     "status": "aktif"
   },
   {
-    "nama": "MAMAN",
-    "nim": "313241010063",
-    "nama_prodi": "Hukum",
-    "status": "aktif"
-  },
-  {
-    "nama": "MARDIYANTI",
-    "nim": "331201300099",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "MARYADI",
-    "nim": "312242531144",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "MERANTO",
-    "nim": "313251020065",
-    "nama_prodi": "Hukum",
-    "status": "aktif"
-  },
-  {
-    "nama": "MISBAHUDIN",
-    "nim": "332221480051",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "MUJIYONO",
-    "nim": "312232510035",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "MUNADI",
-    "nim": "331211320665",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "MUNJIAH",
-    "nim": "332222490102",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "MUTMAENAH",
-    "nim": "312242530004",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "MUTMAINNA",
-    "nim": "331211320391",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "NUR'ASIAH",
-    "nim": "312251541012",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "NURLAELAWATI",
-    "nim": "312251541008",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "PAHRIAH",
-    "nim": "312251541071",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "PATURI",
-    "nim": "312242531150",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "PRASETYONO",
-    "nim": "331211320693",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "RAHMAN",
-    "nim": "313251020038",
-    "nama_prodi": "Hukum",
-    "status": "aktif"
-  },
-  {
-    "nama": "RIKE",
-    "nim": "331191290239",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "RISKA",
-    "nim": "331221340128",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "RISMANTO",
-    "nim": "312251541128",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "RODIAH",
-    "nim": "331211320458",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "RODIYAH",
-    "nim": "312251540019",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "ROMDONI",
-    "nim": "312251541030",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "RONDI",
-    "nim": "312251541009",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "ROSDIANA",
-    "nim": "331211320552",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "ROSITASARI",
-    "nim": "313251020024",
-    "nama_prodi": "Hukum",
-    "status": "aktif"
-  },
-  {
-    "nama": "SAHLANI",
-    "nim": "332221480047",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SAHRUDIN",
-    "nim": "312242531067",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SARBANI",
-    "nim": "313251020098",
-    "nama_prodi": "Hukum",
-    "status": "aktif"
-  },
-  {
-    "nama": "SARIPUDIN",
-    "nim": "331211321073",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SARMILAH",
-    "nim": "331221340389",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SARTIM",
-    "nim": "332221480054",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SEKHUDIN",
-    "nim": "331231360037",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SISWANTI",
-    "nim": "331231361121",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SOFANUDIN",
-    "nim": "311242381114",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SOKHEH",
-    "nim": "331211320002",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SOLEHAT",
-    "nim": "332222490078",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SRIADI",
-    "nim": "312232510024",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SUDARYONO",
-    "nim": "332212470047",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SUGIARTO",
-    "nim": "312241520004",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SUHENDAR",
-    "nim": "312232510018",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SUJATMOKO",
-    "nim": "311242381075",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SULAIMAN",
-    "nim": "331201300027",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SUMARDI",
-    "nim": "331211320577",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SUNARDI",
-    "nim": "331201300197",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SUSANTO",
-    "nim": "312241520075",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SYAADAH",
-    "nim": "312251541029",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SYACHRUDIN",
-    "nim": "312251541074",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SYAEFULLAH",
-    "nim": "332231501055",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "SYAHID",
-    "nim": "312251540033",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "SYARIFUDDIN",
-    "nim": "331181280195",
-    "nama_prodi": "Manajemen",
-    "status": "keluar"
-  },
-  {
-    "nama": "TARINIH",
-    "nim": "331211320483",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "TARMIDI",
-    "nim": "312241520051",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "TARSINAH",
-    "nim": "331201300237",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "TAUFAN",
-    "nim": "332222490105",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "WIDYA CITRA NAULI TANJUNG",
-    "nim": "331231361027",
-    "nama_prodi": "Manajemen",
-    "status": "lulus"
-  },
-  {
-    "nama": "WULANDARI",
-    "nim": "312242530012",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "YUSLIHAYANTI",
-    "nim": "312251541064",
-    "nama_prodi": "Manajemen",
-    "status": "aktif"
-  },
-  {
-    "nama": "ZULFADLI",
-    "nim": "331231360290",
-    "nama_prodi": "Manajemen",
+    "nama": "ZENI OKTARIA",
+    "nim": "315241010015",
+    "nama_prodi": "Sistem dan Teknologi Informasi",
     "status": "aktif"
   }
 ]
