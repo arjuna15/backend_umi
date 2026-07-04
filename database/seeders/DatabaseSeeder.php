@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,12 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        \App\Models\User::factory()->create([
-            'name' => 'Admin UMIBA',
-            'email' => 'admin@umiba.ac.id',
-            'password' => bcrypt('password123'),
-        ]);
-
+        \App\Models\Content::truncate();
         \App\Models\Content::insert([
             ['key' => 'home_hero_title', 'type' => 'text', 'value' => 'Raih Masa Depan Gemilang Bersama UMIBA'],
             ['key' => 'home_hero_subtitle', 'type' => 'text', 'value' => 'Pendaftaran Mahasiswa Baru Tahun Akademik 2026/2027 Telah Dibuka. Bergabunglah menjadi bagian dari generasi cerdas dan inovatif.'],

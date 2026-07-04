@@ -1,0 +1,608 @@
+[
+  {
+    "nama": "ABDILLAH",
+    "nim": "332231500040",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "AISYAH",
+    "nim": "312241520041",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "AJI",
+    "nim": "313241010018",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "ANDRIAN",
+    "nim": "312251541124",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ANDRIANI",
+    "nim": "331221340217",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ANDRIYANI",
+    "nim": "331211320692",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "ARDIANSYAH",
+    "nim": "311242381023",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ARIFIN",
+    "nim": "331212331070",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ARIYA",
+    "nim": "331211320425",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "ASHSHIFA",
+    "nim": "331221340090",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "BASUKI",
+    "nim": "331211320668",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "BUKHORI",
+    "nim": "313241010089",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "CITRA DIANA",
+    "nim": "331231360073",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "CITRA IIS HARDIYANTI",
+    "nim": "331221340384",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "CITRA MAESYARINDA",
+    "nim": "331231361147",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "CITRA SARASWATI",
+    "nim": "311242381091",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "DAMAS",
+    "nim": "332222490118",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "DEASTUTI",
+    "nim": "311241371119",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "DENNY",
+    "nim": "311242381060",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ELIANI",
+    "nim": "312232511035",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ENDANG",
+    "nim": "312251540059",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ERWINSYAH",
+    "nim": "316251020003",
+    "nama_prodi": "Ilmu Aktuaria",
+    "status": "aktif"
+  },
+  {
+    "nama": "FATIMAHTUZAHRO",
+    "nim": "331221340296",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "FAUZAN",
+    "nim": "312232511038",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "FEBRIYANTI",
+    "nim": "311251391177",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "FITRIA",
+    "nim": "331211320062",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "GUNAWAN",
+    "nim": "331221340003",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "HANAFI",
+    "nim": "332221480060",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "HENDAR",
+    "nim": "331211320671",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "HENDRIKA",
+    "nim": "312251541083",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "HERLIYAN",
+    "nim": "313251020073",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "HILALUDDIN",
+    "nim": "312251541067",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "INDRA RAMA FITRA",
+    "nim": "331211320529",
+    "nama_prodi": "Manajemen",
+    "status": "keluar"
+  },
+  {
+    "nama": "IRMAN",
+    "nim": "312251540054",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "IRMANSYAH",
+    "nim": "313251020075",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "ISTIQOMAH",
+    "nim": "331211320625",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "JUMADDIN",
+    "nim": "332212470037",
+    "nama_prodi": "Manajemen",
+    "status": "keluar"
+  },
+  {
+    "nama": "JUNAEDI",
+    "nim": "312241520061",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "JUSRIANTO",
+    "nim": "313241010075",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "KARINDA CITRA NINGRUM",
+    "nim": "331211320261",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "KEMALSYAH",
+    "nim": "312241521042",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "MADIH",
+    "nim": "312241520045",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "MAHFUZI",
+    "nim": "312251541117",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "MAMAN",
+    "nim": "313241010063",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "MARDIYANTI",
+    "nim": "331201300099",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "MARYADI",
+    "nim": "312242531144",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "MERANTO",
+    "nim": "313251020065",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "MISBAHUDIN",
+    "nim": "332221480051",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "MUJIYONO",
+    "nim": "312232510035",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUNADI",
+    "nim": "331211320665",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "MUNJIAH",
+    "nim": "332222490102",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "MUTMAENAH",
+    "nim": "312242530004",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "MUTMAINNA",
+    "nim": "331211320391",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "NUR'ASIAH",
+    "nim": "312251541012",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "NURLAELAWATI",
+    "nim": "312251541008",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "PAHRIAH",
+    "nim": "312251541071",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "PATURI",
+    "nim": "312242531150",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "PRASETYONO",
+    "nim": "331211320693",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "RAHMAN",
+    "nim": "313251020038",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "RIKE",
+    "nim": "331191290239",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "RISKA",
+    "nim": "331221340128",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "RISMANTO",
+    "nim": "312251541128",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "RODIAH",
+    "nim": "331211320458",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "RODIYAH",
+    "nim": "312251540019",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ROMDONI",
+    "nim": "312251541030",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "RONDI",
+    "nim": "312251541009",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ROSDIANA",
+    "nim": "331211320552",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "ROSITASARI",
+    "nim": "313251020024",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "SAHLANI",
+    "nim": "332221480047",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SAHRUDIN",
+    "nim": "312242531067",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SARBANI",
+    "nim": "313251020098",
+    "nama_prodi": "Hukum",
+    "status": "aktif"
+  },
+  {
+    "nama": "SARIPUDIN",
+    "nim": "331211321073",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SARMILAH",
+    "nim": "331221340389",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SARTIM",
+    "nim": "332221480054",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SEKHUDIN",
+    "nim": "331231360037",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SISWANTI",
+    "nim": "331231361121",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SOFANUDIN",
+    "nim": "311242381114",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SOKHEH",
+    "nim": "331211320002",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SOLEHAT",
+    "nim": "332222490078",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SRIADI",
+    "nim": "312232510024",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SUDARYONO",
+    "nim": "332212470047",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SUGIARTO",
+    "nim": "312241520004",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SUHENDAR",
+    "nim": "312232510018",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SUJATMOKO",
+    "nim": "311242381075",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SULAIMAN",
+    "nim": "331201300027",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SUMARDI",
+    "nim": "331211320577",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SUNARDI",
+    "nim": "331201300197",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SUSANTO",
+    "nim": "312241520075",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SYAADAH",
+    "nim": "312251541029",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SYACHRUDIN",
+    "nim": "312251541074",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SYAEFULLAH",
+    "nim": "332231501055",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "SYAHID",
+    "nim": "312251540033",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "SYARIFUDDIN",
+    "nim": "331181280195",
+    "nama_prodi": "Manajemen",
+    "status": "keluar"
+  },
+  {
+    "nama": "TARINIH",
+    "nim": "331211320483",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "TARMIDI",
+    "nim": "312241520051",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "TARSINAH",
+    "nim": "331201300237",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "TAUFAN",
+    "nim": "332222490105",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "WIDYA CITRA NAULI TANJUNG",
+    "nim": "331231361027",
+    "nama_prodi": "Manajemen",
+    "status": "lulus"
+  },
+  {
+    "nama": "WULANDARI",
+    "nim": "312242530012",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "YUSLIHAYANTI",
+    "nim": "312251541064",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  },
+  {
+    "nama": "ZULFADLI",
+    "nim": "331231360290",
+    "nama_prodi": "Manajemen",
+    "status": "aktif"
+  }
+]
