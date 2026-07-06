@@ -202,5 +202,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/siakad/admin/backups', [\App\Http\Controllers\SiakadController::class, 'getBackups']);
     Route::post('/siakad/admin/backups', [\App\Http\Controllers\SiakadController::class, 'triggerBackup']);
     Route::delete('/siakad/admin/backups/{filename}', [\App\Http\Controllers\SiakadController::class, 'deleteBackup']);
+
+    // PDF Exports & Grading
+    Route::get('/siakad/export/krs', [\App\Http\Controllers\SiakadController::class, 'exportKrsPdf']);
+    Route::get('/siakad/export/khs', [\App\Http\Controllers\SiakadController::class, 'exportKhsPdf']);
+    Route::post('/siakad/submission/{submissionId}/grade', [\App\Http\Controllers\SiakadController::class, 'gradeSubmission']);
+    Route::get('/siakad/submission/{submissionId}/download', [\App\Http\Controllers\SiakadController::class, 'downloadSubmission']);
 });
 

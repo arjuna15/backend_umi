@@ -1793,6 +1793,143 @@ class SiakadController extends Controller
     }
 
 
+    public function exportKrsPdf(Request $request)
+    {
+        $user = $request->user();
+        $user->loadMissing('dosenWali');
+
+        $grades = Grade::with([
+            'course.dosen',
+        ])->where('mahasiswa_id', $user->id)->get();
+
+        $totalSks = $grades->sum(function ($item) {
+            return $item->course->sks ?? 0;
+        });
+
+        $semester = 'Semua';
+        if ($grades->count() > 0) {
+            $semester = $grades->first()->course->semester ?? 'Ganjil';
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.krs', [
+            'user' => $user,
+            'krs' => $grades,
+            'totalSks' => $totalSks,
+            'semester' => $semester
+        ]);
+        return $pdf->download('KRS_' . $user->nim_nip . '.pdf');
+    }
+
+    public function exportKhsPdf(Request $request)
+    {
+        $user = $request->user();
+        $user->loadMissing('dosenWali');
+
+        $grades = Grade::with([
+            'course.dosen',
+        ])->where('mahasiswa_id', $user->id)->get();
+
+        $totalSks = $grades->sum(function ($item) {
+            return $item->course->sks ?? 0;
+        });
+
+        $totalSksLulus = 0;
+        $totalBobot = 0;
+        foreach ($grades as $item) {
+            if ($item->grade && !in_array($item->grade, ['E', 'D'])) {
+                $totalSksLulus += $item->course->sks ?? 0;
+            }
+            $bobot = 0;
+            if ($item->grade === 'A') $bobot = 4.0;
+            elseif ($item->grade === 'A-') $bobot = 3.7;
+            elseif ($item->grade === 'B+') $bobot = 3.3;
+            elseif ($item->grade === 'B') $bobot = 3.0;
+            elseif ($item->grade === 'B-') $bobot = 2.7;
+            elseif ($item->grade === 'C+') $bobot = 2.3;
+            elseif ($item->grade === 'C') $bobot = 2.0;
+            elseif ($item->grade === 'D') $bobot = 1.0;
+            elseif ($item->grade === 'E') $bobot = 0;
+            
+            $totalBobot += ($bobot * ($item->course->sks ?? 0));
+        }
+        $ipSemester = $totalSks > 0 ? ($totalBobot / $totalSks) : 0.0;
+
+        $semester = 'Semua';
+        if ($grades->count() > 0) {
+            $semester = $grades->first()->course->semester ?? 'Ganjil';
+        }
+
+        $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.khs', [
+            'user' => $user,
+            'krs' => $grades,
+            'totalSks' => $totalSks,
+            'totalSksLulus' => $totalSksLulus,
+            'ipSemester' => $ipSemester,
+            'semester' => $semester
+        ]);
+        return $pdf->download('KHS_' . $user->nim_nip . '.pdf');
+    }
+
+    public function gradeSubmission(Request $request, $submissionId)
+    {
+        $request->validate([
+            'grade' => 'required|numeric|min:0|max:100',
+        ]);
+
+        $submission = Submission::findOrFail($submissionId);
+        $submission->update(['grade' => $request->grade]);
+
+        $assignment = $submission->assignment;
+        if ($assignment) {
+            $course = $assignment->course;
+            $gradeRecord = Grade::where('course_id', $assignment->course_id)
+                                ->where('mahasiswa_id', $submission->mahasiswa_id)
+                                ->first();
+            if ($gradeRecord) {
+                $gradeRecord->update(['assignment_score' => $request->grade]);
+
+                $attW = (float) ($course->attendance_weight ?? 10);
+                $assW = (float) ($course->assignment_weight ?? 20);
+                $utsW = (float) ($course->uts_weight ?? 30);
+                $uasW = (float) ($course->uas_weight ?? 40);
+                $totalW = $attW + $assW + $utsW + $uasW;
+
+                $attS = (float) ($gradeRecord->attendance_score ?? 0);
+                $assS = (float) $request->grade;
+                $utsS = (float) ($gradeRecord->uts_score ?? 0);
+                $uasS = (float) ($gradeRecord->uas_score ?? 0);
+
+                if ($totalW > 0) {
+                    $finalScore = (($attS * $attW) + ($assS * $assW) + ($utsS * $utsW) + ($uasS * $uasW)) / $totalW;
+                } else {
+                    $finalScore = 0;
+                }
+
+                $finalScore = round($finalScore, 1);
+                $gradeLetter = $this->scoreToLetter($finalScore);
+
+                $gradeRecord->update([
+                    'score' => $finalScore,
+                    'grade' => $gradeLetter
+                ]);
+            }
+        }
+
+        return response()->json(['message' => 'Submission graded successfully', 'submission' => $submission]);
+    }
+
+    public function downloadSubmission(Request $request, $submissionId)
+    {
+        $submission = Submission::findOrFail($submissionId);
+        $path = str_replace('/storage/', '', $submission->file_path);
+        
+        if (!\Storage::disk('public')->exists($path)) {
+            abort(404, 'File not found');
+        }
+
+        return \Storage::disk('public')->download($path);
+    }
+
     private function scoreToLetter(float $score): string
     {
         return match (true) {
