@@ -749,7 +749,14 @@ class SiakadController extends Controller
 
     public function getKrsSubmission(Request $request)
     {
-        $submission = \App\Models\KrsSubmission::where('mahasiswa_id', $request->user()->id)->latest()->first();
+        $semester = $request->query('semester');
+        $query = \App\Models\KrsSubmission::where('mahasiswa_id', $request->user()->id);
+        
+        if ($semester) {
+            $query->where('semester', $semester);
+        }
+        
+        $submission = $query->latest()->first();
         return response()->json($submission);
     }
 
