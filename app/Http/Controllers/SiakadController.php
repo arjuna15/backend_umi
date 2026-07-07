@@ -1263,6 +1263,8 @@ class SiakadController extends Controller
                 'uas_weight' => (float) ($c->uas_weight ?? 0),
                 'akhir' => round((float) $finalScore, 1),
                 'huruf' => $g->grade ?? $this->scoreToLetter((float) $finalScore),
+                'semester_num' => (int) ($c->semester_num ?? 1),
+                'semester_name' => $c->semester ?? '',
             ];
         }
         return response()->json($grades);
