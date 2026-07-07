@@ -151,6 +151,9 @@ class SiakadSeeder extends Seeder
                 $prodiLeadLecturer[$prodi] = $name;
             }
 
+            $jfas = ['Asisten Ahli', 'Lektor', 'Lektor Kepala', 'Guru Besar'];
+            $randomJfa = $isKaprodi ? 'Lektor Kepala' : $jfas[array_rand($jfas)];
+
             $dosenUsers[] = User::create([
                 'name' => $name,
                 'email' => $slugifyEmail($name, '.' . strtolower($role) . '.' . $nimNip . '@umiba.ac.id'),
@@ -159,10 +162,12 @@ class SiakadSeeder extends Seeder
                 'nim_nip' => $nimNip,
                 'prodi' => $prodi,
                 'status' => 'Aktif',
-                'jfa' => $role === 'kaprodi' ? 'Kaprodi' : 'Dosen',
+                'jfa' => $randomJfa,
+                'phone' => '08' . rand(11, 19) . rand(10000000, 99999999),
+                'address' => 'Jl. UMIBA Raya No. ' . rand(1, 99) . ', Jakarta Selatan',
                 'bio' => $role === 'kaprodi'
-                    ? 'Ketua program studi ' . $prodi . ' UMIBA.'
-                    : 'Akun dosen PDDikti untuk program studi ' . $prodi . '.',
+                    ? 'Ketua program studi ' . $prodi . ' UMIBA. Spesialisasi penelitian di bidang terkait.'
+                    : 'Dosen tetap Universitas Mitra Bangsa (UMIBA) pada program studi ' . $prodi . '.',
             ]);
         }
 
@@ -203,7 +208,9 @@ class SiakadSeeder extends Seeder
                 'prodi' => $prodi,
                 'status' => $status,
                 'dosen_wali_id' => $advisor?->id,
-                'bio' => 'Akun mahasiswa PDDikti untuk program studi ' . $prodi . '.',
+                'phone' => '08' . rand(52, 59) . rand(10000000, 99999999),
+                'address' => 'Jl. Kemanggisan No. ' . rand(1, 200) . ', Jakarta Barat',
+                'bio' => 'Mahasiswa Universitas Mitra Bangsa (UMIBA) angkatan ' . rand(2022, 2025) . ' program studi ' . $prodi . '.',
             ]);
         }
 
@@ -211,6 +218,8 @@ class SiakadSeeder extends Seeder
             'Ilmu Komputer' => ['code' => 'IK', 'jenjang' => 'S1'],
             'Ilmu Aktuaria' => ['code' => 'AK', 'jenjang' => 'S1'],
             'Sistem Dan Teknologi Informasi' => ['code' => 'STI', 'jenjang' => 'S1'],
+            'Hukum' => ['code' => 'HK', 'jenjang' => 'S1'],
+            'Manajemen' => ['code' => 'MN', 'jenjang' => 'S1'],
         ];
 
         $studyProgramRows = [];
