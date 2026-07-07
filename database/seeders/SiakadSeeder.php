@@ -248,214 +248,151 @@ class SiakadSeeder extends Seeder
             $lecturersByProdi[$lecturer->prodi][] = $lecturer;
         }
 
-        $courseConfigs = [
-            [
-                'code' => 'IK-301',
-                'name' => 'Pemrograman Web Lanjut',
-                'sks' => 3,
-                'prodi' => 'Ilmu Komputer',
-                'semester_num' => 5,
-                'type' => 'Wajib',
-                'hari' => 'Senin',
-                'jam_mulai' => '08:00',
-                'jam_selesai' => '10:30',
-                'ruang' => 'Lab Komputer A',
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
+        $catalog = [
+            'Ilmu Komputer' => [
+                1 => [
+                    ['code' => 'IK-101', 'name' => 'Dasar Pemrograman', 'sks' => 3],
+                    ['code' => 'IK-103', 'name' => 'Pengantar Teknologi Informasi', 'sks' => 3],
+                    ['code' => 'IK-105', 'name' => 'Matematika Diskrit', 'sks' => 3],
+                    ['code' => 'IK-107', 'name' => 'Kalkulus 1', 'sks' => 3],
+                    ['code' => 'IK-109', 'name' => 'Bahasa Inggris Akademik', 'sks' => 2],
+                    ['code' => 'IK-111', 'name' => 'Pendidikan Kewarganegaraan', 'sks' => 2],
+                ],
+                2 => [
+                    ['code' => 'IK-202', 'name' => 'Struktur Data & Algoritma', 'sks' => 3],
+                    ['code' => 'IK-204', 'name' => 'Sistem Operasi', 'sks' => 3],
+                    ['code' => 'IK-206', 'name' => 'Basis Data', 'sks' => 3],
+                    ['code' => 'IK-208', 'name' => 'Arsitektur Komputer', 'sks' => 3],
+                    ['code' => 'IK-210', 'name' => 'Kalkulus 2', 'sks' => 3],
+                    ['code' => 'IK-212', 'name' => 'Statistika & Probabilitas', 'sks' => 3],
+                ],
+                5 => [
+                    ['code' => 'IK-301', 'name' => 'Pemrograman Web Lanjut', 'sks' => 3],
+                    ['code' => 'IK-303', 'name' => 'Rekayasa Perangkat Lunak', 'sks' => 3],
+                    ['code' => 'IK-305', 'name' => 'Kecerdasan Buatan', 'sks' => 3],
+                ]
             ],
-            [
-                'code' => 'IK-102',
-                'name' => 'Basis Data',
-                'sks' => 3,
-                'prodi' => 'Ilmu Komputer',
-                'semester_num' => 2,
-                'type' => 'Wajib',
-                'hari' => 'Rabu',
-                'jam_mulai' => '13:00',
-                'jam_selesai' => '15:30',
-                'ruang' => 'Lab Komputer B',
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
+            'Sistem Dan Teknologi Informasi' => [
+                1 => [
+                    ['code' => 'STI-101', 'name' => 'Pengantar Sistem Informasi', 'sks' => 3],
+                    ['code' => 'STI-103', 'name' => 'Algoritma & Pemrograman Dasar', 'sks' => 3],
+                    ['code' => 'STI-105', 'name' => 'Matematika Bisnis', 'sks' => 3],
+                    ['code' => 'STI-107', 'name' => 'English for IT', 'sks' => 2],
+                    ['code' => 'STI-109', 'name' => 'Pancasila & Kewarganegaraan', 'sks' => 2],
+                ],
+                2 => [
+                    ['code' => 'STI-202', 'name' => 'Desain Proses Bisnis', 'sks' => 3],
+                    ['code' => 'STI-204', 'name' => 'Sistem Operasi & Jaringan', 'sks' => 3],
+                    ['code' => 'STI-206', 'name' => 'Konsep Basis Data', 'sks' => 3],
+                    ['code' => 'STI-208', 'name' => 'Algoritma & Struktur Data', 'sks' => 3],
+                    ['code' => 'STI-210', 'name' => 'Statistika Deskriptif', 'sks' => 3],
+                ],
+                5 => [
+                    ['code' => 'STI-301', 'name' => 'Analisis Sistem Informasi', 'sks' => 3],
+                    ['code' => 'STI-303', 'name' => 'Manajemen Infrastruktur TI', 'sks' => 3],
+                    ['code' => 'STI-305', 'name' => 'Manajemen Proyek TI', 'sks' => 3],
+                ]
             ],
-            [
-                'code' => 'IK-303',
-                'name' => 'Rekayasa Perangkat Lunak',
-                'sks' => 3,
-                'prodi' => 'Ilmu Komputer',
-                'semester_num' => 5,
-                'type' => 'Wajib',
-                'hari' => 'Jumat',
-                'jam_mulai' => '08:00',
-                'jam_selesai' => '10:30',
-                'ruang' => 'Ruang 401',
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
+            'Ilmu Aktuaria' => [
+                1 => [
+                    ['code' => 'AK-101', 'name' => 'Pengantar Ilmu Aktuaria', 'sks' => 3],
+                    ['code' => 'AK-103', 'name' => 'Kalkulus Aktuaria 1', 'sks' => 3],
+                    ['code' => 'AK-105', 'name' => 'Mikroekonomi Dasar', 'sks' => 3],
+                    ['code' => 'AK-107', 'name' => 'Pengantar Statistik', 'sks' => 3],
+                    ['code' => 'AK-109', 'name' => 'Bahasa Inggris', 'sks' => 2],
+                ],
+                2 => [
+                    ['code' => 'AK-202', 'name' => 'Matematika Finansial', 'sks' => 3],
+                    ['code' => 'AK-204', 'name' => 'Makroekonomi Dasar', 'sks' => 3],
+                    ['code' => 'AK-206', 'name' => 'Probabilitas & Statistika', 'sks' => 3],
+                    ['code' => 'AK-208', 'name' => 'Kalkulus Aktuaria 2', 'sks' => 3],
+                    ['code' => 'AK-210', 'name' => 'Dasar Pemrograman Komputer', 'sks' => 3],
+                ],
+                5 => [
+                    ['code' => 'AK-301', 'name' => 'Matematika Aktuaria', 'sks' => 3],
+                    ['code' => 'AK-303', 'name' => 'Pemodelan Risiko dan Asuransi', 'sks' => 3],
+                    ['code' => 'AK-305', 'name' => 'Statistika Finansial', 'sks' => 3],
+                ]
             ],
-            [
-                'code' => 'STI-301',
-                'name' => 'Analisis Sistem Informasi',
-                'sks' => 3,
-                'prodi' => 'Sistem Dan Teknologi Informasi',
-                'semester_num' => 5,
-                'type' => 'Wajib',
-                'hari' => 'Selasa',
-                'jam_mulai' => '08:00',
-                'jam_selesai' => '10:30',
-                'ruang' => 'Ruang 402',
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
+            'Hukum' => [
+                1 => [
+                    ['code' => 'HK-101', 'name' => 'Pengantar Ilmu Hukum', 'sks' => 4],
+                    ['code' => 'HK-103', 'name' => 'Pengantar Hukum Indonesia', 'sks' => 4],
+                    ['code' => 'HK-105', 'name' => 'Hukum Adat', 'sks' => 3],
+                    ['code' => 'HK-107', 'name' => 'Bahasa Inggris Hukum', 'sks' => 2],
+                    ['code' => 'HK-109', 'name' => 'Pancasila & Etika Hukum', 'sks' => 2],
+                ],
+                2 => [
+                    ['code' => 'HK-202', 'name' => 'Hukum Perdata', 'sks' => 4],
+                    ['code' => 'HK-204', 'name' => 'Hukum Pidana', 'sks' => 4],
+                    ['code' => 'HK-206', 'name' => 'Hukum Tata Negara', 'sks' => 4],
+                    ['code' => 'HK-208', 'name' => 'Hukum Islam', 'sks' => 3],
+                    ['code' => 'HK-210', 'name' => 'Hukum Administrasi Negara', 'sks' => 3],
+                ],
+                5 => [
+                    ['code' => 'HK-301', 'name' => 'Hukum Dagang & Bisnis', 'sks' => 3],
+                    ['code' => 'HK-303', 'name' => 'Hukum Internasional', 'sks' => 3],
+                    ['code' => 'HK-305', 'name' => 'Praktik Peradilan Semu', 'sks' => 3],
+                ]
             ],
-            [
-                'code' => 'STI-102',
-                'name' => 'Algoritma & Struktur Data',
-                'sks' => 3,
-                'prodi' => 'Sistem Dan Teknologi Informasi',
-                'semester_num' => 2,
-                'type' => 'Wajib',
-                'hari' => 'Kamis',
-                'jam_mulai' => '13:00',
-                'jam_selesai' => '15:30',
-                'ruang' => 'Lab Jaringan',
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
-            ],
-            [
-                'code' => 'STI-303',
-                'name' => 'Manajemen Proyek TI',
-                'sks' => 3,
-                'prodi' => 'Sistem Dan Teknologi Informasi',
-                'semester_num' => 5,
-                'type' => 'Wajib',
-                'hari' => 'Sabtu',
-                'jam_mulai' => '08:00',
-                'jam_selesai' => '10:30',
-                'ruang' => 'Ruang 403',
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
-            ],
-            [
-                'code' => 'AK-301',
-                'name' => 'Matematika Aktuaria',
-                'sks' => 3,
-                'prodi' => 'Ilmu Aktuaria',
-                'semester_num' => 5,
-                'type' => 'Wajib',
-                'hari' => 'Senin',
-                'jam_mulai' => '13:00',
-                'jam_selesai' => '15:30',
-                'ruang' => 'Ruang 403',
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
-            ],
-            [
-                'code' => 'AK-102',
-                'name' => 'Probabilitas dan Statistika',
-                'sks' => 3,
-                'prodi' => 'Ilmu Aktuaria',
-                'semester_num' => 2,
-                'type' => 'Wajib',
-                'hari' => 'Rabu',
-                'jam_mulai' => '08:00',
-                'jam_selesai' => '10:30',
-                'ruang' => 'Ruang 402',
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
-            ],
-            [
-                'code' => 'AK-303',
-                'name' => 'Statistika Finansial',
-                'sks' => 3,
-                'prodi' => 'Ilmu Aktuaria',
-                'semester_num' => 5,
-                'type' => 'Wajib',
-                'hari' => 'Jumat',
-                'jam_mulai' => '13:00',
-                'jam_selesai' => '15:30',
-                'ruang' => 'Ruang 401',
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
-            ],
+            'Manajemen' => [
+                1 => [
+                    ['code' => 'MN-101', 'name' => 'Pengantar Manajemen', 'sks' => 3],
+                    ['code' => 'MN-103', 'name' => 'Pengantar Bisnis', 'sks' => 3],
+                    ['code' => 'MN-105', 'name' => 'Matematika Ekonomi', 'sks' => 3],
+                    ['code' => 'MN-107', 'name' => 'Akuntansi Pengantar 1', 'sks' => 3],
+                    ['code' => 'MN-109', 'name' => 'Bahasa Inggris Bisnis', 'sks' => 2],
+                ],
+                2 => [
+                    ['code' => 'MN-202', 'name' => 'Manajemen Pemasaran', 'sks' => 3],
+                    ['code' => 'MN-204', 'name' => 'Manajemen Keuangan', 'sks' => 3],
+                    ['code' => 'MN-206', 'name' => 'Manajemen Sumber Daya Manusia', 'sks' => 3],
+                    ['code' => 'MN-208', 'name' => 'Akuntansi Pengantar 2', 'sks' => 3],
+                    ['code' => 'MN-210', 'name' => 'Statistika Bisnis', 'sks' => 3],
+                    ['code' => 'MN-212', 'name' => 'Ekonomi Manajerial', 'sks' => 3],
+                ],
+                5 => [
+                    ['code' => 'MN-301', 'name' => 'Manajemen Strategis', 'sks' => 3],
+                    ['code' => 'MN-303', 'name' => 'Perilaku Organisasi', 'sks' => 3],
+                    ['code' => 'MN-305', 'name' => 'Kewirausahaan', 'sks' => 3],
+                ]
+            ]
         ];
 
         $courseRows = [];
         $courseByCode = [];
-        $usedLecturerIds = [];
-        foreach ($courseConfigs as $index => $config) {
-            $lecturers = $lecturersByProdi[$config['prodi']] ?? [$admin];
-            $dosen = $lecturers[$index % count($lecturers)];
-            $usedLecturerIds[$dosen->id] = true;
-            $courseRows[] = [
-                'code' => $config['code'],
-                'name' => $config['name'],
-                'sks' => $config['sks'],
-                'dosen_id' => $dosen->id,
-                'prodi' => $config['prodi'],
-                'semester' => 'Ganjil 2026/2027',
-                'semester_num' => $config['semester_num'],
-                'type' => $config['type'],
-                'hari' => $config['hari'],
-                'jam_mulai' => $config['jam_mulai'],
-                'jam_selesai' => $config['jam_selesai'],
-                'ruang' => $config['ruang'],
-                'attendance_weight' => $config['attendance_weight'],
-                'assignment_weight' => $config['assignment_weight'],
-                'uts_weight' => $config['uts_weight'],
-                'uas_weight' => $config['uas_weight'],
-            ];
-        }
-
+        
         $dayPool = ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         $roomPool = ['Lab Komputer A', 'Lab Komputer B', 'Lab Jaringan', 'Ruang 401', 'Ruang 402', 'Ruang 403'];
-        $electiveIndex = 1;
-        foreach ($dosenUsers as $idx => $lecturer) {
-            if (isset($usedLecturerIds[$lecturer->id])) {
-                continue;
+        
+        $idx = 0;
+        foreach ($catalog as $prodiName => $semesters) {
+            $lecturers = $lecturersByProdi[$prodiName] ?? [$admin];
+            foreach ($semesters as $semNum => $courses) {
+                foreach ($courses as $cIndex => $cData) {
+                    $dosen = $lecturers[$idx % count($lecturers)];
+                    $idx++;
+                    
+                    $courseRows[] = [
+                        'code' => $cData['code'],
+                        'name' => $cData['name'],
+                        'sks' => $cData['sks'],
+                        'dosen_id' => $dosen->id,
+                        'prodi' => $prodiName,
+                        'semester' => 'Ganjil 2026/2027',
+                        'semester_num' => $semNum,
+                        'type' => 'Wajib',
+                        'hari' => $dayPool[$idx % count($dayPool)],
+                        'jam_mulai' => $idx % 2 === 0 ? '08:00' : '13:00',
+                        'jam_selesai' => $idx % 2 === 0 ? '10:30' : '15:30',
+                        'ruang' => $roomPool[$idx % count($roomPool)],
+                        'attendance_weight' => 10,
+                        'assignment_weight' => 20,
+                        'uts_weight' => 30,
+                        'uas_weight' => 40,
+                    ];
+                }
             }
-
-            $prodiPrefix = match ($lecturer->prodi) {
-                'Ilmu Komputer' => 'IK',
-                'Ilmu Aktuaria' => 'AK',
-                'Sistem Dan Teknologi Informasi' => 'STI',
-                default => 'UMB',
-            };
-            $courseRows[] = [
-                'code' => $prodiPrefix . '-E' . str_pad((string) $electiveIndex, 2, '0', STR_PAD_LEFT),
-                'name' => 'Topik Khusus ' . $lecturer->prodi . ' ' . $electiveIndex,
-                'sks' => 2 + ($electiveIndex % 2),
-                'dosen_id' => $lecturer->id,
-                'prodi' => $lecturer->prodi,
-                'semester' => 'Ganjil 2026/2027',
-                'semester_num' => 5,
-                'type' => 'Pilihan',
-                'hari' => $dayPool[$electiveIndex % count($dayPool)],
-                'jam_mulai' => $electiveIndex % 2 === 0 ? '13:00' : '08:00',
-                'jam_selesai' => $electiveIndex % 2 === 0 ? '15:30' : '10:30',
-                'ruang' => $roomPool[$electiveIndex % count($roomPool)],
-                'attendance_weight' => 10,
-                'assignment_weight' => 20,
-                'uts_weight' => 30,
-                'uas_weight' => 40,
-            ];
-            $usedLecturerIds[$lecturer->id] = true;
-            $electiveIndex++;
         }
         $this->insertRows('courses', $courseRows, $now);
         foreach (DB::table('courses')->get() as $course) {
@@ -492,13 +429,14 @@ class SiakadSeeder extends Seeder
             }
             $prodiCourses = array_values($prodiCourses);
 
-            $pickCount = min(3, count($prodiCourses));
-            $offset = $pickCount > 0 ? ($index % count($prodiCourses)) : 0;
-            $baseSelection = [];
-            for ($i = 0; $i < $pickCount; $i++) {
-                $baseSelection[] = $prodiCourses[($offset + $i) % count($prodiCourses)];
+            $targetSemester = ($entryYear === 2025) ? 2 : 5;
+            $allProdiCourses = $coursesByProdi[$student->prodi] ?? [];
+            
+            $currentSemesterCourses = array_filter($allProdiCourses, static fn($c) => (int)$c->semester_num === $targetSemester);
+            if (empty($currentSemesterCourses)) {
+                $currentSemesterCourses = $allProdiCourses;
             }
-            $courseIds = array_map(static fn ($course) => $course->id, $baseSelection);
+            $courseIds = array_map(static fn ($course) => $course->id, array_values($currentSemesterCourses));
 
             $krsRows[] = [
                 'mahasiswa_id' => $student->id,
@@ -513,7 +451,7 @@ class SiakadSeeder extends Seeder
             }
 
             if ($index % 3 === 0) {
-                $pendingSelection = array_slice($prodiCourses, 0, min(4, count($prodiCourses)));
+                $pendingSelection = array_slice(array_values($currentSemesterCourses), 0, min(4, count($currentSemesterCourses)));
                 $pendingIds = array_map(static fn ($course) => $course->id, $pendingSelection);
                 if (count($pendingIds) >= 2) {
                     $krsRows[] = [
@@ -552,6 +490,50 @@ class SiakadSeeder extends Seeder
 
         $gradeRows = [];
         $submissionRows = [];
+        // Seed past semester grades (Semester 1 for targetSemester == 2, Semester 1 & 2 for targetSemester == 5)
+        foreach ($mahasiswaUsers as $student) {
+            $entryYear = 2025;
+            $nim = $student->nim_nip;
+            if (strlen($nim) >= 5) {
+                $yearPart = substr($nim, 3, 2);
+                if (is_numeric($yearPart)) {
+                    $entryYear = 2000 + (int)$yearPart;
+                }
+            }
+            $targetSemester = ($entryYear === 2025) ? 2 : 5;
+            $allProdiCourses = $coursesByProdi[$student->prodi] ?? [];
+            
+            $pastSemesters = [];
+            if ($targetSemester === 2) {
+                $pastSemesters = [1];
+            } elseif ($targetSemester === 5) {
+                $pastSemesters = [1, 2];
+            }
+            
+            foreach ($pastSemesters as $pastSem) {
+                $pastCourses = array_filter($allProdiCourses, static fn($c) => (int)$c->semester_num === $pastSem);
+                foreach ($pastCourses as $pastC) {
+                    $attendanceScore = 80 + (($student->id + $pastC->id) % 5) * 3;
+                    $assignmentScore = 78 + (($student->id + $pastC->id) % 6) * 3;
+                    $utsScore = 75 + (($student->id + $pastC->id) % 7) * 3;
+                    $uasScore = 80 + (($student->id + $pastC->id) % 5) * 4;
+                    $finalScore = round(($attendanceScore * 0.1) + ($assignmentScore * 0.2) + ($utsScore * 0.3) + ($uasScore * 0.4), 2);
+                    
+                    $gradeRows[] = [
+                        'mahasiswa_id' => $student->id,
+                        'course_id' => $pastC->id,
+                        'attendance_score' => $attendanceScore,
+                        'assignment_score' => $assignmentScore,
+                        'uts_score' => $utsScore,
+                        'uas_score' => $uasScore,
+                        'score' => $finalScore,
+                        'grade' => $this->scoreToLetter($finalScore),
+                    ];
+                }
+            }
+        }
+
+        // Seed current semester grades (for approved courses)
         foreach ($approvedEnrollments as $courseId => $studentIds) {
             foreach ($studentIds as $idx => $studentId) {
                 $attendanceScore = 78 + (($studentId + $courseId + $idx) % 5) * 3;
