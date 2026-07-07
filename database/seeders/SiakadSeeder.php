@@ -266,11 +266,11 @@ class SiakadSeeder extends Seeder
                 'uas_weight' => 40,
             ],
             [
-                'code' => 'IK-302',
-                'name' => 'Basis Data Lanjut',
+                'code' => 'IK-102',
+                'name' => 'Basis Data',
                 'sks' => 3,
                 'prodi' => 'Ilmu Komputer',
-                'semester_num' => 5,
+                'semester_num' => 2,
                 'type' => 'Wajib',
                 'hari' => 'Rabu',
                 'jam_mulai' => '13:00',
@@ -314,11 +314,11 @@ class SiakadSeeder extends Seeder
                 'uas_weight' => 40,
             ],
             [
-                'code' => 'STI-302',
-                'name' => 'Manajemen Infrastruktur TI',
+                'code' => 'STI-102',
+                'name' => 'Algoritma & Struktur Data',
                 'sks' => 3,
                 'prodi' => 'Sistem Dan Teknologi Informasi',
-                'semester_num' => 5,
+                'semester_num' => 2,
                 'type' => 'Wajib',
                 'hari' => 'Kamis',
                 'jam_mulai' => '13:00',
@@ -362,11 +362,11 @@ class SiakadSeeder extends Seeder
                 'uas_weight' => 40,
             ],
             [
-                'code' => 'AK-302',
-                'name' => 'Pemodelan Risiko dan Asuransi',
+                'code' => 'AK-102',
+                'name' => 'Probabilitas dan Statistika',
                 'sks' => 3,
                 'prodi' => 'Ilmu Aktuaria',
-                'semester_num' => 5,
+                'semester_num' => 2,
                 'type' => 'Wajib',
                 'hari' => 'Rabu',
                 'jam_mulai' => '08:00',
@@ -475,10 +475,22 @@ class SiakadSeeder extends Seeder
         $krsRows = [];
         $approvedEnrollments = [];
         foreach ($mahasiswaUsers as $index => $student) {
-            $prodiCourses = $coursesByProdi[$student->prodi] ?? array_values($courseByCode);
-            if (empty($prodiCourses)) {
-                continue;
+            $entryYear = 2025;
+            $nim = $student->nim_nip;
+            if (strlen($nim) >= 5) {
+                $yearPart = substr($nim, 3, 2);
+                if (is_numeric($yearPart)) {
+                    $entryYear = 2000 + (int)$yearPart;
+                }
             }
+            $targetSemester = ($entryYear === 2025) ? 2 : 5;
+
+            $allProdiCourses = $coursesByProdi[$student->prodi] ?? array_values($courseByCode);
+            $prodiCourses = array_filter($allProdiCourses, static fn($c) => (int)$c->semester_num === $targetSemester);
+            if (empty($prodiCourses)) {
+                $prodiCourses = $allProdiCourses;
+            }
+            $prodiCourses = array_values($prodiCourses);
 
             $pickCount = min(3, count($prodiCourses));
             $offset = $pickCount > 0 ? ($index % count($prodiCourses)) : 0;
