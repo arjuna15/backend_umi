@@ -710,7 +710,40 @@ class SiakadController extends Controller
 
     public function getAvailableKrs(Request $request)
     {
-        $courses = Course::with('dosen')->get();
+        $user = $request->user();
+        if ($user->role !== 'mahasiswa') {
+            $courses = Course::with('dosen')->get();
+            return response()->json($courses);
+        }
+
+        // Determine current semester based on entry year (NIM)
+        $entryYear = 2025;
+        $nim = $user->nim_nip;
+        if (strlen($nim) >= 5) {
+            $yearPart = substr($nim, 3, 2);
+            if (is_numeric($yearPart)) {
+                $entryYear = 2000 + (int)$yearPart;
+            }
+        }
+
+        $targetSemester = 5;
+        if ($entryYear === 2025) {
+            $targetSemester = 2;
+        } elseif ($entryYear === 2024) {
+            $targetSemester = 4;
+        } elseif ($entryYear === 2023) {
+            $targetSemester = 6;
+        } elseif ($entryYear === 2022) {
+            $targetSemester = 8;
+        } elseif ($entryYear === 2026) {
+            $targetSemester = 1;
+        }
+
+        $courses = Course::with('dosen')
+            ->where('prodi', $user->prodi)
+            ->where('semester_num', $targetSemester)
+            ->get();
+
         return response()->json($courses);
     }
 
