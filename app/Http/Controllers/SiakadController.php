@@ -1930,6 +1930,32 @@ class SiakadController extends Controller
         return \Storage::disk('public')->download($path);
     }
 
+    public function getSettings()
+    {
+        $settings = \App\Models\Content::where('key', 'like', 'siakad_%')->pluck('value', 'key');
+        return response()->json($settings);
+    }
+
+    public function updateSettings(Request $request)
+    {
+        $request->validate([
+            'settings' => 'required|array',
+        ]);
+
+        foreach ($request->settings as $key => $value) {
+            if (str_starts_with($key, 'siakad_')) {
+                \App\Models\Content::updateOrCreate(
+                    ['key' => $key],
+                    ['value' => $value]
+                );
+            }
+        }
+
+        $this->logActivity($request->user()->name, 'Update Pengaturan', 'Mengubah konfigurasi sistem akademik');
+
+        return response()->json(['message' => 'Settings updated successfully']);
+    }
+
     private function scoreToLetter(float $score): string
     {
         return match (true) {

@@ -179,6 +179,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/siakad/calendar/{id}', [\App\Http\Controllers\SiakadController::class, 'updateCalendar']);
     Route::delete('/siakad/calendar/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteCalendar']);
 
+    // Settings
+    Route::get('/siakad/settings', [\App\Http\Controllers\SiakadController::class, 'getSettings']);
+    Route::post('/siakad/settings', [\App\Http\Controllers\SiakadController::class, 'updateSettings']);
+
     // Letter Requests
     Route::get('/siakad/mahasiswa/letters', [\App\Http\Controllers\SiakadController::class, 'getMahasiswaLetters']);
     Route::post('/siakad/mahasiswa/letters', [\App\Http\Controllers\SiakadController::class, 'submitMahasiswaLetter']);
