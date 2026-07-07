@@ -248,7 +248,7 @@ class SiakadSeeder extends Seeder
             $lecturersByProdi[$lecturer->prodi][] = $lecturer;
         }
 
-        $catalog = [
+                $catalog = [
             'Ilmu Komputer' => [
                 1 => [
                     ['code' => 'IK-101', 'name' => 'Dasar Pemrograman', 'sks' => 3],
@@ -266,10 +266,34 @@ class SiakadSeeder extends Seeder
                     ['code' => 'IK-210', 'name' => 'Kalkulus 2', 'sks' => 3],
                     ['code' => 'IK-212', 'name' => 'Statistika & Probabilitas', 'sks' => 3],
                 ],
+                3 => [
+                    ['code' => 'IK-301', 'name' => 'Pemrograman Berorientasi Objek', 'sks' => 3],
+                    ['code' => 'IK-303', 'name' => 'Jaringan Komputer', 'sks' => 3],
+                    ['code' => 'IK-305', 'name' => 'Analisis Algoritma', 'sks' => 3],
+                    ['code' => 'IK-307', 'name' => 'Aljabar Linear', 'sks' => 3],
+                ],
+                4 => [
+                    ['code' => 'IK-402', 'name' => 'Kecerdasan Buatan', 'sks' => 3],
+                    ['code' => 'IK-404', 'name' => 'Pemrograman Web', 'sks' => 3],
+                    ['code' => 'IK-406', 'name' => 'Sistem Informasi', 'sks' => 3],
+                ],
                 5 => [
-                    ['code' => 'IK-301', 'name' => 'Pemrograman Web Lanjut', 'sks' => 3],
-                    ['code' => 'IK-303', 'name' => 'Rekayasa Perangkat Lunak', 'sks' => 3],
-                    ['code' => 'IK-305', 'name' => 'Kecerdasan Buatan', 'sks' => 3],
+                    ['code' => 'IK-501', 'name' => 'Pemrograman Web Lanjut', 'sks' => 3],
+                    ['code' => 'IK-503', 'name' => 'Rekayasa Perangkat Lunak', 'sks' => 3],
+                    ['code' => 'IK-505', 'name' => 'Kecerdasan Buatan Lanjut', 'sks' => 3],
+                ],
+                6 => [
+                    ['code' => 'IK-602', 'name' => 'Pembelajaran Mesin (Machine Learning)', 'sks' => 3],
+                    ['code' => 'IK-604', 'name' => 'Komputasi Awan (Cloud Computing)', 'sks' => 3],
+                    ['code' => 'IK-606', 'name' => 'Interaksi Manusia & Komputer', 'sks' => 3],
+                ],
+                7 => [
+                    ['code' => 'IK-701', 'name' => 'Metodologi Penelitian', 'sks' => 2],
+                    ['code' => 'IK-703', 'name' => 'Kuliah Kerja Nyata (KKN)', 'sks' => 3],
+                    ['code' => 'IK-705', 'name' => 'Magang Industri', 'sks' => 4],
+                ],
+                8 => [
+                    ['code' => 'IK-802', 'name' => 'Skripsi / Tugas Akhir', 'sks' => 6],
                 ]
             ],
             'Sistem Dan Teknologi Informasi' => [
@@ -287,10 +311,33 @@ class SiakadSeeder extends Seeder
                     ['code' => 'STI-208', 'name' => 'Algoritma & Struktur Data', 'sks' => 3],
                     ['code' => 'STI-210', 'name' => 'Statistika Deskriptif', 'sks' => 3],
                 ],
-                5 => [
+                3 => [
                     ['code' => 'STI-301', 'name' => 'Analisis Sistem Informasi', 'sks' => 3],
-                    ['code' => 'STI-303', 'name' => 'Manajemen Infrastruktur TI', 'sks' => 3],
-                    ['code' => 'STI-305', 'name' => 'Manajemen Proyek TI', 'sks' => 3],
+                    ['code' => 'STI-303', 'name' => 'Arsitektur Enterprise', 'sks' => 3],
+                    ['code' => 'STI-305', 'name' => 'E-Business', 'sks' => 3],
+                ],
+                4 => [
+                    ['code' => 'STI-402', 'name' => 'Keamanan Sistem Informasi', 'sks' => 3],
+                    ['code' => 'STI-404', 'name' => 'Sistem Pendukung Keputusan', 'sks' => 3],
+                    ['code' => 'STI-406', 'name' => 'Interaksi Manusia & Komputer', 'sks' => 3],
+                ],
+                5 => [
+                    ['code' => 'STI-501', 'name' => 'Analisis Sistem Informasi Lanjut', 'sks' => 3],
+                    ['code' => 'STI-503', 'name' => 'Manajemen Infrastruktur TI', 'sks' => 3],
+                    ['code' => 'STI-505', 'name' => 'Manajemen Proyek TI', 'sks' => 3],
+                ],
+                6 => [
+                    ['code' => 'STI-602', 'name' => 'Audit Sistem Informasi', 'sks' => 3],
+                    ['code' => 'STI-604', 'name' => 'Tata Kelola TI', 'sks' => 3],
+                    ['code' => 'STI-606', 'name' => 'Data Warehouse & Business Intelligence', 'sks' => 3],
+                ],
+                7 => [
+                    ['code' => 'STI-701', 'name' => 'Metodologi Penelitian TI', 'sks' => 2],
+                    ['code' => 'STI-703', 'name' => 'Kuliah Kerja Nyata (KKN)', 'sks' => 3],
+                    ['code' => 'STI-705', 'name' => 'Magang Kerja', 'sks' => 4],
+                ],
+                8 => [
+                    ['code' => 'STI-802', 'name' => 'Tugas Akhir / Skripsi', 'sks' => 6],
                 ]
             ],
             'Ilmu Aktuaria' => [
@@ -308,10 +355,33 @@ class SiakadSeeder extends Seeder
                     ['code' => 'AK-208', 'name' => 'Kalkulus Aktuaria 2', 'sks' => 3],
                     ['code' => 'AK-210', 'name' => 'Dasar Pemrograman Komputer', 'sks' => 3],
                 ],
+                3 => [
+                    ['code' => 'AK-301', 'name' => 'Matematika Finansial Lanjut', 'sks' => 3],
+                    ['code' => 'AK-303', 'name' => 'Teori Suku Bunga', 'sks' => 3],
+                    ['code' => 'AK-305', 'name' => 'Analisis Regresi', 'sks' => 3],
+                ],
+                4 => [
+                    ['code' => 'AK-402', 'name' => 'Matematika Dana Pensiun', 'sks' => 3],
+                    ['code' => 'AK-404', 'name' => 'Hukum Asuransi', 'sks' => 2],
+                    ['code' => 'AK-406', 'name' => 'Analisis Runtun Waktu', 'sks' => 3],
+                ],
                 5 => [
-                    ['code' => 'AK-301', 'name' => 'Matematika Aktuaria', 'sks' => 3],
-                    ['code' => 'AK-303', 'name' => 'Pemodelan Risiko dan Asuransi', 'sks' => 3],
-                    ['code' => 'AK-305', 'name' => 'Statistika Finansial', 'sks' => 3],
+                    ['code' => 'AK-501', 'name' => 'Matematika Aktuaria Jiwa 1', 'sks' => 3],
+                    ['code' => 'AK-503', 'name' => 'Pemodelan Risiko dan Asuransi', 'sks' => 3],
+                    ['code' => 'AK-505', 'name' => 'Statistika Finansial', 'sks' => 3],
+                ],
+                6 => [
+                    ['code' => 'AK-602', 'name' => 'Matematika Aktuaria Jiwa 2', 'sks' => 3],
+                    ['code' => 'AK-604', 'name' => 'Teori Risiko Kredibilitas', 'sks' => 3],
+                    ['code' => 'AK-606', 'name' => 'Manajemen Risiko Perusahaan', 'sks' => 3],
+                ],
+                7 => [
+                    ['code' => 'AK-701', 'name' => 'Metodologi Riset Aktuaria', 'sks' => 2],
+                    ['code' => 'AK-703', 'name' => 'Kuliah Kerja Nyata (KKN)', 'sks' => 3],
+                    ['code' => 'AK-705', 'name' => 'Magang Profesi Aktuaria', 'sks' => 4],
+                ],
+                8 => [
+                    ['code' => 'AK-802', 'name' => 'Tugas Akhir / Skripsi', 'sks' => 6],
                 ]
             ],
             'Hukum' => [
@@ -329,10 +399,33 @@ class SiakadSeeder extends Seeder
                     ['code' => 'HK-208', 'name' => 'Hukum Islam', 'sks' => 3],
                     ['code' => 'HK-210', 'name' => 'Hukum Administrasi Negara', 'sks' => 3],
                 ],
+                3 => [
+                    ['code' => 'HK-301', 'name' => 'Hukum Perjanjian', 'sks' => 3],
+                    ['code' => 'HK-303', 'name' => 'Hukum Perburuhan', 'sks' => 3],
+                    ['code' => 'HK-305', 'name' => 'Hukum Agraria', 'sks' => 3],
+                ],
+                4 => [
+                    ['code' => 'HK-402', 'name' => 'Hukum Acara Perdata', 'sks' => 4],
+                    ['code' => 'HK-404', 'name' => 'Hukum Acara Pidana', 'sks' => 4],
+                    ['code' => 'HK-406', 'name' => 'Hukum Lingkungan', 'sks' => 3],
+                ],
                 5 => [
-                    ['code' => 'HK-301', 'name' => 'Hukum Dagang & Bisnis', 'sks' => 3],
-                    ['code' => 'HK-303', 'name' => 'Hukum Internasional', 'sks' => 3],
-                    ['code' => 'HK-305', 'name' => 'Praktik Peradilan Semu', 'sks' => 3],
+                    ['code' => 'HK-501', 'name' => 'Hukum Dagang & Bisnis', 'sks' => 3],
+                    ['code' => 'HK-503', 'name' => 'Hukum Internasional', 'sks' => 3],
+                    ['code' => 'HK-505', 'name' => 'Hukum Perlindungan Konsumen', 'sks' => 3],
+                ],
+                6 => [
+                    ['code' => 'HK-602', 'name' => 'Hukum Kekayaan Intelektual', 'sks' => 3],
+                    ['code' => 'HK-604', 'name' => 'Etika Profesi Hukum', 'sks' => 2],
+                    ['code' => 'HK-606', 'name' => 'Alternatif Penyelesaian Sengketa', 'sks' => 3],
+                ],
+                7 => [
+                    ['code' => 'HK-701', 'name' => 'Penyusunan Kontrak (Contract Drafting)', 'sks' => 3],
+                    ['code' => 'HK-703', 'name' => 'Kuliah Kerja Nyata (KKN)', 'sks' => 3],
+                    ['code' => 'HK-705', 'name' => 'Praktik Peradilan Semu', 'sks' => 4],
+                ],
+                8 => [
+                    ['code' => 'HK-802', 'name' => 'Skripsi / Tugas Akhir Hukum', 'sks' => 6],
                 ]
             ],
             'Manajemen' => [
@@ -351,10 +444,33 @@ class SiakadSeeder extends Seeder
                     ['code' => 'MN-210', 'name' => 'Statistika Bisnis', 'sks' => 3],
                     ['code' => 'MN-212', 'name' => 'Ekonomi Manajerial', 'sks' => 3],
                 ],
+                3 => [
+                    ['code' => 'MN-301', 'name' => 'Perilaku Organisasi', 'sks' => 3],
+                    ['code' => 'MN-303', 'name' => 'Manajemen Operasional', 'sks' => 3],
+                    ['code' => 'MN-305', 'name' => 'Etika Bisnis', 'sks' => 3],
+                ],
+                4 => [
+                    ['code' => 'MN-402', 'name' => 'Manajemen Risiko Bisnis', 'sks' => 3],
+                    ['code' => 'MN-404', 'name' => 'Sistem Informasi Manajemen', 'sks' => 3],
+                    ['code' => 'MN-406', 'name' => 'Riset Pemasaran', 'sks' => 3],
+                ],
                 5 => [
-                    ['code' => 'MN-301', 'name' => 'Manajemen Strategis', 'sks' => 3],
-                    ['code' => 'MN-303', 'name' => 'Perilaku Organisasi', 'sks' => 3],
-                    ['code' => 'MN-305', 'name' => 'Kewirausahaan', 'sks' => 3],
+                    ['code' => 'MN-501', 'name' => 'Manajemen Strategis', 'sks' => 3],
+                    ['code' => 'MN-503', 'name' => 'Kewirausahaan', 'sks' => 3],
+                    ['code' => 'MN-505', 'name' => 'Studi Kelayakan Bisnis', 'sks' => 3],
+                ],
+                6 => [
+                    ['code' => 'MN-602', 'name' => 'Manajemen Investasi', 'sks' => 3],
+                    ['code' => 'MN-604', 'name' => 'Metode Penelitian Manajemen', 'sks' => 2],
+                    ['code' => 'MN-606', 'name' => 'Kepemimpinan Bisnis', 'sks' => 3],
+                ],
+                7 => [
+                    ['code' => 'MN-701', 'name' => 'Seminar Manajemen Keuangan/Pemasaran', 'sks' => 3],
+                    ['code' => 'MN-703', 'name' => 'Kuliah Kerja Nyata (KKN)', 'sks' => 3],
+                    ['code' => 'MN-705', 'name' => 'Magang Manajemen', 'sks' => 4],
+                ],
+                8 => [
+                    ['code' => 'MN-802', 'name' => 'Skripsi / Tugas Akhir Manajemen', 'sks' => 6],
                 ]
             ]
         ];
@@ -420,7 +536,18 @@ class SiakadSeeder extends Seeder
                     $entryYear = 2000 + (int)$yearPart;
                 }
             }
-            $targetSemester = ($entryYear === 2025) ? 2 : 5;
+                        $targetSemester = 5;
+            if ($entryYear === 2025) {
+                $targetSemester = 2;
+            } elseif ($entryYear === 2024) {
+                $targetSemester = 4;
+            } elseif ($entryYear === 2023) {
+                $targetSemester = 6;
+            } elseif ($entryYear === 2022) {
+                $targetSemester = 8;
+            } elseif ($entryYear === 2026) {
+                $targetSemester = 1;
+            }
 
             $allProdiCourses = $coursesByProdi[$student->prodi] ?? array_values($courseByCode);
             $prodiCourses = array_filter($allProdiCourses, static fn($c) => (int)$c->semester_num === $targetSemester);
@@ -504,10 +631,8 @@ class SiakadSeeder extends Seeder
             $allProdiCourses = $coursesByProdi[$student->prodi] ?? [];
             
             $pastSemesters = [];
-            if ($targetSemester === 2) {
-                $pastSemesters = [1];
-            } elseif ($targetSemester === 5) {
-                $pastSemesters = [1, 2];
+            for ($s = 1; $s < $targetSemester; $s++) {
+                $pastSemesters[] = $s;
             }
             
             foreach ($pastSemesters as $pastSem) {
