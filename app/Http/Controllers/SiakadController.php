@@ -1156,6 +1156,132 @@ class SiakadController extends Controller
         ], 201);
     }
 
+    public function getDosenConsultations(Request $request)
+    {
+        $dosen = $request->user();
+        if ($dosen->role !== 'dosen' && $dosen->role !== 'kaprodi') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $students = User::where('dosen_wali_id', $dosen->id)
+            ->where('role', 'mahasiswa')
+            ->get()
+            ->map(function ($student) use ($dosen) {
+                $latestMsg = ConsultationMessage::where('mahasiswa_id', $student->id)
+                    ->where('dosen_id', $dosen->id)
+                    ->latest()
+                    ->first();
+
+                $unreadCount = ConsultationMessage::where('mahasiswa_id', $student->id)
+                    ->where('dosen_id', $dosen->id)
+                    ->where('sender_role', 'mahasiswa')
+                    ->where('is_read', false)
+                    ->count();
+
+                return [
+                    'id' => $student->id,
+                    'name' => $student->name,
+                    'nim' => $student->nim_nip,
+                    'prodi' => $student->prodi,
+                    'latest_message' => $latestMsg ? $latestMsg->content : null,
+                    'latest_message_time' => $latestMsg ? $latestMsg->created_at?->format('j M Y, H:i') : null,
+                    'unread_count' => $unreadCount,
+                ];
+            });
+
+        return response()->json([
+            'students' => $students
+        ]);
+    }
+
+    public function getDosenStudentConsultation(Request $request, $mahasiswaId)
+    {
+        $dosen = $request->user();
+        if ($dosen->role !== 'dosen' && $dosen->role !== 'kaprodi') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $student = User::where('id', $mahasiswaId)->where('dosen_wali_id', $dosen->id)->first();
+        if (!$student) {
+            return response()->json(['message' => 'Mahasiswa bimbingan tidak ditemukan.'], 404);
+        }
+
+        ConsultationMessage::where('mahasiswa_id', $student->id)
+            ->where('dosen_id', $dosen->id)
+            ->where('sender_role', 'mahasiswa')
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+
+        $messages = ConsultationMessage::where('mahasiswa_id', $student->id)
+            ->where('dosen_id', $dosen->id)
+            ->orderBy('created_at')
+            ->get()
+            ->map(function ($message) {
+                $sender = $message->sender_role === 'mahasiswa' ? 'mahasiswa' : 'dosen';
+                return [
+                    'id' => $message->id,
+                    'sender' => $sender,
+                    'content' => $message->content,
+                    'text' => $message->content,
+                    'created_at' => $message->created_at?->toDateTimeString(),
+                    'time' => $message->created_at?->format('j M Y, H:i'),
+                    'is_from_student' => $sender === 'mahasiswa',
+                ];
+            });
+
+        return response()->json([
+            'student' => [
+                'id' => $student->id,
+                'name' => $student->name,
+                'nim' => $student->nim_nip,
+                'prodi' => $student->prodi,
+            ],
+            'messages' => $messages
+        ]);
+    }
+
+    public function storeDosenConsultation(Request $request)
+    {
+        $dosen = $request->user();
+        if ($dosen->role !== 'dosen' && $dosen->role !== 'kaprodi') {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $request->validate([
+            'mahasiswa_id' => 'required|exists:users,id',
+            'message' => 'required|string|max:2000',
+        ]);
+
+        $student = User::where('id', $request->mahasiswa_id)->where('dosen_wali_id', $dosen->id)->first();
+        if (!$student) {
+            return response()->json(['message' => 'Mahasiswa bimbingan tidak ditemukan.'], 404);
+        }
+
+        $message = ConsultationMessage::create([
+            'mahasiswa_id' => $student->id,
+            'dosen_id' => $dosen->id,
+            'sender_role' => 'dosen',
+            'content' => trim($request->message),
+            'is_read' => false,
+        ]);
+
+        return response()->json([
+            'message' => 'Pesan konsultasi berhasil dikirim.',
+            'data' => [
+                'id' => $message->id,
+                'sender' => 'dosen',
+                'content' => $message->content,
+                'text' => $message->content,
+                'created_at' => $message->created_at?->toDateTimeString(),
+                'time' => $message->created_at?->format('j M Y, H:i'),
+                'is_from_student' => false,
+            ],
+        ], 201);
+    }
+
     public function getMahasiswaMaterials(Request $request, $courseId)
     {
         $materials = \App\Models\Material::where('course_id', $courseId)->orderBy('session_num')->get();

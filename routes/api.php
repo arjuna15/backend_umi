@@ -156,6 +156,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/rekap-presensi', [\App\Http\Controllers\SiakadController::class, 'getDosenRekapPresensi']);
         Route::post('/gradebook/import', [\App\Http\Controllers\SiakadController::class, 'importDosenGradebook']);
         Route::put('/courses/{courseId}/grading-weights', [\App\Http\Controllers\SiakadController::class, 'updateCourseWeights']);
+        
+        // Bimbingan Akademik (Consultations) untuk Dosen
+        Route::get('/consultations', [\App\Http\Controllers\SiakadController::class, 'getDosenConsultations']);
+        Route::get('/consultations/{mahasiswaId}', [\App\Http\Controllers\SiakadController::class, 'getDosenStudentConsultation']);
+        Route::post('/consultations', [\App\Http\Controllers\SiakadController::class, 'storeDosenConsultation']);
     });
     
     Route::get('/siakad/materials/download/{id}', [\App\Http\Controllers\SiakadController::class, 'downloadMaterial']);
