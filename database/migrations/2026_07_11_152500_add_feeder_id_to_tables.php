@@ -11,21 +11,29 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('feeder_id')->nullable()->after('status');
-        });
+        if (!Schema::hasColumn('users', 'feeder_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('feeder_id')->nullable()->after('status');
+            });
+        }
 
-        Schema::table('courses', function (Blueprint $table) {
-            $table->string('feeder_id')->nullable()->after('prodi');
-        });
+        if (!Schema::hasColumn('courses', 'feeder_id')) {
+            Schema::table('courses', function (Blueprint $table) {
+                $table->string('feeder_id')->nullable()->after('prodi');
+            });
+        }
 
-        Schema::table('krs_submissions', function (Blueprint $table) {
-            $table->string('feeder_id')->nullable()->after('status');
-        });
+        if (!Schema::hasColumn('krs_submissions', 'feeder_id')) {
+            Schema::table('krs_submissions', function (Blueprint $table) {
+                $table->string('feeder_id')->nullable()->after('status');
+            });
+        }
 
-        Schema::table('grades', function (Blueprint $table) {
-            $table->string('feeder_id')->nullable()->after('grade');
-        });
+        if (!Schema::hasColumn('grades', 'feeder_id')) {
+            Schema::table('grades', function (Blueprint $table) {
+                $table->string('feeder_id')->nullable()->after('grade');
+            });
+        }
     }
 
     /**
@@ -33,20 +41,28 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('feeder_id');
-        });
+        if (Schema::hasColumn('users', 'feeder_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('feeder_id');
+            });
+        }
 
-        Schema::table('courses', function (Blueprint $table) {
-            $table->dropColumn('feeder_id');
-        });
+        if (Schema::hasColumn('courses', 'feeder_id')) {
+            Schema::table('courses', function (Blueprint $table) {
+                $table->dropColumn('feeder_id');
+            });
+        }
 
-        Schema::table('krs_submissions', function (Blueprint $table) {
-            $table->dropColumn('feeder_id');
-        });
+        if (Schema::hasColumn('krs_submissions', 'feeder_id')) {
+            Schema::table('krs_submissions', function (Blueprint $table) {
+                $table->dropColumn('feeder_id');
+            });
+        }
 
-        Schema::table('grades', function (Blueprint $table) {
-            $table->dropColumn('feeder_id');
-        });
+        if (Schema::hasColumn('grades', 'feeder_id')) {
+            Schema::table('grades', function (Blueprint $table) {
+                $table->dropColumn('feeder_id');
+            });
+        }
     }
 };
