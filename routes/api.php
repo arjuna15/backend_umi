@@ -212,6 +212,13 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/siakad/admin/backups', [\App\Http\Controllers\SiakadController::class, 'triggerBackup']);
     Route::delete('/siakad/admin/backups/{filename}', [\App\Http\Controllers\SiakadController::class, 'deleteBackup']);
 
+    // PDDIKTI Neo Feeder Operations
+    Route::prefix('siakad/admin/feeder')->group(function () {
+        Route::get('/test-connection', [\App\Http\Controllers\Siakad\NeoFeederController::class, 'testConnection']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\NeoFeederController::class, 'getStats']);
+        Route::post('/sync', [\App\Http\Controllers\Siakad\NeoFeederController::class, 'triggerSync']);
+    });
+
     // PDF Exports & Grading
     Route::get('/siakad/export/krs', [\App\Http\Controllers\SiakadController::class, 'exportKrsPdf']);
     Route::get('/siakad/export/khs', [\App\Http\Controllers\SiakadController::class, 'exportKhsPdf']);
