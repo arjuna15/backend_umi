@@ -189,9 +189,9 @@ class NeoFeederService
         $record = [
             'id_registrasi_mahasiswa' => $grade->mahasiswa->feeder_id,
             'id_kelas_kuliah' => $grade->course->feeder_id,
-            'nilai_angka' => $grade->nilai_akhir,
-            'nilai_indeks' => $this->getNilaiIndeks($grade->nilai_huruf),
-            'nilai_huruf' => $grade->nilai_huruf,
+            'nilai_angka' => $grade->score ?? 0,
+            'nilai_indeks' => $this->getNilaiIndeks($grade->grade ?? 'E'),
+            'nilai_huruf' => $grade->grade ?? 'E',
         ];
 
         $response = $this->request('InsertNilaiPerkuliahanKelas', [$record]);

@@ -24,7 +24,7 @@ return new class extends Migration
         });
 
         Schema::table('grades', function (Blueprint $table) {
-            $table->string('feeder_id')->nullable()->after('nilai_huruf');
+            $table->string('feeder_id')->nullable()->after('grade');
         });
     }
 
