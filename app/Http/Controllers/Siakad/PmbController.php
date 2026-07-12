@@ -199,6 +199,7 @@ class PmbController extends Controller
     public function dashboard(): JsonResponse
     {
         $totalApplicants = PmbApplicant::count();
+        $totalPeriods = PmbPeriod::count();
 
         $byStatus = PmbApplicant::selectRaw('status, COUNT(*) as total')
             ->groupBy('status')
@@ -215,7 +216,13 @@ class PmbController extends Controller
         return response()->json([
             'success' => true,
             'stats' => [
+                'total_periods' => $totalPeriods,
                 'total_applicants' => $totalApplicants,
+                'accepted' => $byStatus->get('accepted', 0),
+                'rejected' => $byStatus->get('rejected', 0),
+                'pending' => $byStatus->get('pending', 0),
+                'verified' => $byStatus->get('verified', 0),
+                'enrolled' => $byStatus->get('enrolled', 0),
                 'by_status' => $byStatus,
                 'by_program' => $byProgram,
                 'active_periods' => $activePeriods,

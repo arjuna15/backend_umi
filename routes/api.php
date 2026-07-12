@@ -256,14 +256,11 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/export', [\App\Http\Controllers\Siakad\TracerController::class, 'exportCsv']);
     });
 
-    // PMB (Penerimaan Mahasiswa Baru)
+    // PMB (Penerimaan Mahasiswa Baru) - Admin routes (require auth)
     Route::prefix('siakad/pmb')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Siakad\PmbController::class, 'dashboard']);
-        Route::get('/periods', [\App\Http\Controllers\Siakad\PmbController::class, 'periods']);
         Route::post('/periods', [\App\Http\Controllers\Siakad\PmbController::class, 'createPeriod']);
         Route::put('/periods/{id}', [\App\Http\Controllers\Siakad\PmbController::class, 'updatePeriod']);
-        Route::post('/apply/{periodId}', [\App\Http\Controllers\Siakad\PmbController::class, 'apply']);
-        Route::post('/upload/{applicantId}', [\App\Http\Controllers\Siakad\PmbController::class, 'uploadDocument']);
         Route::get('/applicants/{periodId}', [\App\Http\Controllers\Siakad\PmbController::class, 'getApplicants']);
         Route::get('/applicant/{applicantId}', [\App\Http\Controllers\Siakad\PmbController::class, 'getApplicantDetail']);
         Route::patch('/status/{applicantId}', [\App\Http\Controllers\Siakad\PmbController::class, 'updateStatus']);
@@ -274,5 +271,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/siakad/export/khs', [\App\Http\Controllers\SiakadController::class, 'exportKhsPdf']);
     Route::post('/siakad/submission/{submissionId}/grade', [\App\Http\Controllers\SiakadController::class, 'gradeSubmission']);
     Route::get('/siakad/submission/{submissionId}/download', [\App\Http\Controllers\SiakadController::class, 'downloadSubmission']);
+});
+
+// PMB Public routes (no auth required - for calon mahasiswa)
+Route::prefix('siakad/pmb')->group(function () {
+    Route::get('/periods', [\App\Http\Controllers\Siakad\PmbController::class, 'periods']);
+    Route::post('/apply/{periodId}', [\App\Http\Controllers\Siakad\PmbController::class, 'apply']);
+    Route::post('/upload/{applicantId}', [\App\Http\Controllers\Siakad\PmbController::class, 'uploadDocument']);
 });
 
