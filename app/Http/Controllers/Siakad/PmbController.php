@@ -18,7 +18,10 @@ class PmbController extends Controller
     {
         $periods = PmbPeriod::withCount('applicants')->orderByDesc('created_at')->get();
 
-        return response()->json($periods);
+        return response()->json([
+            'success' => true,
+            'periods' => $periods
+        ]);
     }
 
     /**
@@ -37,7 +40,10 @@ class PmbController extends Controller
 
         $period = PmbPeriod::create($validated);
 
-        return response()->json($period, 201);
+        return response()->json([
+            'success' => true,
+            'period' => $period
+        ], 201);
     }
 
     /**
@@ -58,7 +64,10 @@ class PmbController extends Controller
 
         $period->update($validated);
 
-        return response()->json($period);
+        return response()->json([
+            'success' => true,
+            'period' => $period
+        ]);
     }
 
     /**
@@ -69,7 +78,7 @@ class PmbController extends Controller
         $period = PmbPeriod::findOrFail($periodId);
 
         if ($period->status !== 'open') {
-            return response()->json(['message' => 'Periode pendaftaran belum/sudah ditutup.'], 422);
+            return response()->json(['success' => false, 'message' => 'Periode pendaftaran belum/sudah ditutup.'], 422);
         }
 
         $validated = $request->validate([
@@ -97,7 +106,10 @@ class PmbController extends Controller
             'status' => 'pending',
         ]));
 
-        return response()->json($applicant, 201);
+        return response()->json([
+            'success' => true,
+            'applicant' => $applicant
+        ], 201);
     }
 
     /**
@@ -123,7 +135,10 @@ class PmbController extends Controller
             'uploaded_at' => now(),
         ]);
 
-        return response()->json($document, 201);
+        return response()->json([
+            'success' => true,
+            'document' => $document
+        ], 201);
     }
 
     /**
@@ -134,9 +149,12 @@ class PmbController extends Controller
         $applicants = PmbApplicant::where('pmb_period_id', $periodId)
             ->withCount('documents')
             ->orderByDesc('created_at')
-            ->paginate(20);
+            ->get();
 
-        return response()->json($applicants);
+        return response()->json([
+            'success' => true,
+            'applicants' => $applicants
+        ]);
     }
 
     /**
@@ -155,7 +173,10 @@ class PmbController extends Controller
             'notes' => $request->notes ?? $applicant->notes,
         ]);
 
-        return response()->json($applicant);
+        return response()->json([
+            'success' => true,
+            'applicant' => $applicant
+        ]);
     }
 
     /**
@@ -166,7 +187,10 @@ class PmbController extends Controller
         $applicant = PmbApplicant::with(['documents', 'period'])
             ->findOrFail($applicantId);
 
-        return response()->json($applicant);
+        return response()->json([
+            'success' => true,
+            'applicant' => $applicant
+        ]);
     }
 
     /**
@@ -189,10 +213,13 @@ class PmbController extends Controller
             ->get();
 
         return response()->json([
-            'total_applicants' => $totalApplicants,
-            'by_status' => $byStatus,
-            'by_program' => $byProgram,
-            'active_periods' => $activePeriods,
+            'success' => true,
+            'stats' => [
+                'total_applicants' => $totalApplicants,
+                'by_status' => $byStatus,
+                'by_program' => $byProgram,
+                'active_periods' => $activePeriods,
+            ]
         ]);
     }
 }
