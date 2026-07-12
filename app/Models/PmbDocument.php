@@ -17,11 +17,21 @@ class PmbDocument extends Model
         'uploaded_at',
     ];
 
+    protected $appends = ['file_url'];
+
     protected function casts(): array
     {
         return [
             'uploaded_at' => 'datetime',
         ];
+    }
+
+    public function getFileUrlAttribute(): string
+    {
+        if (filter_var($this->file_path, FILTER_VALIDATE_URL)) {
+            return $this->file_path;
+        }
+        return url('storage/' . $this->file_path);
     }
 
     public function applicant()
