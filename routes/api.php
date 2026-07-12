@@ -219,6 +219,56 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/sync', [\App\Http\Controllers\Siakad\NeoFeederController::class, 'triggerSync']);
     });
 
+    // Chat Real-Time
+    Route::prefix('siakad/chat')->group(function () {
+        Route::get('/rooms', [\App\Http\Controllers\Siakad\ChatController::class, 'index']);
+        Route::post('/rooms', [\App\Http\Controllers\Siakad\ChatController::class, 'createRoom']);
+        Route::get('/rooms/{id}', [\App\Http\Controllers\Siakad\ChatController::class, 'show']);
+        Route::post('/rooms/{id}/messages', [\App\Http\Controllers\Siakad\ChatController::class, 'store']);
+    });
+
+    // MBKM
+    Route::prefix('siakad/mbkm')->group(function () {
+        Route::get('/programs', [\App\Http\Controllers\Siakad\MbkmController::class, 'index']);
+        Route::post('/programs', [\App\Http\Controllers\Siakad\MbkmController::class, 'store']);
+        Route::get('/programs/{id}', [\App\Http\Controllers\Siakad\MbkmController::class, 'show']);
+        Route::post('/programs/{id}/submit', [\App\Http\Controllers\Siakad\MbkmController::class, 'submit']);
+        Route::post('/submissions/{id}/approve', [\App\Http\Controllers\Siakad\MbkmController::class, 'approve']);
+        Route::delete('/programs/{id}', [\App\Http\Controllers\Siakad\MbkmController::class, 'destroy']);
+    });
+
+    // Proctoring
+    Route::prefix('siakad/proctoring')->group(function () {
+        Route::get('/sessions', [\App\Http\Controllers\Siakad\ProctoringController::class, 'index']);
+        Route::post('/generate-token', [\App\Http\Controllers\Siakad\ProctoringController::class, 'generateToken']);
+        Route::post('/sessions/{id}/start', [\App\Http\Controllers\Siakad\ProctoringController::class, 'start']);
+        Route::post('/sessions/{id}/stop', [\App\Http\Controllers\Siakad\ProctoringController::class, 'stop']);
+        Route::post('/log', [\App\Http\Controllers\Siakad\ProctoringController::class, 'logEvent']);
+        Route::get('/sessions/{id}/logs', [\App\Http\Controllers\Siakad\ProctoringController::class, 'getSessionLogs']);
+    });
+
+    // Tracer Study & Alumni
+    Route::prefix('siakad/tracer')->group(function () {
+        Route::get('/alumni', [\App\Http\Controllers\Siakad\TracerController::class, 'index']);
+        Route::post('/alumni', [\App\Http\Controllers\Siakad\TracerController::class, 'storeAlumni']);
+        Route::post('/survey', [\App\Http\Controllers\Siakad\TracerController::class, 'storeSurvey']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\TracerController::class, 'stats']);
+        Route::get('/export', [\App\Http\Controllers\Siakad\TracerController::class, 'exportCsv']);
+    });
+
+    // PMB (Penerimaan Mahasiswa Baru)
+    Route::prefix('siakad/pmb')->group(function () {
+        Route::get('/dashboard', [\App\Http\Controllers\Siakad\PmbController::class, 'dashboard']);
+        Route::get('/periods', [\App\Http\Controllers\Siakad\PmbController::class, 'periods']);
+        Route::post('/periods', [\App\Http\Controllers\Siakad\PmbController::class, 'createPeriod']);
+        Route::put('/periods/{id}', [\App\Http\Controllers\Siakad\PmbController::class, 'updatePeriod']);
+        Route::post('/apply/{periodId}', [\App\Http\Controllers\Siakad\PmbController::class, 'apply']);
+        Route::post('/upload/{applicantId}', [\App\Http\Controllers\Siakad\PmbController::class, 'uploadDocument']);
+        Route::get('/applicants/{periodId}', [\App\Http\Controllers\Siakad\PmbController::class, 'getApplicants']);
+        Route::get('/applicant/{applicantId}', [\App\Http\Controllers\Siakad\PmbController::class, 'getApplicantDetail']);
+        Route::patch('/status/{applicantId}', [\App\Http\Controllers\Siakad\PmbController::class, 'updateStatus']);
+    });
+
     // PDF Exports & Grading
     Route::get('/siakad/export/krs', [\App\Http\Controllers\SiakadController::class, 'exportKrsPdf']);
     Route::get('/siakad/export/khs', [\App\Http\Controllers\SiakadController::class, 'exportKhsPdf']);
