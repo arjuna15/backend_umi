@@ -29,18 +29,20 @@ class ProctoringController extends Controller
      */
     public function generateToken(Request $request): JsonResponse
     {
-        $request->validate([
-            'quiz_id' => 'required|integer',
-        ]);
+        $quizId = $request->input('quiz_id', 1);
 
         $session = ProctorSession::create([
-            'quiz_id' => $request->quiz_id,
+            'quiz_id' => $quizId,
             'user_id' => $request->user()->id,
-            'token' => Str::random(64),
+            'token' => strtoupper(Str::random(8)),
             'status' => 'waiting',
         ]);
 
-        return response()->json($session, 201);
+        return response()->json([
+            'success' => true,
+            'token' => $session->token,
+            'session' => $session
+        ], 201);
     }
 
     /**
@@ -51,7 +53,7 @@ class ProctoringController extends Controller
         $session = ProctorSession::findOrFail($id);
 
         if ($session->status !== 'waiting') {
-            return response()->json(['message' => 'Session sudah dimulai atau sudah berakhir.'], 422);
+            return response()->json(['success' => false, 'message' => 'Session sudah dimulai atau sudah berakhir.'], 422);
         }
 
         $session->update([
@@ -59,7 +61,10 @@ class ProctoringController extends Controller
             'started_at' => now(),
         ]);
 
-        return response()->json($session);
+        return response()->json([
+            'success' => true,
+            'session' => $session
+        ]);
     }
 
     /**
@@ -70,7 +75,7 @@ class ProctoringController extends Controller
         $session = ProctorSession::findOrFail($id);
 
         if ($session->status !== 'active') {
-            return response()->json(['message' => 'Session tidak dalam status aktif.'], 422);
+            return response()->json(['success' => false, 'message' => 'Session tidak dalam status aktif.'], 422);
         }
 
         $session->update([
@@ -78,7 +83,10 @@ class ProctoringController extends Controller
             'ended_at' => now(),
         ]);
 
-        return response()->json($session);
+        return response()->json([
+            'success' => true,
+            'session' => $session
+        ]);
     }
 
     /**
@@ -99,7 +107,10 @@ class ProctoringController extends Controller
             'data' => $request->data,
         ]);
 
-        return response()->json($log, 201);
+        return response()->json([
+            'success' => true,
+            'log' => $log
+        ], 201);
     }
 
     /**
@@ -110,6 +121,10 @@ class ProctoringController extends Controller
         $session = ProctorSession::with(['logs.user:id,name,nim_nip', 'user:id,name'])
             ->findOrFail($id);
 
-        return response()->json($session);
+        return response()->json([
+            'success' => true,
+            'session' => $session,
+            'logs' => $session->logs
+        ]);
     }
 }
