@@ -610,6 +610,22 @@ class SiakadController extends Controller
 
         return response()->json(['message' => 'Gagal mengunggah avatar'], 400);
     }
+
+    public function updatePreferences(Request $request)
+    {
+        $user = auth()->user();
+        $request->validate([
+            'email_notifications' => 'required|boolean',
+            'public_visibility' => 'required|boolean',
+        ]);
+
+        $user->update([
+            'email_notifications' => $request->email_notifications,
+            'public_visibility' => $request->public_visibility,
+        ]);
+
+        return response()->json(['message' => 'Preferensi berhasil diperbarui', 'user' => $user]);
+    }
     public function getBillings()
     {
         return response()->json(\App\Models\Billing::with('user')->orderBy('created_at', 'desc')->get());
