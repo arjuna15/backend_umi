@@ -9,6 +9,33 @@ use Illuminate\Support\Facades\DB;
 
 class EdomController extends Controller
 {
+    public function getMyCourses(Request $request)
+    {
+        $user = $request->user();
+        $approvedKrs = \App\Models\KrsSubmission::where('mahasiswa_id', $user->id)
+            ->where('status', 'approved')
+            ->first();
+
+        if (!$approvedKrs) {
+            return response()->json(['data' => []]);
+        }
+
+        $courses = \App\Models\Course::with('dosen')
+            ->whereIn('id', $approvedKrs->course_ids ?? [])
+            ->get()
+            ->map(function ($course) {
+                return [
+                    'course_id' => $course->id,
+                    'course_name' => $course->name,
+                    'course_code' => $course->code,
+                    'dosen_id' => $course->dosen?->id,
+                    'dosen_name' => $course->dosen?->name ?? 'Belum Ditentukan',
+                ];
+            });
+
+        return response()->json(['data' => $courses]);
+    }
+
     public function getQuestions()
     {
         $questions = EdomQuestion::orderBy('id')->get();

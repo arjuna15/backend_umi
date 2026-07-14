@@ -300,6 +300,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // EDOM (Evaluasi Dosen oleh Mahasiswa)
     Route::prefix('siakad/edom')->group(function () {
+        Route::get('/my-courses', [\App\Http\Controllers\Siakad\EdomController::class, 'getMyCourses']);
         Route::get('/questions', [\App\Http\Controllers\Siakad\EdomController::class, 'getQuestions']);
         Route::post('/submit', [\App\Http\Controllers\Siakad\EdomController::class, 'submitAnswers']);
         Route::get('/stats/{dosenId}', [\App\Http\Controllers\Siakad\EdomController::class, 'getDosenStats']);
