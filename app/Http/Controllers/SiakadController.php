@@ -1094,6 +1094,18 @@ class SiakadController extends Controller
             ];
         }
 
+        $weeklySchedule = $courses->map(function ($course) {
+            $attendance = $course->attendances->sortByDesc('meeting_number')->first();
+            return [
+                'day' => $course->hari,
+                'time' => trim(($course->jam_mulai ?? '') . ($course->jam_selesai ? ' - ' . $course->jam_selesai : '')) ?: '-',
+                'course' => $course->name,
+                'room' => $course->ruang ?? '-',
+                'dosen' => $course->dosen?->name ?? '-',
+                'meeting' => $attendance?->meeting_number ?? 1,
+            ];
+        })->values();
+
         $consultations = $this->formatConsultationMessages($user);
 
         return response()->json([
@@ -1108,7 +1120,7 @@ class SiakadController extends Controller
             'schedule_today' => $scheduleToday,
             'upcoming_deadlines' => collect($upcomingDeadlines)->sortBy('due_in_days')->values(),
             'consultations' => $consultations->values(),
-            'weekly_schedule' => $scheduleToday,
+            'weekly_schedule' => $weeklySchedule,
             'messages' => $consultations->values(),
         ]);
     }
