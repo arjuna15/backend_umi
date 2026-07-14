@@ -886,24 +886,44 @@ class SiakadController extends Controller
 
     public function getKaprodiEdom(Request $request)
     {
-        $edoms = \App\Models\Edom::with(['dosen', 'mahasiswa', 'course'])->get();
+        $edoms = \App\Models\Edom::with(['dosen', 'mahasiswa', 'course'])->latest()->get();
         $dosens = User::where('role', 'dosen')->get();
+
+        // Calculate real averages per aspect
+        $answers = \App\Models\EdomAnswer::with('question')->get();
         
-        // Seed edoms if empty for demo
-        if ($edoms->isEmpty() && $dosens->count() > 0) {
-            foreach ($dosens as $dosen) {
-                \App\Models\Edom::create([
-                    'dosen_id' => $dosen->id,
-                    'mahasiswa_id' => User::where('role', 'mahasiswa')->first()->id ?? 1,
-                    'course_id' => Course::first()->id ?? 1,
-                    'score' => ($dosen->id % 3) + 3,
-                    'comment' => 'Dosen mengajar dengan sangat baik dan jelas.'
-                ]);
-            }
-            $edoms = \App\Models\Edom::with(['dosen', 'mahasiswa', 'course'])->get();
+        $aspects = [
+            'pedagogik' => 0,
+            'profesional' => 0,
+            'sosial' => 0,
+            'kepribadian' => 0
+        ];
+        
+        if ($answers->isNotEmpty()) {
+            $ped = $answers->filter(fn($a) => strcasecmp($a->question?->category ?? '', 'Pedagogik') === 0);
+            $prof = $answers->filter(fn($a) => in_array(strtolower($a->question?->category ?? ''), ['profesionalisme', 'kompetensi']));
+            $sos = $answers->filter(fn($a) => strcasecmp($a->question?->category ?? '', 'Sosial') === 0);
+            $kep = $answers->filter(fn($a) => strcasecmp($a->question?->category ?? '', 'Kepribadian') === 0);
+            
+            $aspects['pedagogik'] = $ped->isNotEmpty() ? round($ped->avg('score'), 2) : 4.5;
+            $aspects['profesional'] = $prof->isNotEmpty() ? round($prof->avg('score'), 2) : 4.6;
+            $aspects['sosial'] = $sos->isNotEmpty() ? round($sos->avg('score'), 2) : 4.4;
+            $aspects['kepribadian'] = $kep->isNotEmpty() ? round($kep->avg('score'), 2) : 4.5;
+        } else {
+            // Default demo values if empty
+            $aspects = [
+                'pedagogik' => 4.5,
+                'profesional' => 4.6,
+                'sosial' => 4.4,
+                'kepribadian' => 4.5
+            ];
         }
-        
-        return response()->json(['edoms' => $edoms, 'dosens' => $dosens]);
+
+        return response()->json([
+            'edoms' => $edoms,
+            'dosens' => $dosens,
+            'aspect_averages' => $aspects
+        ]);
     }
 
     // Dosen Ultimate Mega Update Methods

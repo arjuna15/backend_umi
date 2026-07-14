@@ -45,6 +45,7 @@ class EdomController extends Controller
             return response()->json(['message' => 'Anda sudah mengisi evaluasi untuk dosen ini.'], 422);
         }
 
+        $totalScore = 0;
         foreach ($request->answers as $a) {
             EdomAnswer::create([
                 'question_id' => $a['question_id'],
@@ -54,7 +55,24 @@ class EdomController extends Controller
                 'score' => $a['score'],
                 'comments' => $request->comments,
             ]);
+            $totalScore += $a['score'];
         }
+
+        $avgScore = count($request->answers) > 0 ? $totalScore / count($request->answers) : 5;
+
+        \App\Models\Edom::updateOrCreate(
+            [
+                'user_id' => $request->user()->id,
+                'mahasiswa_id' => $request->user()->id,
+                'dosen_id' => $request->dosen_id,
+                'course_id' => $request->course_id,
+            ],
+            [
+                'score' => round($avgScore, 1),
+                'comment' => $request->comments ?? 'Cukup baik.'
+            ]
+        );
+
         return response()->json(['message' => 'Evaluasi dosen berhasil disimpan.']);
     }
 
