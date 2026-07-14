@@ -1053,17 +1053,21 @@ class SiakadController extends Controller
                 ->get();
         }
 
-        $scheduleToday = $courses->map(function ($course) use ($today) {
+        $dayNameToday = $today->locale('id')->translatedFormat('l'); // e.g. "Senin", "Selasa"
+
+        $scheduleToday = $courses->filter(function ($course) use ($dayNameToday) {
+            return strcasecmp($course->hari ?? '', $dayNameToday) === 0;
+        })->map(function ($course) {
             $attendance = $course->attendances->sortByDesc('meeting_number')->first();
             return [
-                'day' => $course->hari ?? $today->locale('id')->translatedFormat('l'),
+                'day' => $course->hari,
                 'time' => trim(($course->jam_mulai ?? '') . ($course->jam_selesai ? ' - ' . $course->jam_selesai : '')) ?: '-',
                 'course' => $course->name,
                 'room' => $course->ruang ?? '-',
                 'dosen' => $course->dosen?->name ?? '-',
                 'meeting' => $attendance?->meeting_number ?? 1,
             ];
-        })->filter(fn ($item) => $item['course'] !== '-')->values();
+        })->values();
 
         $upcomingDeadlines = [];
         foreach ($courses as $course) {
@@ -1073,6 +1077,8 @@ class SiakadController extends Controller
                     'title' => $assignment->title,
                     'course' => $course->name,
                     'due_in_days' => max(0, abs((int) $dueInDays)),
+                    'type' => 'assignment',
+                    'target_url' => '/siakad/mahasiswa/elearning'
                 ];
             }
         }
@@ -1083,6 +1089,8 @@ class SiakadController extends Controller
                 'title' => 'Tagihan ' . $billing->description,
                 'course' => $user->prodi,
                 'due_in_days' => max(0, now()->diffInDays($billing->due_date, false)),
+                'type' => 'billing',
+                'target_url' => '/siakad/mahasiswa/keuangan'
             ];
         }
 
