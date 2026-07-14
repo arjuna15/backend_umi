@@ -271,6 +271,46 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/siakad/export/khs', [\App\Http\Controllers\SiakadController::class, 'exportKhsPdf']);
     Route::post('/siakad/submission/{submissionId}/grade', [\App\Http\Controllers\SiakadController::class, 'gradeSubmission']);
     Route::get('/siakad/submission/{submissionId}/download', [\App\Http\Controllers\SiakadController::class, 'downloadSubmission']);
+
+    // SKPI & Prestasi
+    Route::prefix('siakad/skpi')->group(function () {
+        Route::get('/list', [\App\Http\Controllers\Siakad\SkpiController::class, 'index']);
+        Route::post('/submit', [\App\Http\Controllers\Siakad\SkpiController::class, 'submit']);
+        Route::post('/verify/{id}', [\App\Http\Controllers\Siakad\SkpiController::class, 'approve']);
+        Route::post('/skpi-submit', [\App\Http\Controllers\Siakad\SkpiController::class, 'submitSkpi']);
+        Route::post('/skpi-verify/{id}', [\App\Http\Controllers\Siakad\SkpiController::class, 'approveSkpi']);
+    });
+
+    // Yudisium & Wisuda
+    Route::prefix('siakad/graduation')->group(function () {
+        Route::get('/yudisium', [\App\Http\Controllers\Siakad\GraduationController::class, 'getYudisiumList']);
+        Route::post('/yudisium', [\App\Http\Controllers\Siakad\GraduationController::class, 'applyYudisium']);
+        Route::post('/yudisium/{id}/verify', [\App\Http\Controllers\Siakad\GraduationController::class, 'verifyYudisium']);
+        Route::get('/wisuda', [\App\Http\Controllers\Siakad\GraduationController::class, 'getWisudaList']);
+        Route::post('/wisuda', [\App\Http\Controllers\Siakad\GraduationController::class, 'applyWisuda']);
+        Route::post('/wisuda/{id}/confirm', [\App\Http\Controllers\Siakad\GraduationController::class, 'confirmWisuda']);
+    });
+
+    // Litabmas (Penelitian & Pengabdian)
+    Route::prefix('siakad/litabmas')->group(function () {
+        Route::get('/proposals', [\App\Http\Controllers\Siakad\LitabmasController::class, 'index']);
+        Route::post('/proposals', [\App\Http\Controllers\Siakad\LitabmasController::class, 'store']);
+        Route::post('/proposals/{id}/review', [\App\Http\Controllers\Siakad\LitabmasController::class, 'review']);
+    });
+
+    // EDOM (Evaluasi Dosen oleh Mahasiswa)
+    Route::prefix('siakad/edom')->group(function () {
+        Route::get('/questions', [\App\Http\Controllers\Siakad\EdomController::class, 'getQuestions']);
+        Route::post('/submit', [\App\Http\Controllers\Siakad\EdomController::class, 'submitAnswers']);
+        Route::get('/stats/{dosenId}', [\App\Http\Controllers\Siakad\EdomController::class, 'getDosenStats']);
+    });
+
+    // Penjaminan Mutu (SPMI/SPME) & IKU
+    Route::prefix('siakad/qa')->group(function () {
+        Route::get('/spmi', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'getSpmiDocs']);
+        Route::post('/spmi', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'uploadSpmiDoc']);
+        Route::get('/iku', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'getIkuStats']);
+    });
 });
 
 // PMB Public routes (no auth required - for calon mahasiswa)
