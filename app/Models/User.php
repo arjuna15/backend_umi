@@ -41,6 +41,8 @@ class User extends Authenticatable
         'dosen_wali_id',
         'jfa',
         'status',
+        'email_notifications',
+        'public_visibility',
     ];
 
     /**
@@ -63,6 +65,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'email_notifications' => 'boolean',
+            'public_visibility' => 'boolean',
         ];
     }
 
