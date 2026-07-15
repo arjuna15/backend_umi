@@ -1,0 +1,27 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('ppg_activities', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('ppg_participant_id')->constrained('ppg_participants')->cascadeOnDelete();
+            $table->enum('activity_type', ['workshop', 'teaching_practice', 'exam', 'seminar']);
+            $table->string('title');
+            $table->date('date');
+            $table->decimal('score', 5, 2)->nullable();
+            $table->text('notes')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('ppg_activities');
+    }
+};

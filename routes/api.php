@@ -313,6 +313,93 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/spmi', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'uploadSpmiDoc']);
         Route::get('/iku', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'getIkuStats']);
     });
+
+    // Kepegawaian (HRD)
+    Route::prefix('siakad/hrd')->group(function () {
+        Route::get('/employees', [\App\Http\Controllers\Siakad\HrdController::class, 'index']);
+        Route::post('/employees', [\App\Http\Controllers\Siakad\HrdController::class, 'store']);
+        Route::put('/employees/{id}', [\App\Http\Controllers\Siakad\HrdController::class, 'update']);
+        Route::delete('/employees/{id}', [\App\Http\Controllers\Siakad\HrdController::class, 'destroy']);
+        Route::get('/attendance', [\App\Http\Controllers\Siakad\HrdController::class, 'attendance']);
+        Route::post('/attendance', [\App\Http\Controllers\Siakad\HrdController::class, 'markAttendance']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\HrdController::class, 'stats']);
+    });
+
+    // Manajemen Kerjasama
+    Route::prefix('siakad/kerjasama')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Siakad\KerjasamaController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\Siakad\KerjasamaController::class, 'store']);
+        Route::put('/{id}', [\App\Http\Controllers\Siakad\KerjasamaController::class, 'update']);
+        Route::delete('/{id}', [\App\Http\Controllers\Siakad\KerjasamaController::class, 'destroy']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\KerjasamaController::class, 'stats']);
+    });
+
+    // RPL (Rekognisi Pembelajaran Lampau)
+    Route::prefix('siakad/rpl')->group(function () {
+        Route::get('/applications', [\App\Http\Controllers\Siakad\RplController::class, 'index']);
+        Route::post('/applications', [\App\Http\Controllers\Siakad\RplController::class, 'store']);
+        Route::get('/applications/{id}', [\App\Http\Controllers\Siakad\RplController::class, 'show']);
+        Route::post('/applications/{id}/review', [\App\Http\Controllers\Siakad\RplController::class, 'review']);
+        Route::post('/applications/{id}/documents', [\App\Http\Controllers\Siakad\RplController::class, 'uploadDocument']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\RplController::class, 'stats']);
+    });
+
+    // Career Center
+    Route::prefix('siakad/career')->group(function () {
+        Route::get('/jobs', [\App\Http\Controllers\Siakad\CareerController::class, 'jobs']);
+        Route::post('/jobs', [\App\Http\Controllers\Siakad\CareerController::class, 'storeJob']);
+        Route::put('/jobs/{id}', [\App\Http\Controllers\Siakad\CareerController::class, 'updateJob']);
+        Route::delete('/jobs/{id}', [\App\Http\Controllers\Siakad\CareerController::class, 'deleteJob']);
+        Route::get('/jobs/{jobId}/applications', [\App\Http\Controllers\Siakad\CareerController::class, 'applications']);
+        Route::post('/jobs/{jobId}/apply', [\App\Http\Controllers\Siakad\CareerController::class, 'apply']);
+        Route::patch('/applications/{id}/status', [\App\Http\Controllers\Siakad\CareerController::class, 'updateApplicationStatus']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\CareerController::class, 'stats']);
+    });
+
+    // CRM CAMABA
+    Route::prefix('siakad/crm')->group(function () {
+        Route::get('/prospects', [\App\Http\Controllers\Siakad\CrmController::class, 'index']);
+        Route::post('/prospects', [\App\Http\Controllers\Siakad\CrmController::class, 'store']);
+        Route::put('/prospects/{id}', [\App\Http\Controllers\Siakad\CrmController::class, 'update']);
+        Route::delete('/prospects/{id}', [\App\Http\Controllers\Siakad\CrmController::class, 'destroy']);
+        Route::post('/prospects/{id}/followup', [\App\Http\Controllers\Siakad\CrmController::class, 'addFollowup']);
+        Route::get('/prospects/{id}/followups', [\App\Http\Controllers\Siakad\CrmController::class, 'getFollowups']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\CrmController::class, 'stats']);
+    });
+
+    // PPG (Pendidikan Profesi Guru)
+    Route::prefix('siakad/ppg')->group(function () {
+        Route::get('/participants', [\App\Http\Controllers\Siakad\PpgController::class, 'index']);
+        Route::post('/participants', [\App\Http\Controllers\Siakad\PpgController::class, 'store']);
+        Route::put('/participants/{id}', [\App\Http\Controllers\Siakad\PpgController::class, 'update']);
+        Route::get('/participants/{id}/activities', [\App\Http\Controllers\Siakad\PpgController::class, 'activities']);
+        Route::post('/participants/{id}/activities', [\App\Http\Controllers\Siakad\PpgController::class, 'addActivity']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\PpgController::class, 'stats']);
+    });
+
+    // e-Sign Integration
+    Route::prefix('siakad/esign')->group(function () {
+        Route::get('/config', [\App\Http\Controllers\Siakad\EsignController::class, 'config']);
+        Route::post('/config', [\App\Http\Controllers\Siakad\EsignController::class, 'updateConfig']);
+        Route::post('/test', [\App\Http\Controllers\Siakad\EsignController::class, 'testConnection']);
+    });
+
+    // Perpustakaan sLimS Integration
+    Route::prefix('siakad/perpustakaan')->group(function () {
+        Route::get('/config', [\App\Http\Controllers\Siakad\PerpustakaanController::class, 'config']);
+        Route::post('/config', [\App\Http\Controllers\Siakad\PerpustakaanController::class, 'updateConfig']);
+        Route::post('/test', [\App\Http\Controllers\Siakad\PerpustakaanController::class, 'testConnection']);
+        Route::get('/search', [\App\Http\Controllers\Siakad\PerpustakaanController::class, 'search']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\PerpustakaanController::class, 'stats']);
+    });
+
+    // Open API Token Management
+    Route::prefix('siakad/api-tokens')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Siakad\ApiTokenController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\Siakad\ApiTokenController::class, 'store']);
+        Route::delete('/{id}', [\App\Http\Controllers\Siakad\ApiTokenController::class, 'destroy']);
+        Route::patch('/{id}/toggle', [\App\Http\Controllers\Siakad\ApiTokenController::class, 'toggle']);
+    });
 });
 
 // PMB Public routes (no auth required - for calon mahasiswa)
