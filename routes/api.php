@@ -400,6 +400,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/{id}', [\App\Http\Controllers\Siakad\ApiTokenController::class, 'destroy']);
         Route::patch('/{id}/toggle', [\App\Http\Controllers\Siakad\ApiTokenController::class, 'toggle']);
     });
+
+    // Beasiswa & KIP-K Management
+    Route::prefix('siakad/beasiswa')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Siakad\ScholarshipController::class, 'index']);
+        Route::post('/', [\App\Http\Controllers\Siakad\ScholarshipController::class, 'store']);
+        Route::get('/masters', [\App\Http\Controllers\Siakad\ScholarshipController::class, 'masters']);
+        Route::post('/masters', [\App\Http\Controllers\Siakad\ScholarshipController::class, 'storeMaster']);
+        Route::get('/stats', [\App\Http\Controllers\Siakad\ScholarshipController::class, 'stats']);
+        Route::patch('/{id}/status', [\App\Http\Controllers\Siakad\ScholarshipController::class, 'updateStatus']);
+    });
 });
 
 // PMB Public routes (no auth required - for calon mahasiswa)
