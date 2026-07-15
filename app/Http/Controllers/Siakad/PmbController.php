@@ -228,5 +228,27 @@ class PmbController extends Controller
                 'active_periods' => $activePeriods,
             ]
         ]);
-    }
+     }
+
+     /**
+      * Public status check query by registration number.
+      */
+     public function checkStatusPublic($regNum): JsonResponse
+     {
+         $applicant = PmbApplicant::with(['documents', 'period'])
+             ->where('registration_number', urldecode($regNum))
+             ->first();
+
+         if (!$applicant) {
+             return response()->json([
+                 'success' => false,
+                 'message' => 'Applicant registration code not found.'
+             ], 404);
+         }
+
+         return response()->json([
+             'success' => true,
+             'applicant' => $applicant
+         ]);
+     }
 }

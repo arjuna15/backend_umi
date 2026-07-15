@@ -320,5 +320,6 @@ Route::prefix('siakad/pmb')->group(function () {
     Route::get('/periods', [\App\Http\Controllers\Siakad\PmbController::class, 'periods']);
     Route::post('/apply/{periodId}', [\App\Http\Controllers\Siakad\PmbController::class, 'apply']);
     Route::post('/upload/{applicantId}', [\App\Http\Controllers\Siakad\PmbController::class, 'uploadDocument']);
+    Route::get('/applicant/status/{regNum}', [\App\Http\Controllers\Siakad\PmbController::class, 'checkStatusPublic']);
 });
 
