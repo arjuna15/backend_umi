@@ -52,9 +52,21 @@ class ScheduleController extends Controller
             $dateStr = $date->format('Y-m-d');
             $dayName = $date->locale('id')->translatedFormat('l'); // 'Senin', 'Selasa', etc.
 
+            $isOddWeek = ($date->weekOfYear % 2) !== 0;
+
             // Get courses normally scheduled on this day of the week
-            $normalCourses = $courses->filter(function ($course) use ($dayName) {
-                return strcasecmp($course->hari ?? '', $dayName) === 0;
+            $normalCourses = $courses->filter(function ($course) use ($dayName, $isOddWeek) {
+                if (strcasecmp($course->hari ?? '', $dayName) !== 0) {
+                    return false;
+                }
+                $freq = $course->frequency ?? 'every_week';
+                if ($freq === 'odd_weeks' && !$isOddWeek) {
+                    return false;
+                }
+                if ($freq === 'even_weeks' && $isOddWeek) {
+                    return false;
+                }
+                return true;
             });
 
             foreach ($normalCourses as $course) {

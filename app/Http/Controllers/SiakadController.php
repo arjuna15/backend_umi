@@ -1124,14 +1124,29 @@ class SiakadController extends Controller
             ];
         }
 
-        $weeklySchedule = $courses->map(function ($course) {
+        $daysMap = [
+            'senin' => 1, 'selasa' => 2, 'rabu' => 3, 'kamis' => 4,
+            'jumat' => 5, 'sabtu' => 6, 'minggu' => 7
+        ];
+
+        $weeklySchedule = $courses->map(function ($course) use ($daysMap) {
             $attendance = $course->attendances->sortByDesc('meeting_number')->first();
+            $dayLower = strtolower($course->hari ?? '');
             return [
+                'id' => $course->id,
+                'course_id' => $course->id,
                 'day' => $course->hari,
+                'day_of_week' => $daysMap[$dayLower] ?? null,
+                'frequency' => $course->frequency ?? 'every_week',
+                'start_time' => $course->jam_mulai,
+                'end_time' => $course->jam_selesai,
                 'time' => trim(($course->jam_mulai ?? '') . ($course->jam_selesai ? ' - ' . $course->jam_selesai : '')) ?: '-',
                 'course' => $course->name,
+                'course_name' => $course->name,
                 'room' => $course->ruang ?? '-',
+                'room_name' => $course->ruang ?? '-',
                 'dosen' => $course->dosen?->name ?? '-',
+                'lecturer_name' => $course->dosen?->name ?? '-',
                 'meeting' => $attendance?->meeting_number ?? 1,
             ];
         })->values();
@@ -1519,6 +1534,7 @@ class SiakadController extends Controller
             'start_time' => 'required|string',
             'end_time' => 'required|string',
             'room' => 'required|string',
+            'frequency' => 'nullable|string|in:every_week,odd_weeks,even_weeks',
         ]);
         
         $course = Course::where('id', $request->course_id)
@@ -1530,6 +1546,7 @@ class SiakadController extends Controller
             'jam_mulai' => $request->start_time,
             'jam_selesai' => $request->end_time,
             'ruang' => $request->room,
+            'frequency' => $request->input('frequency', 'every_week'),
         ]);
         
         return response()->json(['message' => 'Jadwal updated', 'course' => $course]);
