@@ -940,7 +940,7 @@ class SiakadController extends Controller
     public function getDosenDashboard(Request $request)
     {
         $dosenId = auth()->id();
-        $courses = Course::with(['grades', 'attendances', 'assignments'])->where('dosen_id', $dosenId)->get();
+        $courses = Course::with(['grades.mahasiswa', 'attendances.records', 'assignments'])->where('dosen_id', $dosenId)->get();
 
         $todaySchedule = $courses->map(function($course) {
             $latestAttendance = $course->attendances->sortByDesc('meeting_number')->first();
