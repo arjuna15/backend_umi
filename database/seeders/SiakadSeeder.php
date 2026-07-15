@@ -1214,6 +1214,58 @@ class SiakadSeeder extends Seeder
         ];
         $this->insertRows('activity_logs', $activityRows, $now);
 
-        $this->command?->info('Seeded campus data: ' . count($dosenUsers) . ' dosen/kaprodi, ' . count($mahasiswaUsers) . ' mahasiswa, ' . count($courseRows) . ' matkul, dan data akademik pendukung.');
+        // Seed SPME Documents and Service Surveys
+        DB::table('spme_documents')->truncate();
+        DB::table('service_surveys')->truncate();
+
+        $spmeDocs = [
+            ['name' => 'Sertifikat Akreditasi Institusi UMIBA 2026', 'category' => 'akreditasi_institusi', 'status' => 'approved', 'year' => 2026, 'upload_date' => '2026-06-15', 'file_path' => null],
+            ['name' => 'Borang Akreditasi S1 Teknik Informatika', 'category' => 'akreditasi_prodi', 'status' => 'submitted', 'year' => 2025, 'upload_date' => '2025-11-20', 'file_path' => null],
+            ['name' => 'Sertifikasi ISO 9001:2015 Penjaminan Mutu', 'category' => 'sertifikasi', 'status' => 'approved', 'year' => 2024, 'upload_date' => '2024-05-10', 'file_path' => null],
+        ];
+        $this->insertRows('spme_documents', $spmeDocs, $now);
+
+        $surveyRows = [
+            // Akademik
+            ['category' => 'akademik', 'aspect' => 'Kualitas pengajaran dosen', 'rating' => 4.25, 'respondents_count' => 312],
+            ['category' => 'akademik', 'aspect' => 'Ketersediaan bahan ajar', 'rating' => 3.80, 'respondents_count' => 298],
+            ['category' => 'akademik', 'aspect' => 'Kemudahan akses e-learning', 'rating' => 4.05, 'respondents_count' => 305],
+            
+            // Sarpras
+            ['category' => 'sarpras', 'aspect' => 'Kebersihan ruang kelas', 'rating' => 4.10, 'respondents_count' => 280],
+            ['category' => 'sarpras', 'aspect' => 'Ketersediaan wifi kampus', 'rating' => 3.50, 'respondents_count' => 315],
+            ['category' => 'sarpras', 'aspect' => 'Kelayakan laboratorium komputer', 'rating' => 4.30, 'respondents_count' => 270],
+            
+            // Keuangan
+            ['category' => 'keuangan', 'aspect' => 'Kecepatan pelayanan administrasi', 'rating' => 3.90, 'respondents_count' => 260],
+            ['category' => 'keuangan', 'aspect' => 'Transparansi biaya kuliah', 'rating' => 4.15, 'respondents_count' => 285],
+            ['category' => 'keuangan', 'aspect' => 'Kemudahan sistem pembayaran online', 'rating' => 4.45, 'respondents_count' => 320],
+        ];
+        $this->insertRows('service_surveys', $surveyRows, $now);
+
+        // Seed schedule overrides
+        $fridayCourse = \App\Models\Course::where('hari', 'Jumat')->first();
+        $otherCourse = \App\Models\Course::where('hari', '!=', 'Jumat')->first();
+        if ($fridayCourse && $otherCourse) {
+            $overrideDate = '2026-07-17'; // Friday
+            $newDate = '2026-07-15'; // Wednesday
+
+            DB::table('schedule_overrides')->insert([
+                [
+                    'original_schedule_id' => $fridayCourse->id,
+                    'override_date' => $overrideDate,
+                    'status' => 'swapped',
+                    'swapped_with_schedule_id' => $otherCourse->id,
+                    'new_date' => $newDate,
+                    'new_time' => '13:00:00',
+                    'notes' => 'Swapping Friday class with Wednesday class due to guest lecture.',
+                    'created_at' => $now,
+                    'updated_at' => $now,
+                ]
+            ]);
+        }
+
+        $this->command?->info('Seeded campus data: ' . count($dosenUsers) . ' dosen/kaprodi, ' . count($mahasiswaUsers) . ' mahasiswa, ' . count($courseRows) . ' matkul, dan data akademik/penjaminan mutu pendukung.');
     }
 }
+

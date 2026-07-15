@@ -185,6 +185,11 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/siakad/calendar/{id}', [\App\Http\Controllers\SiakadController::class, 'updateCalendar']);
     Route::delete('/siakad/calendar/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteCalendar']);
 
+    // Schedule Swap Overrides
+    Route::get('siakad/schedules/calendar', [\App\Http\Controllers\Siakad\ScheduleController::class, 'getCalendarView']);
+    Route::post('siakad/schedules/override', [\App\Http\Controllers\Siakad\ScheduleController::class, 'createOverride']);
+
+
     // Settings
     Route::get('/siakad/settings', [\App\Http\Controllers\SiakadController::class, 'getSettings']);
     Route::post('/siakad/settings', [\App\Http\Controllers\SiakadController::class, 'updateSettings']);
@@ -311,6 +316,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('siakad/qa')->group(function () {
         Route::get('/spmi', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'getSpmiDocs']);
         Route::post('/spmi', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'uploadSpmiDoc']);
+        Route::get('/spme', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'getSpmeDocs']);
+        Route::post('/spme', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'uploadSpmeDoc']);
+        Route::get('/survey', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'getSurveyStats']);
         Route::get('/iku', [\App\Http\Controllers\Siakad\QualityAssuranceController::class, 'getIkuStats']);
     });
 

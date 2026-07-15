@@ -92,13 +92,7 @@ class SiakadController extends Controller
         }
 
         if (in_array($user->role, ['admin', 'kaprodi', 'superadmin'])) {
-            $courses = Course::with(['dosen'])->get();
-            $users = User::all();
-            return response()->json([
-                'user' => $user,
-                'courses' => $courses,
-                'users_count' => $users->count(),
-            ]);
+            return app(\App\Http\Controllers\Siakad\DashboardController::class)->index($request);
         }
 
         return response()->json(['message' => 'Unauthorized role'], 403);

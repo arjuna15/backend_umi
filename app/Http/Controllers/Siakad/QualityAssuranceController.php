@@ -36,6 +36,98 @@ class QualityAssuranceController extends Controller
         return response()->json(['message' => 'Dokumen SPMI berhasil diunggah.', 'data' => $doc], 201);
     }
 
+    public function getSpmeDocs()
+    {
+        $docs = \App\Models\SpmeDocument::orderBy('created_at', 'desc')->get();
+        return response()->json(['data' => $docs]);
+    }
+
+    public function uploadSpmeDoc(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'status' => 'nullable|string',
+            'year' => 'required|integer',
+            'upload_date' => 'nullable|date',
+            'file' => 'nullable|file',
+        ]);
+
+        $path = null;
+        if ($request->hasFile('file')) {
+            $path = $request->file('file')->store('spme', 'public');
+        }
+
+        $doc = \App\Models\SpmeDocument::create([
+            'name' => $request->name,
+            'category' => $request->category,
+            'status' => $request->status ?? 'pending',
+            'year' => (int) $request->year,
+            'upload_date' => $request->upload_date ?? now()->toDateString(),
+            'file_path' => $path,
+        ]);
+
+        return response()->json(['message' => 'Dokumen SPME berhasil diunggah.', 'data' => $doc], 201);
+    }
+
+    public function getSurveyStats()
+    {
+        $surveys = \App\Models\ServiceSurvey::all();
+        
+        $grouped = [];
+        
+        foreach ($surveys as $survey) {
+            $cat = $survey->category;
+            
+            // Map database categories to frontend categories where needed
+            if ($cat === 'sarpras') {
+                $frontendCat = 'sarana';
+            } elseif ($cat === 'keuangan') {
+                $frontendCat = 'administrasi';
+            } else {
+                $frontendCat = $cat;
+            }
+            
+            if (!isset($grouped[$frontendCat])) {
+                $grouped[$frontendCat] = [
+                    'label' => ucfirst($frontendCat),
+                    'items' => []
+                ];
+            }
+            
+            $grouped[$frontendCat]['items'][] = [
+                'aspek' => $survey->aspect,
+                'aspect' => $survey->aspect,
+                'rating' => (float) $survey->rating,
+                'responden' => $survey->respondents_count,
+                'respondents_count' => $survey->respondents_count,
+            ];
+        }
+        
+        // Also support database keys directly
+        foreach ($surveys as $survey) {
+            $cat = $survey->category;
+            if (!isset($grouped[$cat])) {
+                $grouped[$cat] = [
+                    'label' => ucfirst($cat),
+                    'items' => []
+                ];
+            }
+            // Avoid duplicating items if frontendCat is the same as cat
+            if ($cat === 'sarpras' || $cat === 'keuangan') {
+                $grouped[$cat]['items'][] = [
+                    'aspek' => $survey->aspect,
+                    'aspect' => $survey->aspect,
+                    'rating' => (float) $survey->rating,
+                    'responden' => $survey->respondents_count,
+                    'respondents_count' => $survey->respondents_count,
+                ];
+            }
+        }
+
+        return response()->json(['data' => $grouped]);
+    }
+
     public function getIkuStats()
     {
         $totalMhs = User::where('role', 'mahasiswa')->count();
