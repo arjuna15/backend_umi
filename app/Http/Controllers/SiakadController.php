@@ -265,7 +265,7 @@ class SiakadController extends Controller
     {
         $request->validate([
             'mahasiswa_id' => 'required|numeric',
-            'status' => 'required|in:present,absent'
+            'status' => 'required|in:present,absent,excused'
         ]);
         
         $record = \App\Models\AttendanceRecord::where('attendance_id', $attendanceId)
