@@ -15,13 +15,24 @@ class ScheduleController extends Controller
      */
     public function getCalendarView(Request $request)
     {
-        $monthStr = $request->query('month', Carbon::now()->format('Y-m'));
+        $year = $request->query('year');
+        $month = $request->query('month');
+
+        if ($year && $month) {
+            $monthStr = sprintf('%04d-%02d', $year, $month);
+        } else {
+            $monthStr = $request->query('month', Carbon::now()->format('Y-m'));
+            if (is_numeric($monthStr) && (int)$monthStr >= 1 && (int)$monthStr <= 12) {
+                $monthStr = Carbon::now()->year . '-' . str_pad($monthStr, 2, '0', STR_PAD_LEFT);
+            }
+        }
         
         try {
             $startDate = Carbon::parse($monthStr)->startOfMonth();
             $endDate = Carbon::parse($monthStr)->endOfMonth();
         } catch (\Exception $e) {
-            return response()->json(['error' => 'Invalid month format. Use YYYY-MM.'], 400);
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfMonth();
         }
 
         // Get all courses with their lecturers
