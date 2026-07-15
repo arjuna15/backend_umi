@@ -89,7 +89,6 @@ class EdomController extends Controller
 
         \App\Models\Edom::updateOrCreate(
             [
-                'user_id' => $request->user()->id,
                 'mahasiswa_id' => $request->user()->id,
                 'dosen_id' => $request->dosen_id,
                 'course_id' => $request->course_id,
