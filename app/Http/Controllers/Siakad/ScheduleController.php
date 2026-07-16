@@ -57,7 +57,17 @@ class ScheduleController extends Controller
 
         for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
             $dateStr = $date->format('Y-m-d');
-            $dayName = $date->locale('id')->translatedFormat('l'); // 'Senin', 'Selasa', etc.
+            $dayOfWeek = $date->dayOfWeek; // 0 (Sunday) to 6 (Saturday)
+            $daysMap = [
+                0 => 'Minggu',
+                1 => 'Senin',
+                2 => 'Selasa',
+                3 => 'Rabu',
+                4 => 'Kamis',
+                5 => 'Jumat',
+                6 => 'Sabtu'
+            ];
+            $dayName = $daysMap[$dayOfWeek];
 
             // Check if this date falls within a holiday
             $holidayEvent = $holidays->first(function($h) use ($dateStr) {
