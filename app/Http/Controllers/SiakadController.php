@@ -456,6 +456,7 @@ class SiakadController extends Controller
             'assignment_weight' => 'nullable|numeric|min:0|max:100',
             'uts_weight' => 'nullable|numeric|min:0|max:100',
             'uas_weight' => 'nullable|numeric|min:0|max:100',
+            'campus_location' => 'nullable|string',
         ]);
 
         $course = Course::create([
@@ -471,6 +472,7 @@ class SiakadController extends Controller
             'assignment_weight' => $request->assignment_weight ?? 20,
             'uts_weight' => $request->uts_weight ?? 30,
             'uas_weight' => $request->uas_weight ?? 40,
+            'campus_location' => $request->campus_location ?? 'bintaro',
         ]);
 
         return response()->json(['message' => 'Course created', 'course' => $course]);
@@ -491,6 +493,7 @@ class SiakadController extends Controller
             'assignment_weight' => 'nullable|numeric|min:0|max:100',
             'uts_weight' => 'nullable|numeric|min:0|max:100',
             'uas_weight' => 'nullable|numeric|min:0|max:100',
+            'campus_location' => 'nullable|string',
         ]);
 
         $course = Course::findOrFail($id);
@@ -507,6 +510,7 @@ class SiakadController extends Controller
             'assignment_weight' => $request->assignment_weight ?? $course->assignment_weight,
             'uts_weight' => $request->uts_weight ?? $course->uts_weight,
             'uas_weight' => $request->uas_weight ?? $course->uas_weight,
+            'campus_location' => $request->campus_location ?? $course->campus_location,
         ]);
 
         return response()->json(['message' => 'Course updated', 'course' => $course]);
@@ -1931,9 +1935,13 @@ class SiakadController extends Controller
     }
 
     // --- Classroom CRUD ---
-    public function getClassrooms()
+    public function getClassrooms(Request $request)
     {
-        return response()->json(\App\Models\Classroom::all());
+        $query = \App\Models\Classroom::query();
+        if ($request->has('campus_location')) {
+            $query->where('campus_location', $request->campus_location);
+        }
+        return response()->json($query->get());
     }
 
     public function createClassroom(Request $request)
@@ -1943,6 +1951,7 @@ class SiakadController extends Controller
             'name' => 'required|string',
             'capacity' => 'required|integer',
             'type' => 'required|string',
+            'campus_location' => 'nullable|string',
         ]);
 
         $room = \App\Models\Classroom::create($request->all());
@@ -1959,6 +1968,7 @@ class SiakadController extends Controller
             'name' => 'required|string',
             'capacity' => 'required|integer',
             'type' => 'required|string',
+            'campus_location' => 'nullable|string',
         ]);
 
         $room = \App\Models\Classroom::findOrFail($id);
