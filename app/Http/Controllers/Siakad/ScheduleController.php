@@ -139,16 +139,32 @@ class ScheduleController extends Controller
                             'notes' => $override->notes,
                         ];
                     } elseif ($override->status === 'moved') {
-                        $events[] = [
-                            'date' => $dateStr,
-                            'course_id' => $course->id,
-                            'course_name' => $course->name,
-                            'dosen' => $course->dosen?->name ?? '-',
-                            'time' => trim(($course->jam_mulai ?? '') . ($course->jam_selesai ? ' - ' . $course->jam_selesai : '')),
-                            'room' => $course->ruang ?? '-',
-                            'status' => 'moved',
-                            'notes' => $override->notes ?: 'Moved to ' . ($override->new_date ? $override->new_date->format('Y-m-d') : '') . ' ' . $override->new_time,
-                        ];
+                        // Same-day reschedule: show updated time directly instead of "moved" + "moved_here" duplicate
+                        $isSameDay = $override->new_date && $override->override_date
+                            && $override->new_date->format('Y-m-d') === $override->override_date->format('Y-m-d');
+                        if ($isSameDay) {
+                            $events[] = [
+                                'date' => $dateStr,
+                                'course_id' => $course->id,
+                                'course_name' => $course->name,
+                                'dosen' => $course->dosen?->name ?? '-',
+                                'time' => $override->new_time ?: trim(($course->jam_mulai ?? '') . ($course->jam_selesai ? ' - ' . $course->jam_selesai : '')),
+                                'room' => $course->ruang ?? '-',
+                                'status' => 'rescheduled',
+                                'notes' => $override->notes,
+                            ];
+                        } else {
+                            $events[] = [
+                                'date' => $dateStr,
+                                'course_id' => $course->id,
+                                'course_name' => $course->name,
+                                'dosen' => $course->dosen?->name ?? '-',
+                                'time' => trim(($course->jam_mulai ?? '') . ($course->jam_selesai ? ' - ' . $course->jam_selesai : '')),
+                                'room' => $course->ruang ?? '-',
+                                'status' => 'moved',
+                                'notes' => $override->notes ?: 'Moved to ' . ($override->new_date ? $override->new_date->format('Y-m-d') : '') . ' ' . $override->new_time,
+                            ];
+                        }
                     } elseif ($override->status === 'swapped') {
                         $swappedCourse = $override->swappedWithSchedule;
                         if ($swappedCourse) {
@@ -169,7 +185,11 @@ class ScheduleController extends Controller
 
             // Also check for any classes that were moved or swapped TO this date (as a new date/time)
             $incomingOverrides = $overrides->filter(function ($ov) use ($dateStr) {
-                return $ov->new_date && $ov->new_date->format('Y-m-d') === $dateStr;
+                if (!$ov->new_date) return false;
+                if ($ov->new_date->format('Y-m-d') !== $dateStr) return false;
+                // Skip same-day reschedules (already rendered as 'rescheduled' above)
+                if ($ov->status === 'moved' && $ov->override_date && $ov->override_date->format('Y-m-d') === $dateStr) return false;
+                return true;
             });
 
             foreach ($incomingOverrides as $override) {
