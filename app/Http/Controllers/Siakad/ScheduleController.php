@@ -46,11 +46,39 @@ class ScheduleController extends Controller
             })
             ->get();
 
+        // Get academic calendar holidays
+        $holidays = \App\Models\AcademicCalendar::where(function($q) use ($startDate, $endDate) {
+                $q->whereBetween('start_date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')])
+                  ->orWhereBetween('end_date', [$startDate->format('Y-m-d'), $endDate->format('Y-m-d')]);
+            })
+            ->get();
+
         $events = [];
 
         for ($date = $startDate->copy(); $date->lte($endDate); $date->addDay()) {
             $dateStr = $date->format('Y-m-d');
             $dayName = $date->locale('id')->translatedFormat('l'); // 'Senin', 'Selasa', etc.
+
+            // Check if this date falls within a holiday
+            $holidayEvent = $holidays->first(function($h) use ($dateStr) {
+                $typeLower = strtolower($h->type ?? '');
+                $nameLower = strtolower($h->name ?? '');
+                return $dateStr >= $h->start_date && $dateStr <= $h->end_date && 
+                       (str_contains($typeLower, 'libur') || str_contains($nameLower, 'libur'));
+            });
+
+            if ($holidayEvent) {
+                $events[] = [
+                    'date' => $dateStr,
+                    'course_id' => null,
+                    'course_name' => 'Hari Libur: ' . $holidayEvent->name,
+                    'dosen' => '-',
+                    'time' => 'Full Day',
+                    'room' => '-',
+                    'type' => 'holiday'
+                ];
+                continue;
+            }
 
             $isOddWeek = ($date->weekOfYear % 2) !== 0;
 

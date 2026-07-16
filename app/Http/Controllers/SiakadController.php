@@ -726,6 +726,17 @@ class SiakadController extends Controller
             return response()->json($courses);
         }
 
+        // KRS Billing Gate: Check for unpaid billings
+        $unpaidBillingExists = \App\Models\Billing::where('user_id', $user->id)
+            ->where('status', 'Belum Lunas')
+            ->exists();
+
+        if ($unpaidBillingExists) {
+            return response()->json([
+                'message' => 'Pendaftaran KRS terkunci. Silakan lunasi tagihan SPP/Keuangan Anda terlebih dahulu.'
+            ], 402);
+        }
+
         // Determine current semester based on entry year (NIM)
         $entryYear = 2025;
         $nim = $user->nim_nip;
@@ -776,6 +787,17 @@ class SiakadController extends Controller
             'course_ids' => 'required|array',
             'semester' => 'required|string'
         ]);
+
+        // KRS Billing Gate: Check for unpaid billings
+        $unpaidBillingExists = \App\Models\Billing::where('user_id', $request->user()->id)
+            ->where('status', 'Belum Lunas')
+            ->exists();
+
+        if ($unpaidBillingExists) {
+            return response()->json([
+                'message' => 'Pendaftaran KRS terkunci. Silakan lunasi tagihan SPP/Keuangan Anda terlebih dahulu.'
+            ], 402);
+        }
 
         $submission = \App\Models\KrsSubmission::updateOrCreate(
             ['mahasiswa_id' => $request->user()->id, 'semester' => $request->semester],
@@ -1478,34 +1500,54 @@ class SiakadController extends Controller
             $c = $g->course;
             if (!$c) continue;
 
-            $nilaiTugas = $g->assignment_score ?? 0;
-            $nilaiKuis = $g->attendance_score ?? 0;
-            $nilaiUts = $g->uts_score ?? 0;
-            $nilaiUas = $g->uas_score ?? 0;
-            $finalScore = $g->score;
+            $isPublished = (bool) ($g->is_published ?? false);
 
-            if ($finalScore === null) {
-                $finalScore = round(($nilaiTugas * 0.2) + ($nilaiKuis * 0.2) + ($nilaiUts * 0.3) + ($nilaiUas * 0.3), 1);
-            }
+            $nilaiTugas = $isPublished ? ($g->assignment_score ?? 0) : null;
+            $nilaiKuis = $isPublished ? ($g->attendance_score ?? 0) : null;
+            $nilaiUts = $isPublished ? ($g->uts_score ?? 0) : null;
+            $nilaiUas = $isPublished ? ($g->uas_score ?? 0) : null;
+            $finalScore = $isPublished ? $g->score : null;
 
             $grades[] = [
                 'course_name' => $c->name,
                 'sks' => $c->sks,
-                'tugas' => round($nilaiTugas, 1),
-                'kuis' => round($nilaiKuis, 1),
-                'uts' => round($nilaiUts, 1),
-                'uas' => round($nilaiUas, 1),
+                'tugas' => $nilaiTugas !== null ? round($nilaiTugas) : '-',
+                'kuis' => $nilaiKuis !== null ? round($nilaiKuis) : '-',
+                'uts' => $nilaiUts !== null ? round($nilaiUts) : '-',
+                'uas' => $nilaiUas !== null ? round($nilaiUas) : '-',
                 'attendance_weight' => (float) ($c->attendance_weight ?? 0),
                 'assignment_weight' => (float) ($c->assignment_weight ?? 0),
                 'uts_weight' => (float) ($c->uts_weight ?? 0),
                 'uas_weight' => (float) ($c->uas_weight ?? 0),
-                'akhir' => round((float) $finalScore, 1),
-                'huruf' => $g->grade ?? $this->scoreToLetter((float) $finalScore),
+                'akhir' => $finalScore !== null ? round((float) $finalScore) : '-',
+                'huruf' => $isPublished ? ($g->grade ?? $this->scoreToLetter((float) $finalScore)) : '-',
                 'semester_num' => (int) ($c->semester_num ?? 1),
                 'semester_name' => $c->semester ?? '',
+                'is_published' => $isPublished,
             ];
         }
         return response()->json($grades);
+    }
+
+    public function publishDosenGradebook(Request $request)
+    {
+        $request->validate([
+            'course_id' => 'required|exists:courses,id',
+            'is_published' => 'required|boolean'
+        ]);
+
+        $course = Course::where('id', $request->course_id)
+            ->where('dosen_id', $request->user()->id)
+            ->firstOrFail();
+
+        \App\Models\Grade::where('course_id', $course->id)->update([
+            'is_published' => $request->is_published
+        ]);
+
+        return response()->json([
+            'message' => $request->is_published ? 'Nilai kelas berhasil dipublikasikan!' : 'Nilai kelas ditarik ke draf.',
+            'is_published' => $request->is_published
+        ]);
     }
 
     public function getDosenRoster(Request $request)
@@ -2147,7 +2189,7 @@ class SiakadController extends Controller
                     $finalScore = 0;
                 }
 
-                $finalScore = round($finalScore, 1);
+                $finalScore = round($finalScore);
                 $gradeLetter = $this->scoreToLetter($finalScore);
 
                 $gradeRecord->update([
