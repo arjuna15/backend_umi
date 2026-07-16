@@ -809,7 +809,10 @@ class SiakadController extends Controller
 
     public function getPendingKrs(Request $request)
     {
-        $submissions = \App\Models\KrsSubmission::with('mahasiswa')->orderBy('created_at', 'desc')->get();
+        $prodi = $request->user()->prodi;
+        $submissions = \App\Models\KrsSubmission::whereHas('mahasiswa', function ($q) use ($prodi) {
+            $q->where('prodi', $prodi);
+        })->with('mahasiswa')->orderBy('created_at', 'desc')->get();
         return response()->json($submissions);
     }
 
@@ -839,13 +842,23 @@ class SiakadController extends Controller
     // Kaprodi Mega Update Methods
     public function getKaprodiStats(Request $request)
     {
-        $courses = Course::count();
-        $students = User::where('role', 'mahasiswa')->count();
-        $dosens = User::where('role', 'dosen')->count();
+        $prodi = $request->user()->prodi;
+        $courses = Course::where('prodi', $prodi)->count();
+        $students = User::where('role', 'mahasiswa')->where('prodi', $prodi)->count();
+        $dosens = User::where('role', 'dosen')->where('prodi', $prodi)->count();
         
-        $present = \App\Models\AttendanceRecord::where('status', 'present')->count();
-        $excused = \App\Models\AttendanceRecord::where('status', 'excused')->count();
-        $absent = \App\Models\AttendanceRecord::where('status', 'absent')->count();
+        $present = \App\Models\AttendanceRecord::where('status', 'present')
+            ->whereHas('student', function ($q) use ($prodi) {
+                $q->where('prodi', $prodi);
+            })->count();
+        $excused = \App\Models\AttendanceRecord::where('status', 'excused')
+            ->whereHas('student', function ($q) use ($prodi) {
+                $q->where('prodi', $prodi);
+            })->count();
+        $absent = \App\Models\AttendanceRecord::where('status', 'absent')
+            ->whereHas('student', function ($q) use ($prodi) {
+                $q->where('prodi', $prodi);
+            })->count();
 
         $total = $present + $excused + $absent;
         
@@ -873,18 +886,20 @@ class SiakadController extends Controller
 
     public function getKaprodiMonitoring(Request $request)
     {
-        $courses = Course::with(['dosen', 'materials', 'attendances'])->get();
+        $prodi = $request->user()->prodi;
+        $courses = Course::where('prodi', $prodi)->with(['dosen', 'materials', 'attendances'])->get();
         return response()->json($courses);
     }
 
     public function getKaprodiCourses(Request $request)
     {
-        $courses = Course::with('dosen')->get()->map(function($course) {
+        $prodi = $request->user()->prodi;
+        $courses = Course::where('prodi', $prodi)->with('dosen')->get()->map(function($course) {
             $course->jamMulai = $course->jam_mulai;
             $course->jamSelesai = $course->jam_selesai;
             return $course;
         });
-        $dosens = User::where('role', 'dosen')->get();
+        $dosens = User::where('role', 'dosen')->where('prodi', $prodi)->get();
         return response()->json([
             'courses' => $courses,
             'dosens' => $dosens
@@ -919,17 +934,25 @@ class SiakadController extends Controller
 
     public function getKaprodiStudentGrades(Request $request)
     {
-        $grades = Grade::with(['mahasiswa', 'course'])->get();
+        $prodi = $request->user()->prodi;
+        $grades = Grade::whereHas('mahasiswa', function ($q) use ($prodi) {
+            $q->where('prodi', $prodi);
+        })->with(['mahasiswa', 'course'])->get();
         return response()->json($grades);
     }
 
     public function getKaprodiEdom(Request $request)
     {
-        $edoms = \App\Models\Edom::with(['dosen', 'mahasiswa', 'course'])->latest()->get();
-        $dosens = User::where('role', 'dosen')->get();
+        $prodi = $request->user()->prodi;
+        $edoms = \App\Models\Edom::whereHas('course', function ($q) use ($prodi) {
+            $q->where('prodi', $prodi);
+        })->with(['dosen', 'mahasiswa', 'course'])->latest()->get();
+        $dosens = User::where('role', 'dosen')->where('prodi', $prodi)->get();
 
         // Calculate real averages per aspect
-        $answers = \App\Models\EdomAnswer::with('question')->get();
+        $answers = \App\Models\EdomAnswer::whereHas('edom.course', function ($q) use ($prodi) {
+            $q->where('prodi', $prodi);
+        })->with('question')->get();
         
         $aspects = [
             'pedagogik' => 0,
