@@ -230,7 +230,11 @@ class ScheduleController extends Controller
             return strcmp($a['date'], $b['date']);
         });
 
-        return response()->json($events);
+        return response()->json([
+            'events' => $events,
+            'schedules' => $courses,
+            'overrides' => $overrides
+        ]);
     }
 
     /**
