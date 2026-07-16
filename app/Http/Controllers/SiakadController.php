@@ -899,7 +899,7 @@ class SiakadController extends Controller
             $course->jamSelesai = $course->jam_selesai;
             return $course;
         });
-        $dosens = User::where('role', 'dosen')->where('prodi', $prodi)->get();
+        $dosens = User::where('role', 'dosen')->get();
         return response()->json([
             'courses' => $courses,
             'dosens' => $dosens
@@ -947,7 +947,13 @@ class SiakadController extends Controller
         $edoms = \App\Models\Edom::whereHas('course', function ($q) use ($prodi) {
             $q->where('prodi', $prodi);
         })->with(['dosen', 'mahasiswa', 'course'])->latest()->get();
-        $dosens = User::where('role', 'dosen')->where('prodi', $prodi)->get();
+        $dosens = User::where('role', 'dosen')
+            ->where(function ($query) use ($prodi) {
+                $query->where('prodi', $prodi)
+                      ->orWhereHas('courses', function ($q) use ($prodi) {
+                          $q->where('prodi', $prodi);
+                      });
+            })->get();
 
         // Calculate real averages per aspect
         $answers = \App\Models\EdomAnswer::whereHas('edom.course', function ($q) use ($prodi) {
