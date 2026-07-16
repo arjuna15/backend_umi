@@ -59,6 +59,11 @@ class ScheduleController extends Controller
                     $q->where('dosen_id', $user->id);
                 });
             });
+        } elseif ($user && strtolower($user->role) === 'kaprodi') {
+            $coursesQuery->where('prodi', $user->prodi);
+            $overridesQuery->whereHas('originalSchedule', function ($q) use ($user) {
+                $q->where('prodi', $user->prodi);
+            });
         }
 
         $courses = $coursesQuery->get();
