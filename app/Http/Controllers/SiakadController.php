@@ -822,17 +822,24 @@ class SiakadController extends Controller
         $dosens = User::where('role', 'dosen')->count();
         
         $present = \App\Models\AttendanceRecord::where('status', 'present')->count();
+        $excused = \App\Models\AttendanceRecord::where('status', 'excused')->count();
         $absent = \App\Models\AttendanceRecord::where('status', 'absent')->count();
 
-        if ($present === 0 && $absent === 0) {
-            $present = 85;
-            $absent = 15;
+        $total = $present + $excused + $absent;
+        
+        if ($total > 0) {
+            $distribution = [
+                ['name' => 'Hadir', 'value' => round(($present / $total) * 100)],
+                ['name' => 'Izin', 'value' => round(($excused / $total) * 100)],
+                ['name' => 'Alpa', 'value' => round(($absent / $total) * 100)]
+            ];
+        } else {
+            $distribution = [
+                ['name' => 'Hadir', 'value' => 85],
+                ['name' => 'Izin', 'value' => 10],
+                ['name' => 'Alpa', 'value' => 5]
+            ];
         }
-
-        $distribution = [
-            ['name' => 'Hadir', 'value' => $present],
-            ['name' => 'Absen', 'value' => $absent]
-        ];
         
         return response()->json([
             'total_classes' => $courses,
