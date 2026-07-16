@@ -36,6 +36,7 @@ class ScheduleController extends Controller
         }
 
         $user = $request->user();
+        $portal = $request->query('portal');
         
         $coursesQuery = Course::with('dosen');
         $overridesQuery = ScheduleOverride::with(['originalSchedule.dosen', 'swappedWithSchedule.dosen'])
@@ -44,8 +45,10 @@ class ScheduleController extends Controller
                       ->orWhereBetween('new_date', [$startDate, $endDate]);
             });
 
-        // Filter by logged-in lecturer if the role is 'dosen'
-        if ($user && $user->role === 'dosen') {
+        // Filter by logged-in lecturer if the role is 'dosen', OR if it is a kaprodi accessing the lecturer portal view
+        $isLecturerView = ($user && $user->role === 'dosen') || ($user && $user->role === 'kaprodi' && $portal === 'dosen');
+
+        if ($isLecturerView) {
             $coursesQuery->where('dosen_id', $user->id);
             $overridesQuery->where(function ($query) use ($user) {
                 $query->whereHas('originalSchedule', function ($q) use ($user) {
