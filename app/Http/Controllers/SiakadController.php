@@ -899,7 +899,7 @@ class SiakadController extends Controller
             $course->jamSelesai = $course->jam_selesai;
             return $course;
         });
-        $dosens = User::where('role', 'dosen')->get();
+        $dosens = User::whereIn('role', ['dosen', 'kaprodi'])->get();
         return response()->json([
             'courses' => $courses,
             'dosens' => $dosens
@@ -947,7 +947,7 @@ class SiakadController extends Controller
         $edoms = \App\Models\Edom::whereHas('course', function ($q) use ($prodi) {
             $q->where('prodi', $prodi);
         })->with(['dosen', 'mahasiswa', 'course'])->latest()->get();
-        $dosens = User::where('role', 'dosen')
+        $dosens = User::whereIn('role', ['dosen', 'kaprodi'])
             ->where(function ($query) use ($prodi) {
                 $query->where('prodi', $prodi)
                       ->orWhereHas('courses', function ($q) use ($prodi) {
