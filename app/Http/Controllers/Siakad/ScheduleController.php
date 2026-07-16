@@ -35,16 +35,29 @@ class ScheduleController extends Controller
             $endDate = Carbon::now()->endOfMonth();
         }
 
-        // Get all courses with their lecturers
-        $courses = Course::with('dosen')->get();
-
-        // Get all overrides where override_date is in the month or new_date is in the month
-        $overrides = ScheduleOverride::with(['originalSchedule.dosen', 'swappedWithSchedule.dosen'])
+        $user = $request->user();
+        
+        $coursesQuery = Course::with('dosen');
+        $overridesQuery = ScheduleOverride::with(['originalSchedule.dosen', 'swappedWithSchedule.dosen'])
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('override_date', [$startDate, $endDate])
                       ->orWhereBetween('new_date', [$startDate, $endDate]);
-            })
-            ->get();
+            });
+
+        // Filter by logged-in lecturer if the role is 'dosen'
+        if ($user && $user->role === 'dosen') {
+            $coursesQuery->where('dosen_id', $user->id);
+            $overridesQuery->where(function ($query) use ($user) {
+                $query->whereHas('originalSchedule', function ($q) use ($user) {
+                    $q->where('dosen_id', $user->id);
+                })->orWhereHas('swappedWithSchedule', function ($q) use ($user) {
+                    $q->where('dosen_id', $user->id);
+                });
+            });
+        }
+
+        $courses = $coursesQuery->get();
+        $overrides = $overridesQuery->get();
 
         // Get academic calendar holidays
         $holidays = \App\Models\AcademicCalendar::where(function($q) use ($startDate, $endDate) {
