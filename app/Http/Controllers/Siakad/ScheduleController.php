@@ -45,8 +45,10 @@ class ScheduleController extends Controller
                       ->orWhereBetween('new_date', [$startDate, $endDate]);
             });
 
-        // Filter by logged-in lecturer if the role is 'dosen', OR if it is a kaprodi accessing the lecturer portal view
-        $isLecturerView = ($user && $user->role === 'dosen') || ($user && $user->role === 'kaprodi' && $portal === 'dosen');
+        // Filter by logged-in lecturer if the portal query is 'dosen', OR if the user role is 'dosen'
+        $isLecturerView = (strtolower($portal) === 'dosen') || ($user && strtolower($user->role) === 'dosen');
+
+        \Log::info("DEBUG CALENDAR: User ID: " . ($user ? $user->id : 'null') . " | Role: " . ($user ? $user->role : 'null') . " | Portal: " . ($portal ?: 'null') . " | isLecturerView: " . ($isLecturerView ? 'true' : 'false'));
 
         if ($isLecturerView) {
             $coursesQuery->where('dosen_id', $user->id);
