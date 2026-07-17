@@ -16,7 +16,7 @@ class ProctoringController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $sessions = ProctorSession::with('user:id,name,nim_nip')
+        $sessions = ProctorSession::with(['user:id,name,nim_nip', 'quiz.course'])
             ->withCount('logs')
             ->orderByDesc('created_at')
             ->paginate(20);
@@ -29,10 +29,12 @@ class ProctoringController extends Controller
      */
     public function generateToken(Request $request): JsonResponse
     {
-        $quizId = $request->input('quiz_id', 1);
+        $request->validate([
+            'quiz_id' => 'required|exists:quizzes,id'
+        ]);
 
         $session = ProctorSession::create([
-            'quiz_id' => $quizId,
+            'quiz_id' => $request->quiz_id,
             'user_id' => $request->user()->id,
             'token' => strtoupper(Str::random(8)),
             'status' => 'waiting',
@@ -157,5 +159,25 @@ class ProctoringController extends Controller
             'success' => true,
             'session' => $session
         ]);
+    }
+
+    /**
+     * Get list of quizzes that require proctoring.
+     */
+    public function getAvailableQuizzes(Request $request): JsonResponse
+    {
+        $quizzes = \App\Models\Quiz::with('course')
+            ->where('require_proctoring', true)
+            ->get()
+            ->map(function ($quiz) {
+                return [
+                    'id' => $quiz->id,
+                    'title' => $quiz->title,
+                    'category' => $quiz->category,
+                    'course_name' => $quiz->course?->name ?? 'Mata Kuliah'
+                ];
+            });
+
+        return response()->json($quizzes);
     }
 }
