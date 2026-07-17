@@ -433,3 +433,9 @@ Route::prefix('siakad/pmb')->group(function () {
     Route::get('/applicant/status/{regNum}', [\App\Http\Controllers\Siakad\PmbController::class, 'checkStatusPublic'])->where('regNum', '.*');
 });
 
+
+Route::get('/clear-cache', function() {
+    \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+    return "Cache cleared successfully!";
+});
+
