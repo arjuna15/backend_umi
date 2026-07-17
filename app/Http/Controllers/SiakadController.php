@@ -1066,6 +1066,8 @@ class SiakadController extends Controller
             'course_id' => 'required|exists:courses,id',
             'title' => 'required|string',
             'duration_minutes' => 'required|integer',
+            'category' => 'nullable|string',
+            'require_proctoring' => 'nullable|boolean',
             'questions' => 'required|array'
         ]);
 
@@ -1073,6 +1075,8 @@ class SiakadController extends Controller
             'course_id' => $request->course_id,
             'title' => $request->title,
             'duration_minutes' => $request->duration_minutes,
+            'category' => $request->category ?? 'kuis',
+            'require_proctoring' => $request->require_proctoring ?? false,
             'randomize_questions' => $request->randomize_questions ?? false
         ]);
 
