@@ -1572,19 +1572,35 @@ class SiakadController extends Controller
 
     public function getQuizAttempts(Request $request, $quizId)
     {
-        $quiz = \App\Models\Quiz::with('questions')->findOrFail($quizId);
-        $courseId = $quiz->course_id;
+        $quiz = \App\Models\Quiz::with('course')->findOrFail($quizId);
+        $course = $quiz->course;
 
-        // Get approved KRS students for this course
+        if (!$course) {
+            return response()->json(['message' => 'Course not found'], 404);
+        }
+
+        // Method 1: KRS Approved
         $approvedKrs = \App\Models\KrsSubmission::where('status', 'approved')->get();
         $mahasiswaIds = [];
         foreach ($approvedKrs as $krs) {
-            if (in_array((int)$courseId, array_map('intval', $krs->course_ids ?? []))) {
+            if (in_array((int)$course->id, array_map('intval', $krs->course_ids ?? []))) {
                 $mahasiswaIds[] = $krs->mahasiswa_id;
             }
         }
 
-        $students = \App\Models\User::whereIn('id', $mahasiswaIds)->get();
+        // Method 2: Prodi Fallback (Semua mahasiswa di prodi mata kuliah ini)
+        $prodiStudents = \App\Models\User::where('role', 'mahasiswa')
+            ->where('prodi', $course->prodi)
+            ->pluck('id')
+            ->all();
+
+        // Merge unique student IDs
+        $allMahasiswaIds = array_unique(array_merge($mahasiswaIds, $prodiStudents));
+
+        $students = \App\Models\User::whereIn('id', $allMahasiswaIds)
+            ->where('role', 'mahasiswa')
+            ->get();
+
         $attempts = \App\Models\QuizAttempt::where('quiz_id', $quizId)->get();
 
         $result = $students->map(function ($student) use ($attempts) {
