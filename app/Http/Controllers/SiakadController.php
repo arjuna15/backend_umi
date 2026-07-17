@@ -852,15 +852,15 @@ class SiakadController extends Controller
         $dosens = User::where('role', 'dosen')->where('prodi', $prodi)->count();
         
         $present = \App\Models\AttendanceRecord::where('status', 'present')
-            ->whereHas('student', function ($q) use ($prodi) {
+            ->whereHas('mahasiswa', function ($q) use ($prodi) {
                 $q->where('prodi', $prodi);
             })->count();
         $excused = \App\Models\AttendanceRecord::where('status', 'excused')
-            ->whereHas('student', function ($q) use ($prodi) {
+            ->whereHas('mahasiswa', function ($q) use ($prodi) {
                 $q->where('prodi', $prodi);
             })->count();
         $absent = \App\Models\AttendanceRecord::where('status', 'absent')
-            ->whereHas('student', function ($q) use ($prodi) {
+            ->whereHas('mahasiswa', function ($q) use ($prodi) {
                 $q->where('prodi', $prodi);
             })->count();
 
