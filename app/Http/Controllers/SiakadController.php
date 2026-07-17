@@ -1522,8 +1522,11 @@ class SiakadController extends Controller
         $correct = 0;
         $total = $quiz->questions->count();
 
+        // Convert [{question_id: x, answer: y}] array to key-value map
+        $answersMap = collect($answers)->pluck('answer', 'question_id')->all();
+
         foreach ($quiz->questions as $question) {
-            $given = $answers[$question->id] ?? null;
+            $given = $answersMap[$question->id] ?? null;
             $expected = strtoupper(trim((string) $question->correct_answer));
 
             if ($expected !== '' && strtoupper(trim((string) $given)) === $expected) {
@@ -1538,6 +1541,8 @@ class SiakadController extends Controller
             'score' => $score,
             'correct' => $correct,
             'total' => $total,
+            'correct_count' => $correct,
+            'total_questions' => $total,
         ]);
     }
 
