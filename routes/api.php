@@ -247,6 +247,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Proctoring
     Route::prefix('siakad/proctoring')->group(function () {
         Route::get('/sessions', [\App\Http\Controllers\Siakad\ProctoringController::class, 'index']);
+        Route::post('/sessions/join', [\App\Http\Controllers\Siakad\ProctoringController::class, 'join']);
         Route::post('/generate-token', [\App\Http\Controllers\Siakad\ProctoringController::class, 'generateToken']);
         Route::post('/sessions/{id}/start', [\App\Http\Controllers\Siakad\ProctoringController::class, 'start']);
         Route::post('/sessions/{id}/stop', [\App\Http\Controllers\Siakad\ProctoringController::class, 'stop']);

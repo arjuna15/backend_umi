@@ -127,4 +127,29 @@ class ProctoringController extends Controller
             'logs' => $session->logs
         ]);
     }
+
+    /**
+     * Join proctoring session (Student).
+     */
+    public function join(Request $request): JsonResponse
+    {
+        $request->validate([
+            'token' => 'required|string',
+        ]);
+
+        $session = ProctorSession::where('token', strtoupper($request->token))->first();
+
+        if (!$session) {
+            return response()->json(['success' => false, 'message' => 'Token tidak valid.'], 404);
+        }
+
+        if ($session->status !== 'active') {
+            return response()->json(['success' => false, 'message' => 'Sesi belum dimulai atau sudah berakhir.'], 422);
+        }
+
+        return response()->json([
+            'success' => true,
+            'session' => $session
+        ]);
+    }
 }
