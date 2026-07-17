@@ -95,16 +95,22 @@ class ProctoringController extends Controller
     public function logEvent(Request $request): JsonResponse
     {
         $request->validate([
-            'proctor_session_id' => 'required|exists:proctor_sessions,id',
-            'event' => 'required|string|max:100',
-            'data' => 'nullable|array',
+            'token' => 'required|string',
+            'event_type' => 'required|string|max:100',
+            'description' => 'nullable|string',
         ]);
 
+        $session = ProctorSession::where('token', strtoupper($request->token))->first();
+
+        if (!$session) {
+            return response()->json(['success' => false, 'message' => 'Sesi tidak ditemukan.'], 404);
+        }
+
         $log = ProctorLog::create([
-            'proctor_session_id' => $request->proctor_session_id,
+            'proctor_session_id' => $session->id,
             'user_id' => $request->user()->id,
-            'event' => $request->event,
-            'data' => $request->data,
+            'event' => $request->event_type,
+            'data' => ['description' => $request->description],
         ]);
 
         return response()->json([
