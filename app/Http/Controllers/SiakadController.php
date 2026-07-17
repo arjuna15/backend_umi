@@ -1103,6 +1103,18 @@ class SiakadController extends Controller
         return response()->json($quizzes);
     }
 
+    public function deleteQuiz(Request $request, $id)
+    {
+        $quiz = \App\Models\Quiz::find($id);
+        if (!$quiz) {
+            return response()->json(['message' => 'Quiz tidak ditemukan.'], 404);
+        }
+
+        $quiz->delete();
+
+        return response()->json(['message' => 'Quiz berhasil dihapus.']);
+    }
+
     public function getCourseSessions(Request $request, $courseId)
     {
         $materials = \App\Models\Material::where('course_id', $courseId)->get();
