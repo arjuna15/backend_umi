@@ -1502,6 +1502,16 @@ class SiakadController extends Controller
         $quiz = \App\Models\Quiz::with('questions')->find($quizId);
         if (!$quiz) return response()->json(['message' => 'Quiz not found'], 404);
         
+        $user = $request->user();
+        $attempt = \App\Models\QuizAttempt::where('quiz_id', $quizId)->where('mahasiswa_id', $user->id)->first();
+        if ($attempt) {
+            return response()->json([
+                'already_attempted' => true,
+                'score' => $attempt->score,
+                'submitted_at' => $attempt->created_at->toDateTimeString(),
+            ]);
+        }
+        
         // Hide correct answers
         $quizData = $quiz->toArray();
         foreach($quizData['questions'] as &$q) {
@@ -1516,6 +1526,12 @@ class SiakadController extends Controller
         $request->validate([
             'answers' => 'required|array',
         ]);
+
+        $user = $request->user();
+        $existingAttempt = \App\Models\QuizAttempt::where('quiz_id', $quizId)->where('mahasiswa_id', $user->id)->first();
+        if ($existingAttempt) {
+            return response()->json(['message' => 'Anda sudah pernah mengerjakan kuis ini sebelumnya.'], 422);
+        }
 
         $quiz = \App\Models\Quiz::with('questions')->findOrFail($quizId);
         $answers = $request->answers;
@@ -1536,6 +1552,14 @@ class SiakadController extends Controller
 
         $score = $total > 0 ? round(($correct / $total) * 100, 2) : 0;
 
+        // Store attempt record
+        \App\Models\QuizAttempt::create([
+            'quiz_id' => $quizId,
+            'mahasiswa_id' => $user->id,
+            'score' => $score,
+            'answers' => $answers
+        ]);
+
         return response()->json([
             'message' => 'Jawaban kuis berhasil dikumpulkan.',
             'score' => $score,
@@ -1543,6 +1567,44 @@ class SiakadController extends Controller
             'total' => $total,
             'correct_count' => $correct,
             'total_questions' => $total,
+        ]);
+    }
+
+    public function getQuizAttempts(Request $request, $quizId)
+    {
+        $quiz = \App\Models\Quiz::with('questions')->findOrFail($quizId);
+        $courseId = $quiz->course_id;
+
+        // Get approved KRS students for this course
+        $approvedKrs = \App\Models\KrsSubmission::where('status', 'approved')->get();
+        $mahasiswaIds = [];
+        foreach ($approvedKrs as $krs) {
+            if (in_array((int)$courseId, array_map('intval', $krs->course_ids ?? []))) {
+                $mahasiswaIds[] = $krs->mahasiswa_id;
+            }
+        }
+
+        $students = \App\Models\User::whereIn('id', $mahasiswaIds)->get();
+        $attempts = \App\Models\QuizAttempt::where('quiz_id', $quizId)->get();
+
+        $result = $students->map(function ($student) use ($attempts) {
+            $attempt = $attempts->where('mahasiswa_id', $student->id)->first();
+            return [
+                'student_id' => $student->id,
+                'name' => $student->name,
+                'nim' => $student->nim_nip,
+                'has_attempted' => $attempt !== null,
+                'attempt_id' => $attempt?->id ?? null,
+                'score' => $attempt?->score ?? null,
+                'submitted_at' => $attempt?->created_at?->toDateTimeString() ?? null,
+                'answers' => $attempt?->answers ?? []
+            ];
+        });
+
+        return response()->json([
+            'quiz_title' => $quiz->title,
+            'questions' => $quiz->questions,
+            'attempts' => $result
         ]);
     }
 

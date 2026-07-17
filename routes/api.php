@@ -146,6 +146,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/quiz', [\App\Http\Controllers\SiakadController::class, 'storeQuiz']);
         Route::get('/courses/{courseId}/quizzes', [\App\Http\Controllers\SiakadController::class, 'getQuizzesByCourse']);
         Route::delete('/quizzes/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteQuiz']);
+        Route::get('/quizzes/{quizId}/attempts', [\App\Http\Controllers\SiakadController::class, 'getQuizAttempts']);
         Route::get('/courses/{courseId}/sessions', [\App\Http\Controllers\SiakadController::class, 'getCourseSessions']);
         Route::post('/course/{courseId}/materials', [\App\Http\Controllers\SiakadController::class, 'uploadMateri']);
         Route::post('/course/{courseId}/meet-link', [\App\Http\Controllers\SiakadController::class, 'saveMeetLink']);
