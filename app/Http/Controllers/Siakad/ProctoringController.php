@@ -161,18 +161,15 @@ class ProctoringController extends Controller
         ]);
     }
 
-    /**
-     * Get list of quizzes that require proctoring.
-     */
     public function getAvailableQuizzes(Request $request): JsonResponse
     {
         $quizzes = \App\Models\Quiz::with('course')
-            ->where('require_proctoring', true)
+            ->orderByDesc('created_at')
             ->get()
             ->map(function ($quiz) {
                 return [
                     'id' => $quiz->id,
-                    'title' => $quiz->title,
+                    'title' => $quiz->title . ' (' . ($quiz->course?->name ?? 'Mata Kuliah') . ')',
                     'category' => $quiz->category,
                     'course_name' => $quiz->course?->name ?? 'Mata Kuliah'
                 ];
