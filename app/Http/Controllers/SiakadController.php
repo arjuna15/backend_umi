@@ -1079,12 +1079,14 @@ class SiakadController extends Controller
         foreach ($request->questions as $q) {
             \App\Models\QuizQuestion::create([
                 'quiz_id' => $quiz->id,
-                'question' => $q['question'],
-                'option_a' => $q['option_a'],
-                'option_b' => $q['option_b'],
-                'option_c' => $q['option_c'],
-                'option_d' => $q['option_d'],
-                'correct_answer' => $q['correct_answer']
+                'question' => $q['question'] ?? '',
+                'option_a' => $q['option_a'] ?? '',
+                'option_b' => $q['option_b'] ?? '',
+                'option_c' => $q['option_c'] ?? '',
+                'option_d' => $q['option_d'] ?? '',
+                'correct_answer' => $q['correct_answer'] ?? '',
+                'type' => $q['type'] ?? 'multiple_choice',
+                'correct_answer_text' => $q['correct_answer_text'] ?? null,
             ]);
         }
 
