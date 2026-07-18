@@ -960,7 +960,7 @@ class SiakadController extends Controller
             })->get();
 
         // Calculate real averages per aspect
-        $answers = \App\Models\EdomAnswer::whereHas('edom.course', function ($q) use ($prodi) {
+        $answers = \App\Models\EdomAnswer::whereHas('course', function ($q) use ($prodi) {
             $q->where('prodi', $prodi);
         })->with('question')->get();
         

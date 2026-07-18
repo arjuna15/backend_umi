@@ -100,4 +100,8 @@ class User extends Authenticatable
         return $this->belongsTo(User::class, 'dosen_wali_id');
     }
 
+    public function courses()
+    {
+        return $this->hasMany(Course::class, 'dosen_id');
+    }
 }

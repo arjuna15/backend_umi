@@ -7,4 +7,5 @@ class EdomAnswer extends Model {
     public function question() { return $this->belongsTo(EdomQuestion::class, 'question_id'); }
     public function user() { return $this->belongsTo(User::class); }
     public function dosen() { return $this->belongsTo(User::class, 'dosen_id'); }
+    public function course() { return $this->belongsTo(Course::class, 'course_id'); }
 }

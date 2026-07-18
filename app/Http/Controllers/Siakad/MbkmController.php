@@ -13,11 +13,22 @@ class MbkmController extends Controller
     /**
      * List all MBKM programs with submission count.
      */
-    public function index(): JsonResponse
+    public function index(Request $request): JsonResponse
     {
         $programs = MbkmProgram::withCount('submissions')->orderByDesc('created_at')->get();
+        
+        $mySubmissions = [];
+        if ($request->user()) {
+            $mySubmissions = MbkmSubmission::with('program')
+                ->where('user_id', $request->user()->id)
+                ->orderByDesc('created_at')
+                ->get();
+        }
 
-        return response()->json($programs);
+        return response()->json([
+            'programs' => $programs,
+            'my_submissions' => $mySubmissions
+        ]);
     }
 
     /**
