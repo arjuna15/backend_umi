@@ -1246,8 +1246,8 @@ class SiakadController extends Controller
                 // Shuffle options randomly
                 $options = [$correctText, $distractors[0], $distractors[1], $distractors[2]];
                 
-                // Deterministic randomizing key based on loop index to keep tests predictable but shuffled
-                $correctIndex = ($i * 7) % 4; // Shuffles index to 0, 1, 2, 3
+                // Use standard PHP rand to make it completely non-sequential and non-predictable
+                $correctIndex = rand(0, 3);
                 
                 // Swap correct text to the selected index
                 $temp = $options[$correctIndex];
