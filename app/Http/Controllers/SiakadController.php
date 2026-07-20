@@ -1236,15 +1236,13 @@ class SiakadController extends Controller
             $kw2_cap = ucfirst($kw2);
 
             if ($type === 'multiple_choice') {
-                $optionsKeys = ['A', 'B', 'C', 'D'];
-                $correctKey = $optionsKeys[$i % 4];
                 $generated[] = [
                     'question' => "Bagaimanakah penerapan konsep {$kw1} dalam mendukung efektivitas dan efisiensi sistem pengelolaan {$kw2}?",
                     'option_a' => "Mengoptimalkan integrasi {$kw1} secara real-time dengan modularitas {$kw3}",
                     'option_b' => "Membatasi akses {$kw1} hanya untuk pengolahan data sekunder",
                     'option_c' => "Menghapus komponen {$kw2} agar kompatibel dengan sistem warisan",
                     'option_d' => "Melakukan komparasi manual terhadap struktur data {$kw3}",
-                    'correct_answer' => $correctKey
+                    'correct_answer' => 'A'
                 ];
             } elseif ($type === 'true_false') {
                 $generated[] = [
