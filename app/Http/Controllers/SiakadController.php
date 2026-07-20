@@ -1099,12 +1099,28 @@ class SiakadController extends Controller
     public function generateAiQuestions(Request $request)
     {
         $request->validate([
-            'prompt' => 'required|string',
+            'prompt' => 'nullable|string',
+            'file' => 'nullable|file|mimes:pdf,docx,txt|max:4096',
             'type' => 'required|string|in:multiple_choice,true_false,essay',
             'count' => 'required|integer|min:1|max:15'
         ]);
 
-        $promptText = $request->prompt;
+        $promptText = $request->prompt ?? '';
+        
+        // Extract text if file is uploaded
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $extractedText = $this->extractTextFromFile($file);
+            $promptText = trim($promptText . "\n\n" . $extractedText);
+        }
+
+        if (empty($promptText)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Bahan materi kuliah kosong. Masukkan teks manual atau unggah berkas.'
+            ], 400);
+        }
+
         $type = $request->type;
         $count = (int) $request->count;
 
@@ -1192,13 +1208,15 @@ class SiakadController extends Controller
             $kw2_cap = ucfirst($kw2);
 
             if ($type === 'multiple_choice') {
+                $optionsKeys = ['A', 'B', 'C', 'D'];
+                $correctKey = $optionsKeys[$i % 4];
                 $generated[] = [
                     'question' => "Bagaimanakah penerapan konsep {$kw1} dalam mendukung efektivitas dan efisiensi sistem pengelolaan {$kw2}?",
                     'option_a' => "Mengoptimalkan integrasi {$kw1} secara real-time dengan modularitas {$kw3}",
                     'option_b' => "Membatasi akses {$kw1} hanya untuk pengolahan data sekunder",
                     'option_c' => "Menghapus komponen {$kw2} agar kompatibel dengan sistem warisan",
                     'option_d' => "Melakukan komparasi manual terhadap struktur data {$kw3}",
-                    'correct_answer' => 'A'
+                    'correct_answer' => $correctKey
                 ];
             } elseif ($type === 'true_false') {
                 $generated[] = [
@@ -1217,6 +1235,74 @@ class SiakadController extends Controller
             'success' => true,
             'questions' => $generated
         ]);
+    }
+
+    private function extractTextFromFile($file)
+    {
+        $extension = strtolower($file->getClientOriginalExtension());
+        $path = $file->getRealPath();
+
+        if ($extension === 'txt') {
+            return file_get_contents($path);
+        }
+
+        if ($extension === 'docx') {
+            $stripedText = '';
+            $zip = new \ZipArchive();
+            if ($zip->open($path) === true) {
+                if (($xmlIndex = $zip->locateName('word/document.xml')) !== false) {
+                    $xmlData = $zip->getFromIndex($xmlIndex);
+                    $stripedText = strip_tags($xmlData);
+                }
+                $zip->close();
+            }
+            return html_entity_decode($stripedText);
+        }
+
+        if ($extension === 'pdf') {
+            $pdfContent = file_get_contents($path);
+            
+            // Basic raw PDF text extractor helper
+            $resultText = '';
+            
+            // Search for BT ... ET text blocks
+            if (preg_match_all('/BT(.*?)ET/s', $pdfContent, $textBlocks)) {
+                foreach ($textBlocks[1] as $block) {
+                    // Extract text between brackets [ (Text) ] or (Text)
+                    if (preg_match_all('/\((.*?)\)/s', $block, $phrases)) {
+                        foreach ($phrases[1] as $phrase) {
+                            // Strip escape slashes
+                            $resultText .= str_replace(['\\(', '\\)', '\\\\'], ['(', ')', '\\'], $phrase) . ' ';
+                        }
+                    }
+                }
+            }
+            
+            // Cleanup PDF formatting syntax/spacing
+            $resultText = preg_replace('/[\s\n\r\t]+/', ' ', $resultText);
+            
+            // If the basic extractor found text, return it
+            if (strlen(trim($resultText)) > 20) {
+                return trim($resultText);
+            }
+            
+            // Fallback: Strip printable characters as a generic fallback parser
+            $asciiText = '';
+            $len = strlen($pdfContent);
+            for ($i = 0; $i < $len; $i++) {
+                $char = $pdfContent[$i];
+                $ascii = ord($char);
+                if (($ascii >= 32 && $ascii <= 126) || $ascii == 10 || $ascii == 13) {
+                    $asciiText .= $char;
+                }
+            }
+            // Strip structural PDF tags
+            $cleaned = preg_replace('/(obj|endobj|stream|endstream|xref|trailer|startxref|%%EOF)/i', ' ', $asciiText);
+            $cleaned = preg_replace('/[\s\n\r\t]+/', ' ', $cleaned);
+            return trim(substr($cleaned, 0, 5000)); // cap at 5000 chars for prompt safety
+        }
+
+        return '';
     }
 
     public function getQuizzesByCourse(Request $request, $courseId)
