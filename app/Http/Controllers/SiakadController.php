@@ -1131,16 +1131,30 @@ class SiakadController extends Controller
                 $client = new \GuzzleHttp\Client();
                 
                 // Formulate system prompt instruction
-                $systemPrompt = "Buatkan {$count} soal bertipe {$type} berdasarkan materi berikut ini:\n\n\"{$promptText}\"\n\n";
-                $systemPrompt .= "Keluarkan respon HANYA berupa JSON valid dengan format berikut, jangan ada teks pembuka atau penutup markdown:\n";
+                $systemPrompt = "Anda adalah dosen ahli pembuat soal ujian akademik. Tugas Anda adalah membuat {$count} soal bertipe {$type} secara ketat dan HANYA berdasarkan bahan materi perkuliahan berikut ini:\n\n";
+                $systemPrompt .= "\"\"\"\n{$promptText}\n\"\"\"\n\n";
+                $systemPrompt .= "Aturan Pembuatan Soal:\n";
+                $systemPrompt .= "1. Pertanyaan WAJIB relevan, faktual, dan dapat dijawab sepenuhnya hanya dengan membaca bahan materi di atas.\n";
+                $systemPrompt .= "2. Jangan pernah mengarang informasi baru di luar bahan materi.\n";
+                if ($type === 'multiple_choice') {
+                    $systemPrompt .= "3. Tipe Pilihan Ganda: Buat 4 opsi jawaban (A, B, C, D). Pastikan opsi pengecoh realistis namun salah, dan hanya ada SATU opsi jawaban yang benar. Tentukan kunci jawaban yang akurat (A/B/C/D) sesuai fakta materi.\n";
+                } elseif ($type === 'true_false') {
+                    $systemPrompt .= "3. Tipe Benar/Salah: Buat pernyataan yang jelas bersumber dari materi, dan tentukan kunci jawaban ('True' jika benar, 'False' jika salah).\n";
+                } else {
+                    $systemPrompt .= "3. Tipe Esai: Buat pertanyaan analitis dan sediakan kunci pedoman jawaban penilaian lengkap di field 'correct_answer_text'.\n";
+                }
+                $systemPrompt .= "4. Keluarkan respon HANYA berupa objek JSON valid dengan struktur persis seperti contoh di bawah ini (tanpa blok pembuka/penutup markdown ```json):\n";
                 
                 if ($type === 'multiple_choice') {
-                    $systemPrompt .= "{\n  \"questions\": [\n    {\n      \"question\": \"Pertanyaan soal...\",\n      \"option_a\": \"Jawaban opsi A\",\n      \"option_b\": \"Jawaban opsi B\",\n      \"option_c\": \"Jawaban opsi C\",\n      \"option_d\": \"Jawaban opsi D\",\n      \"correct_answer\": \"A\"\n    }\n  ]\n}";
+                    $systemPrompt .= "{\n  \"questions\": [\n    {\n      \"question\": \"Pertanyaan soal di sini...\",\n      \"option_a\": \"Opsi A...\",\n      \"option_b\": \"Opsi B...\",\n      \"option_c\": \"Opsi C...\",\n      \"option_d\": \"Opsi D...\",\n      \"correct_answer\": \"A\"\n    }\n  ]\n}";
                 } elseif ($type === 'true_false') {
-                    $systemPrompt .= "{\n  \"questions\": [\n    {\n      \"question\": \"Pernyataan soal...\",\n      \"correct_answer\": \"True\"\n    }\n  ]\n}";
+                    $systemPrompt .= "{\n  \"questions\": [\n    {\n      \"question\": \"Pernyataan soal di sini...\",\n      \"correct_answer\": \"True\"\n    }\n  ]\n}";
                 } else {
-                    $systemPrompt .= "{\n  \"questions\": [\n    {\n      \"question\": \"Pertanyaan esai...\",\n      \"correct_answer_text\": \"Kunci pedoman jawaban penilaian...\"\n    }\n  ]\n}";
+                    $systemPrompt .= "{\n  \"questions\": [\n    {\n      \"question\": \"Pertanyaan esai di sini...\",\n      \"correct_answer_text\": \"Pedoman penilaian jawaban di sini...\"\n    }\n  ]\n}";
                 }
+
+                // Log the final prompt to backend log for verification
+                \Log::info("AI Quiz promptText length: " . strlen($promptText));
 
                 if (env('GEMINI_API_KEY')) {
                     $geminiKey = env('GEMINI_API_KEY');
