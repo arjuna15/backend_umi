@@ -1158,7 +1158,8 @@ class SiakadController extends Controller
 
                 if (env('GEMINI_API_KEY')) {
                     $geminiKey = env('GEMINI_API_KEY');
-                    $response = $client->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key={$geminiKey}", [
+                    \Log::info("Calling Gemini API with key suffix: " . substr($geminiKey, -5));
+                    $response = $client->post("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={$geminiKey}", [
                         'json' => [
                             'contents' => [
                                 ['parts' => [['text' => $systemPrompt]]]
@@ -1170,6 +1171,7 @@ class SiakadController extends Controller
                     ]);
                     $body = json_decode($response->getBody()->getContents(), true);
                     $rawJson = $body['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
+                    \Log::info("Gemini raw response text: " . $rawJson);
                 } else {
                     $openaiKey = env('OPENAI_API_KEY');
                     $response = $client->post("https://api.openai.com/v1/chat/completions", [
@@ -1195,10 +1197,15 @@ class SiakadController extends Controller
                         'success' => true,
                         'questions' => $parsed['questions']
                     ]);
+                } else {
+                    throw new \Exception("JSON parsed does not contain valid questions array. Raw: " . $rawJson);
                 }
+            } catch (\GuzzleHttp\Exception\RequestException $ge) {
+                $errResponseBody = $ge->hasResponse() ? $ge->getResponse()->getBody()->getContents() : 'No response body';
+                \Log::error("Gemini Guzzle Request Exception: " . $ge->getMessage() . " | Response: " . $errResponseBody);
             } catch (\Exception $e) {
-                // If live API fails, we automatically fallback to our smart local generator
-                \Log::warning("AI API failed, falling back to local quiz generator: " . $e->getMessage());
+                // Log live API error to logs
+                \Log::error("Gemini/OpenAI API Generation failed: " . $e->getMessage() . "\n" . $e->getTraceAsString());
             }
         }
 
