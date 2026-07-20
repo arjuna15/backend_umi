@@ -1236,13 +1236,32 @@ class SiakadController extends Controller
             $kw2_cap = ucfirst($kw2);
 
             if ($type === 'multiple_choice') {
+                $correctText = "Mengoptimalkan integrasi {$kw1} secara real-time dengan modularitas {$kw3}";
+                $distractors = [
+                    "Membatasi akses {$kw1} hanya untuk pengolahan data sekunder",
+                    "Menghapus komponen {$kw2} agar kompatibel dengan sistem warisan",
+                    "Melakukan komparasi manual terhadap struktur data {$kw3}"
+                ];
+                
+                // Shuffle options randomly
+                $options = [$correctText, $distractors[0], $distractors[1], $distractors[2]];
+                
+                // Deterministic randomizing key based on loop index to keep tests predictable but shuffled
+                $correctIndex = ($i * 7) % 4; // Shuffles index to 0, 1, 2, 3
+                
+                // Swap correct text to the selected index
+                $temp = $options[$correctIndex];
+                $options[$correctIndex] = $options[0];
+                $options[0] = $temp;
+                
+                $optionKeys = ['A', 'B', 'C', 'D'];
                 $generated[] = [
                     'question' => "Bagaimanakah penerapan konsep {$kw1} dalam mendukung efektivitas dan efisiensi sistem pengelolaan {$kw2}?",
-                    'option_a' => "Mengoptimalkan integrasi {$kw1} secara real-time dengan modularitas {$kw3}",
-                    'option_b' => "Membatasi akses {$kw1} hanya untuk pengolahan data sekunder",
-                    'option_c' => "Menghapus komponen {$kw2} agar kompatibel dengan sistem warisan",
-                    'option_d' => "Melakukan komparasi manual terhadap struktur data {$kw3}",
-                    'correct_answer' => 'A'
+                    'option_a' => $options[0],
+                    'option_b' => $options[1],
+                    'option_c' => $options[2],
+                    'option_d' => $options[3],
+                    'correct_answer' => $optionKeys[$correctIndex]
                 ];
             } elseif ($type === 'true_false') {
                 $generated[] = [
