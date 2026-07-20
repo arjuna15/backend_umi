@@ -144,6 +144,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\SiakadController::class, 'getDosenDashboard']);
         Route::post('/bap', [\App\Http\Controllers\SiakadController::class, 'storeBap']);
         Route::post('/quiz', [\App\Http\Controllers\SiakadController::class, 'storeQuiz']);
+        Route::post('/quiz/generate-ai', [\App\Http\Controllers\SiakadController::class, 'generateAiQuestions']);
         Route::get('/courses/{courseId}/quizzes', [\App\Http\Controllers\SiakadController::class, 'getQuizzesByCourse']);
         Route::delete('/quizzes/{id}', [\App\Http\Controllers\SiakadController::class, 'deleteQuiz']);
         Route::get('/quizzes/{quizId}/attempts', [\App\Http\Controllers\SiakadController::class, 'getQuizAttempts']);
