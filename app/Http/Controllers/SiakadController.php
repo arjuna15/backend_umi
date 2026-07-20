@@ -1100,7 +1100,7 @@ class SiakadController extends Controller
     {
         $request->validate([
             'prompt' => 'nullable|string',
-            'file' => 'nullable|file|mimes:pdf,docx,txt|max:4096',
+            'file' => 'nullable|file|max:4096',
             'type' => 'required|string|in:multiple_choice,true_false,essay',
             'count' => 'required|integer|min:1|max:15'
         ]);
@@ -1110,6 +1110,13 @@ class SiakadController extends Controller
         // Extract text if file is uploaded
         if ($request->hasFile('file')) {
             $file = $request->file('file');
+            $extension = strtolower($file->getClientOriginalExtension());
+            if (!in_array($extension, ['pdf', 'docx', 'txt'])) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Format file tidak didukung. Harap unggah file PDF, DOCX, atau TXT.'
+                ], 422);
+            }
             $extractedText = $this->extractTextFromFile($file);
             $promptText = trim($promptText . "\n\n" . $extractedText);
         }
