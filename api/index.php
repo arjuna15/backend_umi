@@ -34,6 +34,16 @@ if (file_exists($writableSqlite)) {
     $_SERVER['DB_DATABASE'] = $writableSqlite;
 }
 
+// Fix HTTPS & Host detection behind Vercel edge reverse proxy
+if (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https') {
+    $_SERVER['HTTPS'] = 'on';
+    $_SERVER['SERVER_PORT'] = '443';
+}
+
+// Ensure correct SCRIPT_NAME and PHP_SELF for path resolution
+$_SERVER['SCRIPT_NAME'] = '/index.php';
+$_SERVER['PHP_SELF'] = '/index.php';
+
 // Require Composer Autoloader
 require __DIR__ . '/../vendor/autoload.php';
 
